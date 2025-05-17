@@ -1,64 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubit/login_cubit.dart';
-import '../cubit/login_state.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../widgets/login_form.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LoginCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Login'),
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            colors: [
+              AppColors.primary,
+              AppColors.primary,
+            ],
+          ),
         ),
-        body: BlocConsumer<LoginCubit, LoginState>(
-          listener: (context, state) {
-            if (state is LoginSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Login successful!')),
-              );
-            } else if (state is LoginFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.error)),
-              );
-            }
-          },
-          builder: (context, state) {
-            if (state is LoginLoading) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            return Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: usernameController,
-                    decoration: InputDecoration(labelText: 'Username'),
-                  ),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(labelText: 'Password'),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<LoginCubit>(context).login(
-                        usernameController.text,
-                        passwordController.text,
-                      );
-                    },
-                    child: Text('Login'),
-                  ),
-                ],
+        child: Column(
+          children: [
+            SizedBox(height: 90),
+            Text(
+              "Login",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 45,
+                fontWeight: FontWeight.bold,
               ),
-            );
-          },
+            ),
+            SizedBox(height: 40),
+            Text(
+              "Welcome Back",
+              style: TextStyle(color: Colors.white, fontSize: 25),
+            ),
+            SizedBox(height: 50),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 100),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(55),
+                    topRight: Radius.circular(55),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 15,
+                      offset: Offset(0, -5),
+                    ),
+                  ],
+                ),
+                child: LoginForm(),
+              ),
+            ),
+          ],
         ),
       ),
     );
