@@ -1,5 +1,7 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubit/cart_cubit.dart';
 import 'quantity_controller.dart';
 
 class ProductCard extends StatefulWidget {
@@ -40,20 +42,38 @@ class _ProductCardState extends State<ProductCard> {
   }
 
   void increment() {
+    final oldQuantity = quantity;
+    final newQuantity = oldQuantity + 1;
+
     setState(() {
-      quantity++;
-      widget.quantityController.text = quantity.toString();
+      quantity = newQuantity;
+      widget.quantityController.text = newQuantity.toString();
     });
-    widget.onTotalChange(widget.price);
+
+    final cubit = context.read<CartCubit>();
+    final index = cubit.products.indexWhere((p) => p['title'] == widget.title);
+    if (index != -1) {
+      cubit.updateQuantity(index, oldQuantity, newQuantity);
+    }
+
   }
 
   void decrement() {
     if (quantity > 1) {
+      final oldQuantity = quantity;
+      final newQuantity = oldQuantity - 1;
+
       setState(() {
-        quantity--;
-        widget.quantityController.text = quantity.toString();
+        quantity = newQuantity;
+        widget.quantityController.text = newQuantity.toString();
       });
-      widget.onTotalChange(-widget.price);
+
+      final cubit = context.read<CartCubit>();
+      final index = cubit.products.indexWhere((p) => p['title'] == widget.title);
+      if (index != -1) {
+        cubit.updateQuantity(index, oldQuantity, newQuantity);
+      }
+
     }
   }
 
