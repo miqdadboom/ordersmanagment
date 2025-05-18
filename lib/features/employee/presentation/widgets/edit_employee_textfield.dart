@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/constants/app_colors.dart';
 
 class EditEmployeeTextField extends StatelessWidget {
@@ -26,7 +25,7 @@ class EditEmployeeTextField extends StatelessWidget {
             hintText: label,
             prefixIcon: Icon(icon, color: AppColors.primary),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: AppColors.background,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: AppColors.primary),
               borderRadius: BorderRadius.circular(12),

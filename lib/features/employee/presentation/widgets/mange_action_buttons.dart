@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class ActionButtonsWidget extends StatelessWidget {
   final VoidCallback onAddPressed;
@@ -17,11 +18,11 @@ class ActionButtonsWidget extends StatelessWidget {
         Expanded(
           child: ElevatedButton.icon(
             icon: const Icon(Icons.person_add),
-            label: const Text("Add Employee", style: TextStyle(color: Colors.black)),
+            label: const Text("Add Employee", style: TextStyle(color: Colors.white)),
             onPressed: onAddPressed,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF39A28B),
-              foregroundColor: Colors.black,
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -31,24 +32,17 @@ class ActionButtonsWidget extends StatelessWidget {
         const SizedBox(width: 10),
         Expanded(
           child: ElevatedButton(
-            onPressed: null,
+            onPressed: () {}, // to enable button visuals
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF39A28B),
-              foregroundColor: Colors.black,
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
             child: PopupMenuButton<String>(
               onSelected: onSortSelected,
-              icon: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text("Sort", style: TextStyle(color: Colors.black, fontSize: 18)),
-                  SizedBox(width: 20),
-                  Icon(Icons.arrow_drop_down),
-                ],
-              ),
+              color: Colors.white,
               itemBuilder: (context) => const [
                 PopupMenuItem(value: 'name_asc', child: Text('Name A-Z')),
                 PopupMenuItem(value: 'name_desc', child: Text('Name Z-A')),
@@ -56,6 +50,14 @@ class ActionButtonsWidget extends StatelessWidget {
                 PopupMenuItem(value: 'job_desc', child: Text('Job Z-A')),
                 PopupMenuItem(value: 'reset', child: Text('Reset to Original')),
               ],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text("Sort", style: TextStyle(color: Colors.white, fontSize: 18)),
+                  SizedBox(width: 10),
+                  Icon(Icons.arrow_drop_down, color: Colors.white),
+                ],
+              ),
             ),
           ),
         ),

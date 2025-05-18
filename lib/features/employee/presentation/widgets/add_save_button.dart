@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class SaveButton extends StatelessWidget {
   final VoidCallback onPressed;
-  final Color color;
 
   const SaveButton({
     super.key,
-    required this.onPressed,
-    required this.color,
+    required this.onPressed, required Color color,
   });
 
   @override
@@ -15,7 +14,7 @@ class SaveButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: color,
+        backgroundColor: AppColors.primary,
         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 14),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(200),
@@ -23,7 +22,7 @@ class SaveButton extends StatelessWidget {
       ),
       child: const Text(
         'Save',
-        style: TextStyle(fontSize: 18, color: Colors.white),
+        style: TextStyle(fontSize: 18, color: AppColors.textLight),
       ),
     );
   }

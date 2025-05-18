@@ -5,7 +5,6 @@ import '../widgets/add_employee_text_field.dart';
 import '../widgets/add_save_button.dart';
 import 'manage_employee_screen.dart';
 
-
 class AddEmployee extends StatefulWidget {
   const AddEmployee({super.key});
 
@@ -22,7 +21,7 @@ class _AddEmployeeState extends State<AddEmployee> {
   final _addressController = TextEditingController();
   final _distributionController = TextEditingController();
 
-  final Color primaryColor =  AppColors.primary;
+  final Color primaryColor = AppColors.primary;
 
   void _submitForm(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -35,7 +34,13 @@ class _AddEmployeeState extends State<AddEmployee> {
       if (confirm) {
         print('Saved: ${_nameController.text} - ${_jobController.text}');
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Employee saved successfully')),
+          SnackBar(
+            content: const Text(
+              'Employee saved successfully',
+              style: TextStyle(color: AppColors.textLight),
+            ),
+            backgroundColor: AppColors.primary,
+          ),
         );
         _clearFields();
       }
@@ -56,15 +61,31 @@ class _AddEmployeeState extends State<AddEmployee> {
     return showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
+        backgroundColor: AppColors.background,
+        title: Text(
+          title,
+          style: const TextStyle(color: AppColors.textDark),
+        ),
+        content: Text(
+          content,
+          style: const TextStyle(color: AppColors.textDescription),
+        ),
         actions: [
           TextButton(
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppColors.notSelectedItemNavigation),
+            ),
             onPressed: () => Navigator.of(context).pop(false),
           ),
           ElevatedButton(
-            child: const Text('Confirm'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+            ),
+            child: const Text(
+              'Confirm',
+              style: TextStyle(color: AppColors.textLight),
+            ),
             onPressed: () => Navigator.of(context).pop(true),
           ),
         ],
@@ -75,7 +96,7 @@ class _AddEmployeeState extends State<AddEmployee> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       appBar: EmployeeAppBar(primaryColor: primaryColor),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -84,7 +105,7 @@ class _AddEmployeeState extends State<AddEmployee> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 48),
+                const SizedBox(height: 55),
                 EmployeeTextField(
                   controller: _nameController,
                   hintText: "Name",
@@ -127,7 +148,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                   validatorMessage: 'Please enter the distribution line',
                   primaryColor: primaryColor,
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 50),
                 SaveButton(
                   onPressed: () => _submitForm(context),
                   color: primaryColor,

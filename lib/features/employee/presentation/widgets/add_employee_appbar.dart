@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ordersmanagment_app/features/employee/presentation/screens/add_employee_screen.dart';
-
+import '../../../../core/constants/app_colors.dart';
 
 class EmployeeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color primaryColor;
@@ -11,18 +10,14 @@ class EmployeeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       foregroundColor: Colors.black,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddEmployee()),
-          );
+          Navigator.pop(context);
         },
       ),
-      title: null,
       flexibleSpace: Padding(
         padding: const EdgeInsets.only(bottom: 1),
         child: Align(

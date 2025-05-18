@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class LoginButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const LoginButton({Key? key, required this.onPressed}) : super(key: key);
+  const LoginButton({Key? key, required this.onPressed, required Color backgroundColor, required Color textColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,20 +17,20 @@ class LoginButton extends StatelessWidget {
             left: Radius.circular(30),
             right: Radius.circular(30),
           ),
-          color:Color(0xFF39A28B),
+          color: AppColors.primary,
           boxShadow: [
             BoxShadow(
-              color: Colors.green.shade300,
-              blurRadius: 400,
+              color: AppColors.primary.withOpacity(0.4),
+              blurRadius: 20,
               offset: Offset(0, 4),
             ),
           ],
         ),
-        child: Center(
+        child: const Center(
           child: Text(
             "Login",
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.textLight,
               fontSize: 22,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2,

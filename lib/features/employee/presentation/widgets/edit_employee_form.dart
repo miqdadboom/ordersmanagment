@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_colors.dart';
 import 'edit_employee_textfield.dart';
 
 class EditEmployeeForm extends StatefulWidget {
@@ -55,7 +56,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
                   const SnackBar(content: Text("The employee has been deleted")),
                 );
               },
-              child: const Text("Delete", style: TextStyle(color: Colors.red)),
+              child: Text("Delete", style: TextStyle(color: AppColors.deleteButton)),
             ),
           ],
         );
@@ -78,7 +79,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
                   height: 5,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF39A28B),
+                  color: AppColors.primary,
                 ),
               ),
             ),
@@ -96,9 +97,9 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
                 onPressed: () => _submitForm(context),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  backgroundColor: Color(0xFF39A28B),
+                  backgroundColor: AppColors.primary,
                 ),
-                child: const Text('Save', style: TextStyle(fontSize: 18, color: Colors.white)),
+                child: Text('Save', style: TextStyle(fontSize: 18, color: AppColors.buttonText)),
               ),
             ),
             const SizedBox(height: 10),
@@ -108,9 +109,9 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
                 onPressed: () => _confirmDelete(context),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  backgroundColor: Colors.red,
+                  backgroundColor: AppColors.deleteButton,
                 ),
-                child: const Text('Delete Employee', style: TextStyle(fontSize: 18, color: Colors.white)),
+                child: Text('Delete Employee', style: TextStyle(fontSize: 18, color: AppColors.buttonText)),
               ),
             ),
           ],
