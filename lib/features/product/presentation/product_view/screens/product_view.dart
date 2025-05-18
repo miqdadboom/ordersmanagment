@@ -81,6 +81,7 @@ class ProductView extends StatelessWidget {
                 padding: EdgeInsets.all(16.0),
                 child: DescriptionProduct(),
               ),
+              SizedBox(height: 25,),
               const SizeProduct(),
             ],
           ),

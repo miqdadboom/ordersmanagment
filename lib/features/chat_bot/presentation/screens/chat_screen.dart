@@ -39,6 +39,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           ),
         ),
         backgroundColor: AppColors.primary,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: AppColors.textDark),
+          onPressed: () => Navigator.pushReplacementNamed(context, '/homeScreen'),
+        ),
       ),
       body: Column(
         children: [

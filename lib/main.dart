@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
       home: const HomeScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
+        '/homeScreen': (context) => const HomeScreen(),
         '/conversationScreen': (context) => const ConversationsScreen(),
         '/chatScreen': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;

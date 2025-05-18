@@ -91,4 +91,20 @@ class ChatDatabase {
       orderBy: 'timestamp DESC',
     );
   }
+
+  Future<void> deleteConversation(int conversationId) async {
+    final db = await instance.database;
+
+    await db.delete(
+      'messages',
+      where: 'conversation_id = ?',
+      whereArgs: [conversationId],
+    );
+
+    await db.delete(
+      'conversations',
+      where: 'id = ?',
+      whereArgs: [conversationId],
+    );
+  }
 }

@@ -11,6 +11,7 @@ class ConversationsScreen extends StatefulWidget {
 }
 
 class _ConversationsScreenState extends State<ConversationsScreen> {
+  bool isLoading = true;
   List<Map<String, dynamic>> conversations = [];
 
   @override
@@ -20,10 +21,20 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   }
 
   Future<void> _loadConversations() async {
+    setState(() => isLoading = true);
     final data = await ChatDatabase.instance.getConversations();
     setState(() {
       conversations = data;
+      isLoading = false;
     });
+  }
+
+  Future<void> _deleteConversation(int id) async {
+    await ChatDatabase.instance.deleteConversation(id);
+    await _loadConversations();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Conversation deleted successfully')),
+    );
   }
 
   @override
@@ -33,11 +44,13 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         title: const Text('Conversations'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pushReplacementNamed(context, '/homeScreen'),
         ),
       ),
-      body: conversations.isEmpty
+      body: isLoading
           ? const Center(child: CircularProgressIndicator())
+          : conversations.isEmpty
+          ? const Center(child: Text('No conversations found.'))
           : ListView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: conversations.length,
@@ -53,6 +66,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                 arguments: {'id': convo['id']},
               );
             },
+            onDelete: () => _deleteConversation(convo['id']),
           );
         },
       ),

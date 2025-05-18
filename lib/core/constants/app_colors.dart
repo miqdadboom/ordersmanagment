@@ -19,6 +19,7 @@ class AppColors {
   static const selectedItemNavigation = Color(0xFF000000);
   static const notSelectedItemNavigation = Color(0xFF403F3F);
   static const quantityIcons = Color(0xFFFFFFFF);
+  static const iconSize = Color(0xFFE0E0E0);
 
   // confirm order
   static const startConfirmOrder = Color(0xFF96D3DC);
@@ -35,6 +36,7 @@ class AppColors {
   // chat
   static const conversatioTextMessage = Color(0xFF403F3F);
   static const conversatioDateMessage = Color(0xFF403F3F);
+  static const iconDelete = Color(0xFFFF0000);
 
   // UI elements
   static const cardBackground = Color(0xFF39A28B); // Same as primary for cards

@@ -12,14 +12,14 @@ class ConfirmOrderActions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ActionButton(
-          label: "Send Order",
-          onPressed: onSend,
-        ),
-        ActionButton(
           label: "Not Yet",
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/cartScreen');
           },
+        ),
+        ActionButton(
+          label: " Send Order",
+          onPressed: onSend,
         ),
       ],
     );

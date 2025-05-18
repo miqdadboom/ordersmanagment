@@ -6,7 +6,6 @@ import '../../../../core/constants/app_colors.dart';
 import 'conversations_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  static const String routeName = 'home';
   const HomeScreen({super.key});
 
   @override
@@ -23,14 +22,6 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: AppColors.backgroundChat,
         appBar: AppBar(
           backgroundColor: AppColors.backgroundChat,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pushReplacementNamed(
-                context, '/conversationScreen',
-              );
-            },
-            icon: const Icon(Icons.menu, size: 40),
-          ),
           title: const Text(
             "Chat Ai",
             style: TextStyle(
@@ -48,13 +39,21 @@ class HomeScreen extends StatelessWidget {
               children: [
                 AnimatedIntro(),
                 FeaturesSection(),
-                SizedBox(height: 30),
+                SizedBox(height: 15),
                 StartChatButton(),
                 SizedBox(height: 30),
               ],
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.primary,
+            onPressed: () {
+            Navigator.pushReplacementNamed(context, '/conversationScreen');
+            },
+          child:  Icon(Icons.chat_outlined, color: AppColors.background,size: 35,),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }

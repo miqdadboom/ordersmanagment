@@ -57,6 +57,30 @@ class _ProductCardState extends State<ProductCard> {
     }
   }
 
+
+  void _showDeleteConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Product Deletion'),
+        content: const Text('Are you sure you want to remove this product from the cart?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: TextStyle(color: AppColors.textDark)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              widget.onRemove();
+            },
+            child: Text('Delete', style: TextStyle(color: AppColors.iconDelete)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -83,10 +107,10 @@ class _ProductCardState extends State<ProductCard> {
                   fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 6),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(9.0),
+                  padding: const EdgeInsets.only(bottom: 30, left: 5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -115,7 +139,7 @@ class _ProductCardState extends State<ProductCard> {
             top: 0,
             right: 0,
             child: GestureDetector(
-              onTap: widget.onRemove,
+              onTap: () => _showDeleteConfirmation(context),
               child:  Icon(Icons.close, color: AppColors.icon),
             ),
           ),

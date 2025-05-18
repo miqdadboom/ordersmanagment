@@ -16,7 +16,7 @@ class ChatCubit extends StateNotifier<List<ChatMessage>> {
   final _bot = ChatUser(id: '2', firstName: 'ChatAi');
 
   final _chatGpt = OpenAI.instance.build(
-    token: '',
+    token: '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',
     baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 5)),
   );
 
