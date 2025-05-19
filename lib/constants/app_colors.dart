@@ -47,4 +47,29 @@ class AppColors {
   ); // "You have 3 notifications" background
 
   static const viewAll = Color(0x80000000);
+  static const selectionFieldEdges = Color(0x809E9E9E);
+  static const categoryName = Color(0xFF000000);
+  static const cardField = Color(0xFFFFFFFF);
+  static const cardShadow = Color.fromRGBO(158, 158, 158, 0.2);
+  static const cardWithoutImage =  Color(0xFFEEEEEE);
+  static const imageNotSupported = Color(0xFF9E9E9E);
+  static const noImageText = Color(0xFF757575);
+  static const textCardBrand = Color(0xFF757575);
+  static const priceOfCard = Color(0xFF000000);
+  static const discountsOfCard = Color(0xFFF44336);
+
+  static const cloudyOfHeder = Color(0x66000000);
+  static const searchBar = Color(0xFFEEEEEE);
+  static const LogOutField = Color(0xFFFFCDD2);
+  static const LogOutText = Color(0xFFFF0000);
+  static const lougOut = Color(0xFFFF0000);
+  static const cancel = Color(0xFF000000);
+  static const cancelField = Color(0xFF9E9E9E);
+
+
+  // You can add other color constants here
+  static const secondaryColor = Color(0xFF03DAC6);
+  static const backgroundColor = Color(0xFFD3D5D7);
+  static const notSelectedItem = Color(0xFF000000);
+
 }

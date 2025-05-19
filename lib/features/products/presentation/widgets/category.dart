@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ordersmanagment_app/constants/app_colors.dart';
 
 class CategorySection extends StatelessWidget {
   final Function(int index) onCategoryTap;
-  final VoidCallback onViewAllTap;  // دالة عند الضغط على View All
+  final VoidCallback onViewAllTap; // دالة عند الضغط على View All
 
   const CategorySection({
     super.key,
@@ -15,7 +16,7 @@ class CategorySection extends StatelessWidget {
     'https://images.pexels.com/photos/31887348/pexels-photo-31887348/free-photo-of-elegant-spring-white-flowers-in-bloom.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     'https://images.pexels.com/photos/15619932/pexels-photo-15619932/free-photo-of-macro-of-green-leaf-on-black-background.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
   ];
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,16 +31,9 @@ class CategorySection extends StatelessWidget {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               TextButton(
-                onPressed: onViewAllTap,  // استخدم الدالة الجديدة
+                onPressed: onViewAllTap, // استخدم الدالة الجديدة
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                child: Text(
-                  'View All',
-                  style: TextStyle(
-                    fontSize: 14,
-                    // ignore: deprecated_member_use
-                    color: Colors.black.withOpacity(0.5),
-                  ),
-                ),
+                child: Text('View All', style: TextStyle(fontSize: 14)),
               ),
             ],
           ),
@@ -72,7 +66,7 @@ class CategorySection extends StatelessWidget {
                       Text(
                         'Category ${index + 1}',
                         style: const TextStyle(
-                          color: Colors.black54,
+                          color: AppColors.categoryName,
                           fontSize: 10,
                           fontWeight: FontWeight.w400,
                         ),

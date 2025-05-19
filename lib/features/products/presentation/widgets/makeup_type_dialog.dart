@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ordersmanagment_app/constants/app_colors.dart';
 
 class MakeupTypeDialog extends StatefulWidget {
   final List<String> makeupTypes;
@@ -54,18 +55,20 @@ class _MakeupTypeDialogState extends State<MakeupTypeDialog> {
         child: Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: widget.makeupTypes.map((type) {
-            final isSelected = tempSelectedTypes.contains(type);
-            return ChoiceChip(
-              label: Text(type),
-              selected: isSelected,
-              onSelected: (_) => handleToggle(type),
-              selectedColor: Colors.pinkAccent,
-              labelStyle: TextStyle(
-                color: isSelected ? Colors.white : Colors.black,
-              ),
-            );
-          }).toList(),
+          children:
+              widget.makeupTypes.map((type) {
+                final isSelected = tempSelectedTypes.contains(type);
+                return ChoiceChip(
+                  label: Text(type),
+                  selected: isSelected,
+                  onSelected: (_) => handleToggle(type),
+                  selectedColor: AppColors.primary,
+                  labelStyle: TextStyle(
+                    color:
+                        isSelected ? AppColors.textLight : AppColors.textDark,
+                  ),
+                );
+              }).toList(),
         ),
       ),
       actions: [

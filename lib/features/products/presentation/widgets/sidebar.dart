@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ordersmanagment_app/constants/app_colors.dart';
 
 class AppSidebar extends StatelessWidget {
   const AppSidebar({super.key});
@@ -9,7 +10,7 @@ class AppSidebar extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            color: Colors.blue,
+            color: AppColors.primary,
             padding: const EdgeInsets.only(
               left: 16,
               right: 16,
@@ -29,7 +30,7 @@ class AppSidebar extends StatelessWidget {
                   child: Text(
                     'Ahmad istatieh',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.background,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
@@ -45,44 +46,124 @@ class AppSidebar extends StatelessWidget {
               padding: EdgeInsets.zero,
               children: [
                 ListTile(
-                  leading: Icon(Icons.home),
-                  title: Text('Home'),
+                  leading: Icon(Icons.home, color: AppColors.icon),
+                  title: Text('Home', style: TextStyle(color: AppColors.icon)),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.shopping_cart),
-                  title: Text('Orders'),
+                  leading: Icon(Icons.shopping_cart, color: AppColors.icon),
+                  title: Text(
+                    'Orders',
+                    style: TextStyle(color: AppColors.icon),
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.chat_bubble_outline),
-                  title: Text('Chatbot'),
+                  leading: Icon(
+                    Icons.chat_bubble_outline,
+                    color: AppColors.icon,
+                  ),
+                  title: Text(
+                    'Chatbot',
+                    style: TextStyle(color: AppColors.icon),
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.notifications_none),
-                  title: Text('Notifications'),
+                  leading: Icon(
+                    Icons.notifications_none,
+                    color: AppColors.icon,
+                  ),
+                  title: Text(
+                    'Notifications',
+                    style: TextStyle(color: AppColors.icon),
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
-                const SizedBox(height: 20),
+                ListTile(
+                  leading: Icon(Icons.settings, color: AppColors.icon),
+                  title: Text(
+                    'Settings',
+                    style: TextStyle(color: AppColors.icon),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 50.0, left: 8, right: 8),
             child: ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              leading: const Icon(Icons.logout, color: AppColors.lougOut),
+              title: const Text(
+                'Log out',
+                style: TextStyle(color: AppColors.lougOut),
+              ),
               onTap: () {
-                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: const Text(
+                          'Confirm Logout',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        content: const Text(
+                          'Are you sure you want to log out?',
+                          textAlign: TextAlign.center,
+                        ),
+                        actionsAlignment: MainAxisAlignment.center,
+                        actions: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.LogOutField,
+                              foregroundColor: AppColors.LogOutText,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 12,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Log out'),
+                          ),
+                          const SizedBox(width: 12),
+                          OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.cancel,
+                              side: const BorderSide(
+                                color: AppColors.cancelField,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 12,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Cancel'),
+                          ),
+                        ],
+                      ),
+                );
               },
             ),
           ),

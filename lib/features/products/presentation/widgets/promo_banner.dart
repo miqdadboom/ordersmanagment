@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ordersmanagment_app/constants/app_colors.dart';
 
 class PromoBanner extends StatefulWidget {
   const PromoBanner({super.key});
@@ -47,7 +48,7 @@ class _PromoBannerState extends State<PromoBanner> {
               ),
               Container(
                 // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.4),
+                color: AppColors.cloudyOfHeder,
                 width: double.infinity,
                 height: double.infinity,
               ),
@@ -57,7 +58,7 @@ class _PromoBannerState extends State<PromoBanner> {
                 child: Text(
                   'New product and offers',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textLight,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -69,8 +70,8 @@ class _PromoBannerState extends State<PromoBanner> {
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
+                    backgroundColor: AppColors.textLight,
+                    foregroundColor: AppColors.textDark,
                   ),
                   child: const Text('Shop Now'),
                 ),

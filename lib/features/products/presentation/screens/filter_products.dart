@@ -86,7 +86,6 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    
                     const SizedBox(height: 12),
                     const SearchBarWidget(),
                     const SizedBox(height: 20),

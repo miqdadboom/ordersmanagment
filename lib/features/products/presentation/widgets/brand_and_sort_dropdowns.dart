@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ordersmanagment_app/constants/app_colors.dart';
 
 class BrandAndSortDropdowns extends StatelessWidget {
   final String selectedBrand;
@@ -23,7 +24,7 @@ class BrandAndSortDropdowns extends StatelessWidget {
             height: 40,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
+              border: Border.all(color: AppColors.selectionFieldEdges),
               borderRadius: BorderRadius.circular(10),
             ),
             child: DropdownButtonHideUnderline(
@@ -46,7 +47,7 @@ class BrandAndSortDropdowns extends StatelessWidget {
             height: 40,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
+              border: Border.all(color: AppColors.selectionFieldEdges),
               borderRadius: BorderRadius.circular(10),
             ),
             child: DropdownButtonHideUnderline(
