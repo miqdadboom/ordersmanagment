@@ -67,6 +67,7 @@ class _MakeupTypeDialogState extends State<MakeupTypeDialog> {
                     color:
                         isSelected ? AppColors.textLight : AppColors.textDark,
                   ),
+                  checkmarkColor: Colors.white,
                 );
               }).toList(),
         ),

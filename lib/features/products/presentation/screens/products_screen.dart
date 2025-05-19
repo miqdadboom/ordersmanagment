@@ -14,7 +14,6 @@ class Category {
   Category(this.imageUrl, this.name);
 }
 
-// ----- CategorySection الآن يستقبل List<Category> بدل بيانات ثابتة -----
 class CategorySection extends StatelessWidget {
   final Function(int index) onCategoryTap;
   final VoidCallback onViewAllTap;
@@ -175,8 +174,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: const Text('Home Page', style: TextStyle(color: Colors.white)),
+        backgroundColor: AppColors.primary,
         centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white, // تغيير لون أيقونة الرجوع إلى الأبيض
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),

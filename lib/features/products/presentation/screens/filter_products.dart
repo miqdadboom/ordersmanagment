@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ordersmanagment_app/constants/app_colors.dart';
 import 'package:ordersmanagment_app/features/products/presentation/widgets/brand_and_sort_dropdowns.dart';
 import 'package:ordersmanagment_app/features/products/presentation/widgets/makeup_type_dialog.dart';
 import 'package:ordersmanagment_app/features/products/presentation/widgets/makeup_type_filter.dart';
@@ -76,7 +77,18 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Makeup'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text(
+          'Makeup',
+          style: TextStyle(color: AppColors.textLight),
+        ),
+        centerTitle: true,
+        backgroundColor: AppColors.primary,
+        iconTheme: const IconThemeData(
+          color: Colors.white, // تغيير لون أيقونة الرجوع إلى الأبيض
+        ),
+      ),
+
       body: SafeArea(
         child: CustomScrollView(
           slivers: [

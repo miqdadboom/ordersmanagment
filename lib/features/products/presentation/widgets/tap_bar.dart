@@ -22,8 +22,8 @@ class _BottomNavigationSalesRepresentativeState
         // Add navigation logic here
       },
       type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.backgroundColor,
-      selectedItemColor: AppColors.primary,
+      backgroundColor: AppColors.primary,
+      selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
       unselectedItemColor: AppColors.notSelectedItem,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
