@@ -20,6 +20,7 @@ class AppColors {
   static const notSelectedItemNavigation = Color(0xFF403F3F);
   static const quantityIcons = Color(0xFFFFFFFF);
   static const iconSize = Color(0xFFE0E0E0);
+  static const buttonText = Color(0xFFFFFFFF);
 
   // confirm order
   static const startConfirmOrder = Color(0xFF96D3DC);
