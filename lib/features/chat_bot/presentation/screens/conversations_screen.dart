@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../data/datasources/chat_database.dart';
 import '../widgets/conversation_item.dart';
@@ -31,7 +32,21 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
   Future<void> _deleteConversation(int id) async {
     await ChatDatabase.instance.deleteConversation(id);
+
+    final messagesCollection = FirebaseFirestore.instance
+        .collection('conversations')
+        .doc(id.toString())
+        .collection('messages');
+
+    final messagesSnapshot = await messagesCollection.get();
+    for (final doc in messagesSnapshot.docs) {
+      await doc.reference.delete();
+    }
+
+    await FirebaseFirestore.instance.collection('conversations').doc(id.toString()).delete();
+
     await _loadConversations();
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Conversation deleted successfully')),
     );

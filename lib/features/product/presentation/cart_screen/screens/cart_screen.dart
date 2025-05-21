@@ -1,6 +1,12 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../confirm_order/presentation/screens/confirm_order.dart';
+import '../../../../orders/data/datasources/order_data_source_impl.dart';
+import '../../../../orders/data/repositories/orders_repository_impl.dart';
+import '../../../../orders/domain/repositories/orders_repository.dart';
+import '../../../../orders/domain/repositories/orders_repository_impl.dart';
+import '../../../../orders/presentation/cubit/orders_cubit.dart';
 import '../cubit/cart_cubit.dart';
 import '../widgets/cart_product_list.dart';
 import '../../../../../core/widgets/bottom_navigation_sales_representative.dart';
@@ -12,8 +18,17 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CartCubit()..initializeProducts(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => CartCubit()..initializeProducts()),
+        BlocProvider(
+          create: (_) {
+            final dataSource = OrderDataSourceImpl();
+            final OrderRepository repository = OrderRepositoryImpl(dataSource: dataSource);
+            return OrdersCubit(repository);
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.background,
@@ -30,7 +45,23 @@ class CartScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               BlocBuilder<CartCubit, double>(
-                builder: (context, total) => ConfirmOrderBar(totalPrice: total),
+                builder: (context, total) => ConfirmOrderBar(
+                  totalPrice: total,
+                  onConfirm: () {
+                    final cartProducts = context.read<CartCubit>().products;
+                    final ordersCubit = context.read<OrdersCubit>();
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: ordersCubit,
+                          child: ConfirmOrder(cartProducts: cartProducts),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
               const Divider(height: 1),
               SizedBox(height: 60, child: BottomNavigationSalesRepresentative()),

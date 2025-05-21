@@ -4,7 +4,8 @@ import '../../../../../core/constants/app_colors.dart';
 
 class ConfirmOrderBar extends StatelessWidget {
   final double totalPrice;
-  const ConfirmOrderBar({super.key, required this.totalPrice});
+  final VoidCallback onConfirm;
+  const ConfirmOrderBar({super.key, required this.totalPrice, required this.onConfirm});
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +62,7 @@ class ConfirmOrderBar extends StatelessWidget {
               ],
             ),
             child: TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/confirmOrder');
-              },
+              onPressed: onConfirm,
               style: TextButton.styleFrom(
                 padding:  EdgeInsets.symmetric(horizontal: screenWidth * 0.06, vertical: screenWidth * 0.03),
               ),
