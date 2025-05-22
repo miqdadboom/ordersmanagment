@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../widgets/mange_action_buttons.dart';
-import '../widgets/mange_employee_list.dart';
 import '../widgets/mange_search_bar.dart';
 import 'add_employee_screen.dart';
+import 'edit_employee_screen.dart';
 
 class ManageEmployee extends StatefulWidget {
   @override
@@ -11,59 +12,11 @@ class ManageEmployee extends StatefulWidget {
 }
 
 class _ManageEmployeeState extends State<ManageEmployee> {
-  TextEditingController _searchController = TextEditingController();
-
-  final List<Map<String, String>> _originalEmployees = [
-    {"name": "Salah Nofal", "job": "WORK"},
-    {"name": "Ahmed Istatieh", "job": "DEVELOPER"},
-    {"name": "Miqdad Boom", "job": "HR MANAGER"},
-    {"name": "Maya Qasim", "job": "ACCOUNTANT"},
-    {"name": "Fton Ali", "job": "DESIGNER"},
-    {"name": "HANA Omar", "job": "MARKETING"},
-    {"name": "HANA Omar", "job": "MARKETING"},
-    {"name": "HANA Omar", "job": "MARKETING"},
-    {"name": "HANA Omar", "job": "MARKETING"},
-    {"name": "HANA Omar", "job": "MARKETING"},
-  ];
-
-  List<Map<String, String>> employees = [];
-
-  @override
-  void initState() {
-    super.initState();
-    employees = List.from(_originalEmployees);
-  }
-
-  void _filterEmployees(String query) {
-    setState(() {
-      employees = _originalEmployees
-          .where((employee) =>
-      employee["name"]!.toLowerCase().contains(query.toLowerCase()) ||
-          employee["job"]!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    });
-  }
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   void _sortEmployees(String value) {
-    setState(() {
-      switch (value) {
-        case 'name_asc':
-          employees.sort((a, b) => a['name']!.compareTo(b['name']!));
-          break;
-        case 'name_desc':
-          employees.sort((a, b) => b['name']!.compareTo(a['name']!));
-          break;
-        case 'job_asc':
-          employees.sort((a, b) => a['job']!.compareTo(b['job']!));
-          break;
-        case 'job_desc':
-          employees.sort((a, b) => b['job']!.compareTo(a['job']!));
-          break;
-        case 'reset':
-          employees = List.from(_originalEmployees);
-          break;
-      }
-    });
+    // Sorting logic can be implemented later if needed.
   }
 
   @override
@@ -76,7 +29,7 @@ class _ManageEmployeeState extends State<ManageEmployee> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {},
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Padding(
@@ -85,18 +38,68 @@ class _ManageEmployeeState extends State<ManageEmployee> {
           children: [
             SearchBarWidget(
               controller: _searchController,
-              onChanged: _filterEmployees,
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value.toLowerCase();
+                });
+              },
             ),
             const SizedBox(height: 10),
             ActionButtonsWidget(
               onAddPressed: () {
                 Navigator.pushNamed(context, '/add');
-
               },
               onSortSelected: _sortEmployees,
             ),
             const SizedBox(height: 15),
-            Expanded(child: EmployeeListWidget(employees: employees)),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('users').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  final docs = snapshot.data?.docs ?? [];
+
+                  final filtered = docs.where((doc) {
+                    final data = doc.data() as Map<String, dynamic>;
+                    final name = data['name']?.toLowerCase() ?? '';
+                    final job = data['jobTitle']?.toLowerCase() ?? '';
+                    return name.contains(_searchQuery) || job.contains(_searchQuery);
+                  }).toList();
+
+                  if (filtered.isEmpty) {
+                    return const Center(child: Text("No employees found"));
+                  }
+
+                  return ListView.builder(
+                    itemCount: filtered.length,
+                    itemBuilder: (context, index) {
+                      final data = filtered[index].data() as Map<String, dynamic>;
+                      final id = filtered[index].id;
+
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        child: ListTile(
+                          title: Text(data['name'] ?? ''),
+                          subtitle: Text(data['jobTitle'] ?? ''),
+                          trailing: const Icon(Icons.edit, color: AppColors.primary),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => EditEmployee(userId: id),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

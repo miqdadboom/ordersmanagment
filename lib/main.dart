@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:ordersmanagment_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:ordersmanagment_app/features/employee/presentation/screens/add_employee_screen.dart';
 import 'package:ordersmanagment_app/features/employee/presentation/screens/manage_employee_screen.dart';
 import 'package:ordersmanagment_app/features/employee/presentation/screens/edit_employee_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    if (user == null) {
+      print(' User is signed OUT!');
+    } else {
+      print(' User is signed IN!');
+    }
+  });
+
   runApp(const MyApp());
 }
 
@@ -20,12 +34,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: '/login',
+
+      initialRoute: '/manage',
       routes: {
         '/login': (context) => LoginScreen(),
         '/manage': (context) => ManageEmployee(),
         '/add': (context) => const AddEmployee(),
-        '/edit': (context) => const EditEmployee(),
+        '/edit': (context) => const EditEmployee(userId: '',),
       },
     );
   }
