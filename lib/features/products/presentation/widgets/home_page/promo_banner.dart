@@ -47,7 +47,6 @@ class _PromoBannerState extends State<PromoBanner> {
                 height: double.infinity,
               ),
               Container(
-                // ignore: deprecated_member_use
                 color: AppColors.cloudyOfHeder,
                 width: double.infinity,
                 height: double.infinity,

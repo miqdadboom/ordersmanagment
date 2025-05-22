@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ordersmanagment_app/constants/app_colors.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/brand_and_sort_dropdowns.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/makeup_type_dialog.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/makeup_type_filter.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/product_card.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/search_bar.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/filter_home_page/brand_and_sort_dropdowns.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/filter_home_page/makeup_type_dialog.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/filter_home_page/makeup_type_filter.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/home_page/product_card.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/filter_home_page/search_bar.dart';
 
 class FilterProductsScreen extends StatefulWidget {
   const FilterProductsScreen({super.key});
@@ -85,7 +85,7 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
         centerTitle: true,
         backgroundColor: AppColors.primary,
         iconTheme: const IconThemeData(
-          color: Colors.white, // تغيير لون أيقونة الرجوع إلى الأبيض
+          color: Colors.white, 
         ),
       ),
 

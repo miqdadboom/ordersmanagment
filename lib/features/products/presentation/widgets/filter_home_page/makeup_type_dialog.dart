@@ -23,7 +23,7 @@ class _MakeupTypeDialogState extends State<MakeupTypeDialog> {
   @override
   void initState() {
     super.initState();
-    tempSelectedTypes = {...widget.selectedTypes}; // نسخة قابلة للتعديل
+    tempSelectedTypes = {...widget.selectedTypes};
   }
 
   void handleToggle(String type) {
@@ -43,7 +43,6 @@ class _MakeupTypeDialogState extends State<MakeupTypeDialog> {
       }
     });
 
-    // استدعاء الدالة الأم لتحديث الحالة خارج البوب أب أيضًا
     widget.onTypeToggle(type);
   }
 

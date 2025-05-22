@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:ordersmanagment_app/constants/app_colors.dart';
+import 'package:ordersmanagment_app/features/products/domain/entities/category.dart';
 
 class CategorySection extends StatelessWidget {
   final Function(int index) onCategoryTap;
-  final VoidCallback onViewAllTap; // دالة عند الضغط على View All
+  final VoidCallback onViewAllTap;
+  final List<Category> categories;
 
   const CategorySection({
     super.key,
     required this.onCategoryTap,
     required this.onViewAllTap,
+    required this.categories,
   });
-
-  final List<String> images = const [
-    'https://images.pexels.com/photos/27085501/pexels-photo-27085501/free-photo-of-overgrown-wall-of-an-apartment-building.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    'https://images.pexels.com/photos/31887348/pexels-photo-31887348/free-photo-of-elegant-spring-white-flowers-in-bloom.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    'https://images.pexels.com/photos/15619932/pexels-photo-15619932/free-photo-of-macro-of-green-leaf-on-black-background.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +28,12 @@ class CategorySection extends StatelessWidget {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               TextButton(
-                onPressed: onViewAllTap, // استخدم الدالة الجديدة
+                onPressed: onViewAllTap,
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                child: Text('View All', style: TextStyle(fontSize: 14)),
+                child: Text(
+                  'View All',
+                  style: TextStyle(fontSize: 14, color: AppColors.viewAll),
+                ),
               ),
             ],
           ),
@@ -42,8 +42,9 @@ class CategorySection extends StatelessWidget {
           height: 100,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 6,
+            itemCount: categories.length,
             itemBuilder: (context, index) {
+              final category = categories[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: GestureDetector(
@@ -56,7 +57,7 @@ class CategorySection extends StatelessWidget {
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage(images[index % images.length]),
+                            image: NetworkImage(category.imageUrl),
                             fit: BoxFit.cover,
                           ),
                           shape: BoxShape.circle,
@@ -64,9 +65,9 @@ class CategorySection extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Category ${index + 1}',
+                        category.name,
                         style: const TextStyle(
-                          color: AppColors.categoryName,
+                          color: AppColors.textDark,
                           fontSize: 10,
                           fontWeight: FontWeight.w400,
                         ),

@@ -127,8 +127,8 @@ class AppSidebar extends StatelessWidget {
                         actions: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.LogOutField,
-                              foregroundColor: AppColors.LogOutText,
+                              backgroundColor: AppColors.logOutField,
+                              foregroundColor: AppColors.logOutText,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
                                 vertical: 12,

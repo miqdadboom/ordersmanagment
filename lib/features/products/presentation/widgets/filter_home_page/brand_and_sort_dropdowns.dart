@@ -19,17 +19,16 @@ class BrandAndSortDropdowns extends StatelessWidget {
   Widget build(BuildContext context) {
     const dropdownTextStyle = TextStyle(
       color: AppColors.primary,
-      fontSize: 14, // حجم الخط المعدل
+      fontSize: 14, 
       fontWeight: FontWeight.w500,
     );
 
     return Row(
       children: [
-        // Dropdown العلامة التجارية
         Expanded(
           child: Container(
             height: 40,
-            alignment: Alignment.center, // محاذاة النص في المنتصف
+            alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.primary),
@@ -45,11 +44,11 @@ class BrandAndSortDropdowns extends StatelessWidget {
                     String item,
                   ) {
                     return Align(
-                      alignment: Alignment.centerLeft, // محاذاة النص
+                      alignment: Alignment.centerLeft,
                       child: Text(
                         item == 'All Brands' ? 'Brand' : item,
                         style: dropdownTextStyle.copyWith(
-                          fontSize: 14, // حجم الخط عند التحديد
+                          fontSize: 14,
                         ),
                       ),
                     );
@@ -81,7 +80,7 @@ class BrandAndSortDropdowns extends StatelessWidget {
                 onChanged: onBrandChanged,
                 dropdownColor: Colors.white,
                 icon: Icon(Icons.arrow_drop_down, color: AppColors.primary),
-                iconSize: 24, // حجم أيقونة السهم
+                iconSize: 24,
               ),
             ),
           ),
@@ -89,7 +88,6 @@ class BrandAndSortDropdowns extends StatelessWidget {
 
         const SizedBox(width: 8),
 
-        // Dropdown الترتيب
         Expanded(
           child: Container(
             height: 40,

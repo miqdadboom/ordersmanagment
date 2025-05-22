@@ -31,7 +31,6 @@ class ProductCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              // ignore: deprecated_member_use
               color: AppColors.cardShadow,
               spreadRadius: 1,
               blurRadius: 5,
@@ -45,7 +44,6 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Image Section
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(12),
@@ -77,7 +75,6 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Product Info Section
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
                   child: Column(

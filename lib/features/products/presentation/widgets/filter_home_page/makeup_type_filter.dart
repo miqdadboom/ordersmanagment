@@ -58,9 +58,9 @@ class MakeupTypeFilter extends StatelessWidget {
                         selected: isSelected,
                         onSelected: (_) => onTypeSelected(type),
                         selectedColor:
-                            AppColors.primary, // لون الخلفية عند التحديد
-                        backgroundColor: Colors.grey[100], // لون الخلفية العادي
-                        checkmarkColor: Colors.white, // لون علامة الاختيار
+                            AppColors.primary, 
+                        backgroundColor: Colors.grey[100], 
+                        checkmarkColor: Colors.white, 
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                           side: BorderSide(
@@ -71,7 +71,7 @@ class MakeupTypeFilter extends StatelessWidget {
                             width: 1,
                           ),
                         ),
-                        elevation: 2, // ظل خفيف
+                        elevation: 2,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 4,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/product_card.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/home_page/product_card.dart';
 
 class ProductSearchDelegate extends SearchDelegate {
   final List<Map<String, dynamic>> allProducts;

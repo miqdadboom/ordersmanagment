@@ -1,104 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ordersmanagment_app/constants/app_colors.dart';
+import 'package:ordersmanagment_app/features/products/domain/entities/category.dart';
 import 'package:ordersmanagment_app/features/products/presentation/screens/filter_products.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/product_search_delegate.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/product_card.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/promo_banner.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/sidebar.dart';
-import 'package:ordersmanagment_app/features/products/presentation/widgets/tap_bar.dart';
-
-class Category {
-  final String imageUrl;
-  final String name;
-
-  Category(this.imageUrl, this.name);
-}
-
-class CategorySection extends StatelessWidget {
-  final Function(int index) onCategoryTap;
-  final VoidCallback onViewAllTap;
-  final List<Category> categories;
-
-  const CategorySection({
-    super.key,
-    required this.onCategoryTap,
-    required this.onViewAllTap,
-    required this.categories,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Category',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              TextButton(
-                onPressed: onViewAllTap,
-                style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                child: Text(
-                  'View All',
-                  style: TextStyle(
-                    fontSize: 14,
-                    // ignore: deprecated_member_use
-                    color: AppColors.viewAll,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 100,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              final category = categories[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: GestureDetector(
-                  onTap: () => onCategoryTap(index),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 80,
-                        height: 80,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(category.imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        category.name,
-                        style: const TextStyle(
-                          color: AppColors.textDark,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
+import 'package:ordersmanagment_app/features/products/presentation/widgets/home_page/product_search_delegate.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/home_page/product_card.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/home_page/promo_banner.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/home_page/sidebar.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/home_page/tap_bar.dart';
+import 'package:ordersmanagment_app/features/products/presentation/widgets/home_page/category.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -119,7 +28,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
     };
   });
 
-  // نعرف هنا نفس قائمة الكاتيجوري التي نريد عرضها
   final List<Category> categories = List.generate(
     6,
     (index) => Category(
@@ -147,7 +55,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   ),
                   title: Text(category.name),
                   onTap: () {
-                    Navigator.pop(context); // اغلاق البوب أب
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -177,9 +85,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         title: const Text('Home Page', style: TextStyle(color: Colors.white)),
         backgroundColor: AppColors.primary,
         centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.white, // تغيير لون أيقونة الرجوع إلى الأبيض
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),

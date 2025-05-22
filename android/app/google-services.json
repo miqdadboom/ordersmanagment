@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "361469210976",
+    "project_id": "fluttertest-77bb1",
+    "storage_bucket": "fluttertest-77bb1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361469210976:android:2e8d5301e81ac999aeee05",
+        "android_client_info": {
+          "package_name": "com.orders.ordersmanagment_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlM-MXEwThRgcgVhte0ORHYDhkXir4sPs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

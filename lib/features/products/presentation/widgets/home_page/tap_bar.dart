@@ -19,7 +19,6 @@ class _BottomNavigationSalesRepresentativeState
       currentIndex: _currentIndex,
       onTap: (index) {
         setState(() => _currentIndex = index);
-        // Add navigation logic here
       },
       type: BottomNavigationBarType.fixed,
       backgroundColor: AppColors.primary,

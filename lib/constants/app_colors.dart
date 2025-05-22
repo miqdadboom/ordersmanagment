@@ -60,8 +60,8 @@ class AppColors {
 
   static const cloudyOfHeder = Color(0x66000000);
   static const searchBar = Color(0xFFEEEEEE);
-  static const LogOutField = Color(0xFFFFCDD2);
-  static const LogOutText = Color(0xFFFF0000);
+  static const logOutField = Color(0xFFFFCDD2);
+  static const logOutText = Color(0xFFFF0000);
   static const lougOut = Color(0xFFFF0000);
   static const cancel = Color(0xFF000000);
   static const cancelField = Color(0xFF9E9E9E);
