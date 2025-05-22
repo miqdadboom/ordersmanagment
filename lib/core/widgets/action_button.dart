@@ -1,6 +1,7 @@
 
-import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+
+import '../constants/app_colors.dart';
 
 class ActionButton extends StatelessWidget {
   final String label;

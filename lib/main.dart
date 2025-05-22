@@ -1,9 +1,9 @@
-import 'package:final_tasks_front_end/features/chat_bot/presentation/screens/chat_screen.dart';
-import 'package:final_tasks_front_end/features/chat_bot/presentation/screens/conversations_screen.dart';
-import 'package:final_tasks_front_end/features/chat_bot/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'features/chat_bot/presentation/screens/chat_screen.dart';
+import 'features/chat_bot/presentation/screens/conversations_screen.dart';
+import 'features/chat_bot/presentation/screens/home_screen.dart';
 import 'features/map/presentation/screens/map_screen.dart';
 import 'features/product/presentation/cart_screen/screens/cart_screen.dart';
 import 'features/confirm_order/presentation/screens/confirm_order.dart';
