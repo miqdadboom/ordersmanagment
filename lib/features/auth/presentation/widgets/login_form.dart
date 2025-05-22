@@ -54,11 +54,7 @@ class _LoginFormState extends State<LoginForm> {
             textColor: AppColors.textDark,
           ),
           const SizedBox(height: 35),
-          LoginButton(
-            onPressed: _handleLogin,
-            backgroundColor: AppColors.primary,
-            textColor: AppColors.buttonText,
-          ),
+          LoginButton(),
         ],
       ),
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/widgets/common_text.dart';
-import '../../cart_screen/widgets/quantity_controller.dart';
-
+import '../../../cart_product/presentation/cart_screen/widgets/quantity_controller.dart';
 class TextDescription extends StatelessWidget {
   final String name;
   final String brand;

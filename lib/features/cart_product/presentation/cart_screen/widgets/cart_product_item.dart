@@ -1,4 +1,4 @@
-import 'package:final_tasks_front_end/features/product/presentation/cart_screen/widgets/product_card.dart';
+import 'package:final_tasks_front_end/features/cart_product/presentation/cart_screen/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/cart_cubit.dart';
