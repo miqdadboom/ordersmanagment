@@ -20,7 +20,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
   final _addressController = TextEditingController();
   final _distributionController = TextEditingController();
 
-  String _selectedRole = 'employee';
+  String _selectedRole = 'sales representative';
   bool _loading = true;
 
   @override
@@ -30,11 +30,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
   }
 
   Future<void> _loadEmployeeData() async {
-    final doc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
-        .get();
-
+    final doc = await FirebaseFirestore.instance.collection('users').doc(widget.userId).get();
     final data = doc.data();
     if (data != null) {
       _nameController.text = data['name'] ?? '';
@@ -42,9 +38,10 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
       _phoneController.text = data['phone'] ?? '';
       _addressController.text = data['address'] ?? '';
       _distributionController.text = data['distributionLine'] ?? '';
-      _selectedRole = data['role'] ?? 'employee';
+      _selectedRole = data['role'] ?? 'sales representative';
     }
 
+    if (!mounted) return;
     setState(() {
       _loading = false;
     });
@@ -52,10 +49,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
 
   Future<void> _updateEmployee() async {
     if (_formKey.currentState!.validate()) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.userId)
-          .update({
+      await FirebaseFirestore.instance.collection('users').doc(widget.userId).update({
         'name': _nameController.text.trim(),
         'email': _emailController.text.trim(),
         'phone': _phoneController.text.trim(),
@@ -64,6 +58,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
         'role': _selectedRole,
       });
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Employee updated successfully")),
       );
@@ -92,6 +87,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
 
     if (confirm == true) {
       await FirebaseFirestore.instance.collection('users').doc(widget.userId).delete();
+      if (!mounted) return;
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Employee deleted")),
@@ -100,41 +96,50 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
   }
 
   Widget _buildRoleDropdown() {
-    final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: AppColors.primary.withOpacity(0.4)),
-    );
+    final validRoles = [
+      'admin',
+      'sales representative',
+      'warehouse employee',
+    ];
 
-    final focusedBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: AppColors.primary, width: 2),
-    );
+    final dropdownValue = validRoles.contains(_selectedRole) ? _selectedRole : null;
 
-    return DropdownButtonFormField<String>(
-      value: _selectedRole,
-      decoration: InputDecoration(
-        labelText: 'Select Role',
-        labelStyle: const TextStyle(color: AppColors.textDark),
-        filled: true,
-        fillColor: AppColors.background,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-        border: border,
-        enabledBorder: border,
-        focusedBorder: focusedBorder,
-      ),
-      items: ['employee', 'storekeeper'].map((role) {
-        return DropdownMenuItem<String>(
-          value: role,
-          child: Text(role[0].toUpperCase() + role.substring(1)),
-        );
-      }).toList(),
-      onChanged: (value) {
-        if (value != null) {
-          setState(() {
-            _selectedRole = value;
-          });
-        }
-      },
+    return Column(
+      children: [
+        DropdownButtonFormField<String>(
+          value: dropdownValue,
+          decoration: InputDecoration(
+            labelText: 'Select Role',
+            labelStyle: const TextStyle(color: AppColors.textDark),
+            filled: true,
+            fillColor: AppColors.background,
+            contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.primary.withOpacity(0.4)),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderSide: BorderSide(color: AppColors.primary, width: 2),
+            ),
+          ),
+          dropdownColor: AppColors.background,
+          items: const [
+            DropdownMenuItem(value: 'admin', child: Text('Admin')),
+            DropdownMenuItem(value: 'sales representative', child: Text('Sales Representative')),
+            DropdownMenuItem(value: 'warehouse employee', child: Text('Warehouse Employee')),
+          ],
+          onChanged: (value) {
+            if (value != null) {
+              setState(() {
+                _selectedRole = value;
+              });
+            }
+          },
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 
@@ -172,7 +177,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   EditEmployeeTextField(
                     controller: _nameController,
                     label: "Name",
@@ -203,9 +208,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
                     icon: Icons.route,
                     validatorMessage: 'Please enter the distribution line',
                   ),
-                  const SizedBox(height: 10),
                   _buildRoleDropdown(),
-                  const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

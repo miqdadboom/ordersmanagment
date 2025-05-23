@@ -39,14 +39,14 @@ class EmployeeCardWidget extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                // TODO: call action
+
               },
               child: Icon(Icons.call, color: AppColors.primary),
             ),
             const SizedBox(width: 20),
             GestureDetector(
               onTap: () {
-                // TODO: email action
+
               },
               child: Icon(Icons.email, color: AppColors.primary),
             ),

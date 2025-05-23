@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
       ),
 
-      initialRoute: '/manage',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(),
         '/manage': (context) => ManageEmployee(),
