@@ -77,7 +77,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
             onPressed: () => Navigator.pop(ctx, false),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.deleteButton),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.iconDelete),
             child: const Text("Delete"),
             onPressed: () => Navigator.pop(ctx, true),
           ),
@@ -227,7 +227,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
                       onPressed: _deleteEmployee,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        backgroundColor: AppColors.deleteButton,
+                        backgroundColor: AppColors.iconDelete,
                       ),
                       child: const Text("Delete", style: TextStyle(fontSize: 18)),
                     ),

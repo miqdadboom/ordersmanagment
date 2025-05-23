@@ -1,29 +1,33 @@
 {
   "project_info": {
-    "project_number": "452057974456",
-    "project_id": "salah-database",
-    "storage_bucket": "salah-database.firebasestorage.app"
+
+
+    "project_number": "340621456955",
+    "project_id": "finalprojectflutter-6ae1f",
+    "storage_bucket": "finalprojectflutter-6ae1f.firebasestorage.app"
+
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:452057974456:android:0e8b736cd73974edc7d64d",
-        "android_client_info": {
-          "package_name": "com.orders.ordersmanagment_app"
+          "mobilesdk_app_id": "1:340621456955:android:34ab31f4a5e92673bbce1e",
+          "android_client_info": {
+            "package_name": "com.example.ordersmanagment_app"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+
+            "current_key": "AIzaSyCQjf19n4VREJoE_qilW2bIOymuY0hTzWk"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
         }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDZAkrnxye8T1b5p6yxlM6SpUf3BQyLWUo"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    }
-  ],
+
+    }],
   "configuration_version": "1"
 }
