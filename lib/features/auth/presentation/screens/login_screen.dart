@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             colors: [
               AppColors.primary,
-              AppColors.primary, // تقدر تغيّرها إذا بدك Gradation
+              AppColors.primary,
             ],
           ),
         ),
@@ -23,7 +23,7 @@ class LoginScreen extends StatelessWidget {
             Text(
               "Login",
               style: TextStyle(
-                color: AppColors.textLight, // بدل Colors.white
+                color: AppColors.textLight,
                 fontSize: 45,
                 fontWeight: FontWeight.bold,
               ),
@@ -32,7 +32,7 @@ class LoginScreen extends StatelessWidget {
             Text(
               "Welcome Back",
               style: TextStyle(
-                color: AppColors.textLight, // بدل Colors.white
+                color: AppColors.textLight,
                 fontSize: 25,
               ),
             ),
@@ -55,14 +55,14 @@ class _LoginFormContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 100),
       decoration: const BoxDecoration(
-        color: AppColors.background, // بدل Colors.white
+        color: AppColors.background,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(55),
           topRight: Radius.circular(55),
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.boxShadow, // بدل Colors.black.withOpacity()
+            color: AppColors.boxShadow,
             blurRadius: 15,
             offset: Offset(0, -5),
           ),
