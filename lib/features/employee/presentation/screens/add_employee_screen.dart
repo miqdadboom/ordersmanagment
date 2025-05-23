@@ -55,7 +55,7 @@ class _AddEmployeeState extends State<AddEmployee> {
 
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text(' Employee added successfully'),
+              content: Text('Employee added successfully'),
               backgroundColor: Colors.green,
             ),
           );
@@ -64,7 +64,7 @@ class _AddEmployeeState extends State<AddEmployee> {
         } on FirebaseAuthException catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(' Error: ${e.message}'),
+              content: Text('Error: ${e.message}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -92,8 +92,8 @@ class _AddEmployeeState extends State<AddEmployee> {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.background,
         title: Text(title, style: const TextStyle(color: AppColors.textDark)),
-        content:
-        Text(content, style: const TextStyle(color: AppColors.textDescription)),
+        content: Text(content,
+            style: const TextStyle(color: AppColors.textDescription)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -103,7 +103,8 @@ class _AddEmployeeState extends State<AddEmployee> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Confirm', style: TextStyle(color: AppColors.textLight)),
+            child: const Text('Confirm',
+                style: TextStyle(color: AppColors.textLight)),
           ),
         ],
       ),
@@ -168,7 +169,9 @@ class _AddEmployeeState extends State<AddEmployee> {
                 const SizedBox(height: 16),
                 _buildRoleDropdown(),
                 const SizedBox(height: 55),
-                SaveButton(onPressed: () => _submitForm(context), color: primaryColor),
+                SaveButton(
+                    onPressed: () => _submitForm(context),
+                    color: primaryColor),
               ],
             ),
           ),
@@ -195,17 +198,17 @@ class _AddEmployeeState extends State<AddEmployee> {
         labelStyle: const TextStyle(color: AppColors.textDark),
         filled: true,
         fillColor: AppColors.background,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+        contentPadding:
+        const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
         border: border,
         enabledBorder: border,
         focusedBorder: focusedBorder,
       ),
-      items: ['employee', 'storekeeper'].map((role) {
-        return DropdownMenuItem<String>(
-          value: role,
-          child: Text(role[0].toUpperCase() + role.substring(1)),
-        );
-      }).toList(),
+      items: const [
+        DropdownMenuItem(value: 'employee', child: Text('Sales Representative')),
+        DropdownMenuItem(value: 'storekeeper', child: Text('Warehouse Employee')),
+
+      ],
       onChanged: (value) {
         if (value != null) {
           setState(() {
