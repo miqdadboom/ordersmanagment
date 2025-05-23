@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.orders.ordersmanagment_app"
+    namespace = "com.example.ordersmanagment_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -21,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.orders.ordersmanagment_app"
+        applicationId = "com.example.ordersmanagment_app"
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
