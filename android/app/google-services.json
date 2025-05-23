@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "452057974456",
+    "project_id": "salah-database",
+    "storage_bucket": "salah-database.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452057974456:android:0e8b736cd73974edc7d64d",
+        "android_client_info": {
+          "package_name": "com.orders.ordersmanagment_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZAkrnxye8T1b5p6yxlM6SpUf3BQyLWUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
