@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/constants/app_colors.dart';
 import 'edit_employee_textfield.dart';
 
 class EditEmployeeForm extends StatefulWidget {
-  const EditEmployeeForm({super.key});
+  final String userId;
+
+  const EditEmployeeForm({super.key, required this.userId});
 
   @override
   State<EditEmployeeForm> createState() => _EditEmployeeFormState();
@@ -11,112 +14,227 @@ class EditEmployeeForm extends StatefulWidget {
 
 class _EditEmployeeFormState extends State<EditEmployeeForm> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _jobController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _distributionController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _distributionController = TextEditingController();
 
-  void _submitForm(BuildContext context) {
+  String _selectedRole = 'employee';
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmployeeData();
+  }
+
+  Future<void> _loadEmployeeData() async {
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.userId)
+        .get();
+
+    final data = doc.data();
+    if (data != null) {
+      _nameController.text = data['name'] ?? '';
+      _emailController.text = data['email'] ?? '';
+      _phoneController.text = data['phone'] ?? '';
+      _addressController.text = data['address'] ?? '';
+      _distributionController.text = data['distributionLine'] ?? '';
+      _selectedRole = data['role'] ?? 'employee';
+    }
+
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  Future<void> _updateEmployee() async {
     if (_formKey.currentState!.validate()) {
-      final name = _nameController.text;
-      final job = _jobController.text;
-      print('The employee has been saved: $name - $job');
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.userId)
+          .update({
+        'name': _nameController.text.trim(),
+        'email': _emailController.text.trim(),
+        'phone': _phoneController.text.trim(),
+        'address': _addressController.text.trim(),
+        'distributionLine': _distributionController.text.trim(),
+        'role': _selectedRole,
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('The employee has been saved successfully')),
+        const SnackBar(content: Text("Employee updated successfully")),
       );
-
-      _nameController.clear();
-      _emailController.clear();
-      _phoneController.clear();
-      _jobController.clear();
-      _addressController.clear();
-      _distributionController.clear();
     }
   }
 
-  void _confirmDelete(BuildContext context) {
-    showDialog(
+  Future<void> _deleteEmployee() async {
+    final confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext ctx) {
-        return AlertDialog(
-          title: const Text("Confirm Delete"),
-          content: const Text("Are you sure you want to delete this employee?"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("The employee has been deleted")),
-                );
-              },
-              child: Text("Delete", style: TextStyle(color: AppColors.iconDelete)),
-            ),
-          ],
+      builder: (ctx) => AlertDialog(
+        title: const Text("Delete Employee"),
+        content: const Text("Are you sure you want to delete this employee?"),
+        actions: [
+          TextButton(
+            child: const Text("Cancel"),
+            onPressed: () => Navigator.pop(ctx, false),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.iconDelete),
+            child: const Text("Delete"),
+            onPressed: () => Navigator.pop(ctx, true),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await FirebaseFirestore.instance.collection('users').doc(widget.userId).delete();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Employee deleted")),
+      );
+    }
+  }
+
+  Widget _buildRoleDropdown() {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: AppColors.primary.withOpacity(0.4)),
+    );
+
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: AppColors.primary, width: 2),
+    );
+
+    return DropdownButtonFormField<String>(
+      value: _selectedRole,
+      decoration: InputDecoration(
+        labelText: 'Select Role',
+        labelStyle: const TextStyle(color: AppColors.textDark),
+        filled: true,
+        fillColor: AppColors.background,
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+        border: border,
+        enabledBorder: border,
+        focusedBorder: focusedBorder,
+      ),
+      items: ['employee', 'storekeeper'].map((role) {
+        return DropdownMenuItem<String>(
+          value: role,
+          child: Text(role[0].toUpperCase() + role.substring(1)),
         );
+      }).toList(),
+      onChanged: (value) {
+        if (value != null) {
+          setState(() {
+            _selectedRole = value;
+          });
+        }
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return Column(
+      children: [
+        Row(
           children: [
-            Center(
-              child: Text(
-                "Edit Employee Details",
-                style: TextStyle(
-                  height: 5,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-              ),
+            IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppColors.primary),
+              onPressed: () => Navigator.pop(context),
             ),
-            const SizedBox(height: 5),
-            EditEmployeeTextField(controller: _nameController, label: "Person", icon: Icons.person, validatorMessage: 'Please enter the name'),
-            EditEmployeeTextField(controller: _emailController, label: "Email", icon: Icons.email, validatorMessage: 'Please enter the email'),
-            EditEmployeeTextField(controller: _phoneController, label: "Phone", icon: Icons.phone, validatorMessage: 'Please enter the phone number'),
-            EditEmployeeTextField(controller: _jobController, label: "Job", icon: Icons.work, validatorMessage: 'Please enter the job title'),
-            EditEmployeeTextField(controller: _addressController, label: "Address", icon: Icons.location_on, validatorMessage: 'Please enter the address'),
-            EditEmployeeTextField(controller: _distributionController, label: "Distribution Line", icon: Icons.straight_outlined, validatorMessage: 'Please enter the distribution line'),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => _submitForm(context),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  backgroundColor: AppColors.primary,
-                ),
-                child: Text('Save', style: TextStyle(fontSize: 18, color: AppColors.buttonText)),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => _confirmDelete(context),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  backgroundColor: AppColors.iconDelete,
-                ),
-                child: Text('Delete Employee', style: TextStyle(fontSize: 18, color: AppColors.buttonText)),
-              ),
-            ),
+            const Spacer(),
           ],
         ),
-      ),
+        Expanded(
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(
+                    child: Text(
+                      "Edit Employee",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                        height: 5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  EditEmployeeTextField(
+                    controller: _nameController,
+                    label: "Name",
+                    icon: Icons.person,
+                    validatorMessage: 'Please enter the name',
+                  ),
+                  EditEmployeeTextField(
+                    controller: _emailController,
+                    label: "Email",
+                    icon: Icons.email,
+                    validatorMessage: 'Please enter the email',
+                  ),
+                  EditEmployeeTextField(
+                    controller: _phoneController,
+                    label: "Phone",
+                    icon: Icons.phone,
+                    validatorMessage: 'Please enter the phone number',
+                  ),
+                  EditEmployeeTextField(
+                    controller: _addressController,
+                    label: "Address",
+                    icon: Icons.location_on,
+                    validatorMessage: 'Please enter the address',
+                  ),
+                  EditEmployeeTextField(
+                    controller: _distributionController,
+                    label: "Distribution Line",
+                    icon: Icons.route,
+                    validatorMessage: 'Please enter the distribution line',
+                  ),
+                  const SizedBox(height: 10),
+                  _buildRoleDropdown(),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _updateEmployee,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        backgroundColor: AppColors.primary,
+                      ),
+                      child: const Text("Save", style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _deleteEmployee,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        backgroundColor: AppColors.iconDelete,
+                      ),
+                      child: const Text("Delete", style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

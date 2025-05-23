@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/manage': (context) => ManageEmployee(),
         '/add': (context) => const AddEmployee(),
-        '/edit': (context) => const EditEmployee(),
+        '/edit': (context) => const EditEmployee(userId: '',),
         '/homeScreen': (context) => const HomeScreen(),
         '/conversationScreen': (context) => const ConversationsScreen(),
         '/chatScreen': (context) {
