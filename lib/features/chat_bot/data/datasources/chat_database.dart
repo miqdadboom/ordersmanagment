@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -45,11 +46,19 @@ class ChatDatabase {
 
   Future<int> createConversation(String title) async {
     final db = await instance.database;
-    return await db.insert('conversations', {
+    int id = await db.insert('conversations', {
       'title': title,
       'last_message': '',
       'last_updated': DateTime.now().toIso8601String(),
     });
+
+    await FirebaseFirestore.instance.collection('conversations').doc(id.toString()).set({
+      'title': title,
+      'last_message': '',
+      'last_updated': DateTime.now().toIso8601String(),
+    });
+
+    return id;
   }
 
   Future<void> updateConversation(int conversationId, String lastMessage) async {
@@ -75,6 +84,18 @@ class ChatDatabase {
       'type': type,
     });
     await updateConversation(conversationId, content);
+
+
+    await FirebaseFirestore.instance
+        .collection('conversations')
+        .doc(conversationId.toString())
+        .collection('messages')
+        .add({
+      'sender': sender,
+      'content': content,
+      'timestamp': DateTime.now().toIso8601String(),
+      'type': type,
+    });
   }
 
   Future<List<Map<String, dynamic>>> getConversations() async {
@@ -106,5 +127,8 @@ class ChatDatabase {
       where: 'id = ?',
       whereArgs: [conversationId],
     );
+
+    await FirebaseFirestore.instance.collection('conversations').doc(conversationId.toString()).delete();
+
   }
 }

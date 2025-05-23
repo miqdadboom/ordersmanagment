@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
-class BottomNavigationSalesRepresentative extends StatefulWidget {
-  const BottomNavigationSalesRepresentative({super.key});
+class BottomNavigationManager extends StatefulWidget {
+  const BottomNavigationManager({super.key});
 
   @override
-  State<BottomNavigationSalesRepresentative> createState() =>
-      _BottomNavigationSalesRepresentativeState();
+  State<BottomNavigationManager> createState() =>
+      _BottomNavigationManager();
 }
 
-class _BottomNavigationSalesRepresentativeState
-    extends State<BottomNavigationSalesRepresentative> {
+class _BottomNavigationManager
+    extends State<BottomNavigationManager> {
   int _currentIndex = 0;
 
   void _onTabTapped(int index) {

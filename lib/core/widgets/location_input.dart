@@ -10,7 +10,6 @@ import '../constants/app_colors.dart';
 
 class LocationInput extends StatefulWidget {
   const LocationInput({super.key, required this.onSelectLocation});
-
   final void Function(PlaceLocation location) onSelectLocation;
 
   @override
@@ -26,9 +25,8 @@ class _LocationInputState extends State<LocationInput> {
       final url = Uri.parse(
         'https://nominatim.openstreetmap.org/reverse?format=json&lat=$latitude&lon=$longitude',
       );
-
       final response = await http.get(url, headers: {
-        'User-Agent': 'flutter-app' // ضروري لنظام OSM
+        'User-Agent': 'flutter-app',
       });
 
       final resData = json.decode(response.body);
@@ -45,64 +43,40 @@ class _LocationInputState extends State<LocationInput> {
 
       widget.onSelectLocation(_pickedLocation!);
     } catch (e) {
-      setState(() {
-        _isGettingLocation = false;
-      });
+      setState(() => _isGettingLocation = false);
     }
   }
 
-  void _selectMap() async {
-    final pickedLocation = await Navigator.pushNamed(context, '/mapScreen',) as LatLng?;;
-
+  Future<void> _selectMap() async {
+    final pickedLocation = await Navigator.pushNamed(context, '/mapScreen') as LatLng?;
     if (pickedLocation == null) return;
 
     await _savePlace(pickedLocation.latitude, pickedLocation.longitude);
   }
 
-
-  void _getCurrentLocation() async {
+  Future<void> _getCurrentLocation() async {
     Location location = Location();
 
     bool serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) return;
-    }
+    if (!serviceEnabled && !(await location.requestService())) return;
 
     PermissionStatus permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) return;
-    }
+    if (permissionGranted == PermissionStatus.denied &&
+        (await location.requestPermission()) != PermissionStatus.granted) return;
 
-    await location.changeSettings(
-      accuracy: LocationAccuracy.high,
-      interval: 1000,
-    );
-
-    setState(() {
-      _isGettingLocation = true;
-    });
+    setState(() => _isGettingLocation = true);
 
     final locationData = await location.getLocation();
+    if (locationData.latitude == null || locationData.longitude == null) return;
 
-    final lat = locationData.latitude;
-    final lng = locationData.longitude;
-
-    if (lat == null || lng == null) return;
-
-    await _savePlace(lat, lng);
+    await _savePlace(locationData.latitude!, locationData.longitude!);
   }
-
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    Widget previewContent = const Text(
-      'No Location Chosen',
-      textAlign: TextAlign.center,
-    );
+    Widget previewContent = const Text('No Location Chosen', textAlign: TextAlign.center);
 
     if (_isGettingLocation) {
       previewContent = const CircularProgressIndicator();
@@ -111,16 +85,16 @@ class _LocationInputState extends State<LocationInput> {
         children: [
           FlutterMap(
             options: MapOptions(
-              center: LatLng(
-                _pickedLocation!.latitude,
-                _pickedLocation!.longitude,
+              initialCenter: LatLng(_pickedLocation!.latitude, _pickedLocation!.longitude),
+              initialZoom: 13.0,
+              interactionOptions: const InteractionOptions(
+                flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
               ),
-              zoom: 13,
-              interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
             ),
             children: [
               TileLayer(
                 urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.example.final_tasks_front_end',
               ),
               MarkerLayer(
                 markers: [
@@ -128,7 +102,7 @@ class _LocationInputState extends State<LocationInput> {
                     point: LatLng(_pickedLocation!.latitude, _pickedLocation!.longitude),
                     width: 60,
                     height: 60,
-                    child:  Icon(Icons.location_pin, size: 40, color: AppColors.lableMap),
+                    child: Icon(Icons.location_pin, size: 40, color: AppColors.lableMap),
                   ),
                 ],
               ),
@@ -147,7 +121,7 @@ class _LocationInputState extends State<LocationInput> {
                 style: const TextStyle(fontSize: 12),
               ),
             ),
-          )
+          ),
         ],
       );
     }
@@ -158,10 +132,7 @@ class _LocationInputState extends State<LocationInput> {
           height: 170,
           width: double.infinity,
           decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: AppColors.border,
-            ),
+            border: Border.all(width: 1, color: AppColors.border),
           ),
           alignment: Alignment.center,
           child: previewContent,
@@ -172,7 +143,7 @@ class _LocationInputState extends State<LocationInput> {
           children: [
             Flexible(
               child: TextButton.icon(
-                icon:  Icon(Icons.location_on, color: AppColors.icon),
+                icon: Icon(Icons.location_on, color: AppColors.icon),
                 label: FittedBox(
                   child: Text(
                     'Current Location',
@@ -184,7 +155,7 @@ class _LocationInputState extends State<LocationInput> {
             ),
             Flexible(
               child: TextButton.icon(
-                icon:  Icon(Icons.map, color: AppColors.icon),
+                icon: Icon(Icons.map, color: AppColors.icon),
                 label: FittedBox(
                   child: Text(
                     'Select on Map',

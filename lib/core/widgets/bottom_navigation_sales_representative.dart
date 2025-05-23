@@ -22,6 +22,8 @@ class _BottomNavigationSalesRepresentativeState
       case 0:
         Navigator.pushReplacementNamed(context, '/productScreen');
         break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/listOrder');
       case 2:
         Navigator.pushReplacementNamed(context, '/cartScreen');
         break;
