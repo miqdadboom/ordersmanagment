@@ -17,10 +17,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'features/orders/domain/repositories/orders_repository_impl.dart';
-
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      print("✅ Firebase initialized");
+    } else {
+      print("⚠️ Firebase already initialized");
+    }
+  } catch (e) {
+    print("❌ Firebase init error: $e");
+  }
 
   final dataSource = OrderDataSourceImpl();
   final OrderRepository repository = OrderRepositoryImpl(dataSource: dataSource);
@@ -41,7 +54,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const ListOfOrdersScreen(),
+      home: const HomeScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
         '/homeScreen': (context) => const HomeScreen(),

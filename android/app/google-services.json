@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "13202879334",
-    "project_id": "fluttercourse-b328d",
-    "storage_bucket": "fluttercourse-b328d.firebasestorage.app"
+    "project_number": "340621456955",
+    "project_id": "finalprojectflutter-6ae1f",
+    "storage_bucket": "finalprojectflutter-6ae1f.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:13202879334:android:b05303c93e48dc314d8ea7",
+        "mobilesdk_app_id": "1:340621456955:android:34ab31f4a5e92673bbce1e",
         "android_client_info": {
-          "package_name": "com.example.front_end_task"
+          "package_name": "com.example.ordersmanagment_app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDlNtRze1-vSe_lClqFhjKsVczAKbcRLns"
+          "current_key": "AIzaSyCQjf19n4VREJoE_qilW2bIOymuY0hTzWk"
         }
       ],
       "services": {

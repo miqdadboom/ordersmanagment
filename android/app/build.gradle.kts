@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.front_end_task"
+    namespace = "com.example.ordersmanagment_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -21,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.front_end_task"
+        applicationId = "com.example.ordersmanagment_app"
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
