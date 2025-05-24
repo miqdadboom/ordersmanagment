@@ -16,5 +16,12 @@ class ConfirmOrderRemoteDataSource {
       'timestamp': DateTime.now().toIso8601String(),
       'products': products,
     });
+
+    await FirebaseFirestore.instance.collection('notifications').add({
+      'title': 'new order',
+      'body': 'A new order has arrived from $customerName ',
+      'timestamp': DateTime.now().toIso8601String(),
+      'isRead': false,
+    });
   }
 }

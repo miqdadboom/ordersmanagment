@@ -5,3 +5,4 @@ abstract class NotificationRemoteDataSource {
   Future<AppNotification> fetchNotificationById(String id);
   Future<void> markNotificationAsRead(String id);
 }
+

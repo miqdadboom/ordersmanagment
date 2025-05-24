@@ -20,15 +20,15 @@ class _BottomNavigationSalesRepresentativeState
 
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/productScreen');
+        Navigator.pushNamed(context, '/productScreen');
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/listOrder');
+        Navigator.pushNamed(context, '/listOrder');
       case 2:
-        Navigator.pushReplacementNamed(context, '/cartScreen');
+        Navigator.pushNamed(context, '/cartScreen');
         break;
       case 3:
-        Navigator.pushReplacementNamed(context, '/notificationList');
+        Navigator.pushNamed(context, '/notificationList');
         break;
       default:
         break;

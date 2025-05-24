@@ -14,7 +14,7 @@ class ConfirmOrderActions extends StatelessWidget {
         ActionButton(
           label: "Not Yet",
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/cartScreen');
+            Navigator.pushNamed(context, '/cartScreen');
           },
         ),
         ActionButton(
