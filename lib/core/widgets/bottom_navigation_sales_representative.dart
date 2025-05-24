@@ -27,8 +27,10 @@ class _BottomNavigationSalesRepresentativeState
       case 2:
         Navigator.pushReplacementNamed(context, '/cartScreen');
         break;
+      case 3:
+        Navigator.pushReplacementNamed(context, '/notificationList');
+        break;
       default:
-      // Order (1) and Notification (3) not implemented yet
         break;
     }
   }
