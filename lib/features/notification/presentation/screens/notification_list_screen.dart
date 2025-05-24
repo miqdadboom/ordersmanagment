@@ -33,13 +33,14 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'Notifications',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: 24,
             fontFamily: 'Roboto',
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
