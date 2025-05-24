@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+
+import '../constants/app_colors.dart';
+
 
 class BottomNavigationSalesRepresentative extends StatefulWidget {
   const BottomNavigationSalesRepresentative({super.key});

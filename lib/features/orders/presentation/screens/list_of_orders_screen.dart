@@ -1,17 +1,57 @@
 // lib/presentation/screens/list_of_orders_screen.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/utils/user_access_control.dart';
 import '../../../../core/widgets/bottom_navigation_warehouse_manager.dart';
 import '../../data/models/order_model.dart';
 import '../../domain/entities/order_product.dart';
 import '../widgets/order_card.dart';
 
-class ListOfOrdersScreen extends StatelessWidget {
-
+class ListOfOrdersScreen extends StatefulWidget {
   const ListOfOrdersScreen({super.key});
 
   @override
+  State<ListOfOrdersScreen> createState() => _ListOfOrdersScreenState();
+}
+
+class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
+  String? _role;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserRole();
+  }
+
+  Future<void> _getUserRole() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final role = doc['role'];
+
+    if (!mounted) return;
+    setState(() {
+      _role = role;
+      _loading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (!UserAccessControl.ListOfOrdersScreen(_role!)) {
+
+      return const Scaffold(
+        body: Center(child: Text("You are not authorized to access this page.")),
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
