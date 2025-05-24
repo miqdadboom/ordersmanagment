@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:  LoginScreen(),
+      home:  CartScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
         '/listOrder': (context) => ListOfOrdersScreen(),

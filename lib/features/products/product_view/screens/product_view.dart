@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/product_quantity_cubit.dart';
 import '../widgets/add_cart_bar.dart';
 import '../widgets/product_description.dart';
-import '../widgets/product_sizes.dart';
 import '../widgets/product_text_details.dart';
 
 class ProductView extends StatelessWidget {
@@ -81,8 +80,6 @@ class ProductView extends StatelessWidget {
                 padding: EdgeInsets.all(16.0),
                 child: DescriptionProduct(),
               ),
-              SizedBox(height: 25,),
-              const SizeProduct(),
             ],
           ),
         ),
