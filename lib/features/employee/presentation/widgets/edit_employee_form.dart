@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_colors.dart';
-import 'edit_employee_textfield.dart';
+import '../../data/models/EmployeeModel.dart';
+import '../../data/repositories/employee_repository_impl.dart';
+import '../../data/datasources/firebase_employee_service.dart';
+import '../widgets/edit_employee_textfield.dart';
 
 class EditEmployeeForm extends StatefulWidget {
   final String userId;
@@ -19,9 +22,11 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
   final _distributionController = TextEditingController();
-
   String _selectedRole = 'sales representative';
   bool _loading = true;
+
+  final _repo = EmployeeRepositoryImpl(FirebaseEmployeeService());
+  EmployeeModel? _employee;
 
   @override
   void initState() {
@@ -30,33 +35,33 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
   }
 
   Future<void> _loadEmployeeData() async {
-    final doc = await FirebaseFirestore.instance.collection('users').doc(widget.userId).get();
-    final data = doc.data();
-    if (data != null) {
-      _nameController.text = data['name'] ?? '';
-      _emailController.text = data['email'] ?? '';
-      _phoneController.text = data['phone'] ?? '';
-      _addressController.text = data['address'] ?? '';
-      _distributionController.text = data['distributionLine'] ?? '';
-      _selectedRole = data['role'] ?? 'sales representative';
+    final employee = await _repo.getEmployeeById(widget.userId);
+    if (employee != null) {
+      _employee = employee;
+      _nameController.text = employee.name;
+      _emailController.text = employee.email;
+      _phoneController.text = employee.phone;
+      _addressController.text = employee.address;
+      _distributionController.text = employee.distributionLine;
+      _selectedRole = employee.role;
     }
-
     if (!mounted) return;
-    setState(() {
-      _loading = false;
-    });
+    setState(() => _loading = false);
   }
 
   Future<void> _updateEmployee() async {
-    if (_formKey.currentState!.validate()) {
-      await FirebaseFirestore.instance.collection('users').doc(widget.userId).update({
-        'name': _nameController.text.trim(),
-        'email': _emailController.text.trim(),
-        'phone': _phoneController.text.trim(),
-        'address': _addressController.text.trim(),
-        'distributionLine': _distributionController.text.trim(),
-        'role': _selectedRole,
-      });
+    if (_formKey.currentState!.validate() && _employee != null) {
+      final updated = EmployeeModel(
+        id: _employee!.id,
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _phoneController.text.trim(),
+        address: _addressController.text.trim(),
+        distributionLine: _distributionController.text.trim(),
+        role: _selectedRole,
+      );
+
+      await _repo.updateEmployee(updated);
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -86,7 +91,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
     );
 
     if (confirm == true) {
-      await FirebaseFirestore.instance.collection('users').doc(widget.userId).delete();
+      await _repo.deleteEmployee(widget.userId);
       if (!mounted) return;
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -96,7 +101,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
   }
 
   Widget _buildRoleDropdown() {
-    final validRoles = [
+    const validRoles = [
       'admin',
       'sales representative',
       'warehouse employee',
@@ -130,13 +135,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
             DropdownMenuItem(value: 'sales representative', child: Text('Sales Representative')),
             DropdownMenuItem(value: 'warehouse employee', child: Text('Warehouse Employee')),
           ],
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                _selectedRole = value;
-              });
-            }
-          },
+          onChanged: (value) => setState(() => _selectedRole = value ?? _selectedRole),
         ),
         const SizedBox(height: 20),
       ],

@@ -9,8 +9,6 @@ import 'package:final_tasks_front_end/features/orders/domain/entities/order_prod
 import 'package:final_tasks_front_end/features/orders/presentation/cubit/orders_cubit.dart';
 import 'package:final_tasks_front_end/features/orders/presentation/screens/list_of_orders_screen.dart';
 import 'package:final_tasks_front_end/features/confirm_order/presentation/screens/confirm_order.dart';
-import 'package:final_tasks_front_end/features/products/presentation/screens/order_details_screen.dart';
-import 'package:final_tasks_front_end/features/products/presentation/screens/order_products_screen.dart';
 import 'package:final_tasks_front_end/features/orders/data/datasources/order_data_source_impl.dart';
 import 'package:final_tasks_front_end/features/orders/data/repositories/orders_repository_impl.dart';
 import 'package:final_tasks_front_end/features/orders/domain/repositories/orders_repository.dart';
@@ -25,6 +23,8 @@ import 'features/employee/presentation/screens/manage_employee_screen.dart';
 import 'features/orders/data/models/order_model.dart';
 import 'features/orders/domain/repositories/orders_repository_impl.dart';
 import 'features/products/presentation/screens/filter_products.dart';
+import 'features/products/presentation/screens/order_details_screen.dart';
+import 'features/products/presentation/screens/order_products_screen.dart';
 import 'features/products/presentation/screens/products_screen.dart';
 import 'features/products/product_view/screens/product_view.dart';
 import 'firebase_options.dart';
@@ -37,12 +37,12 @@ void main() async {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-      print("✅ Firebase initialized");
+      print(" Firebase initialized");
     } else {
-      print("⚠️ Firebase already initialized");
+      print("⚠ Firebase already initialized");
     }
   } catch (e) {
-    print("❌ Firebase init error: $e");
+    print(" Firebase init error: $e");
   }
 
   final dataSource = OrderDataSourceImpl();
@@ -68,6 +68,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/listOrder': (context) => ListOfOrdersScreen(),
+        '/storeHome': (context) => ProductsScreen(),
+        '/employeeHome': (context) => const CartScreen(),
+
         '/products': (context) {
           final args = ModalRoute.of(context)!.settings.arguments;
           final products = args is List<order_product.OrderProduct> ? args : <order_product.OrderProduct>[];

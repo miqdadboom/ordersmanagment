@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
 import 'package:final_tasks_front_end/features/products/domain/entities/category.dart';
 import 'package:final_tasks_front_end/features/products/presentation/screens/filter_products.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/product_search_delegate.dart';
@@ -7,7 +10,6 @@ import 'package:final_tasks_front_end/features/products/presentation/widgets/hom
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/promo_banner.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/sidebar.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/category.dart';
-
 import '../../../../core/widgets/bottom_navigation_sales_representative.dart';
 
 class ProductsScreen extends StatefulWidget {
@@ -20,22 +22,43 @@ class ProductsScreen extends StatefulWidget {
 class _ProductsScreenState extends State<ProductsScreen> {
   final List<Map<String, dynamic>> products = List.generate(10, (index) {
     return {
-      'name': 'Product ${index + 1}',
-      'brand': 'Brand ${index + 1}',
+      'name': 'Product \${index + 1}',
+      'brand': 'Brand \${index + 1}',
       'price': '\$${(index + 5) * 2}.99',
       'discount': index % 3 == 0 ? '10% OFF' : null,
       'image':
-          'https://images.pexels.com/photos/${27085501 + index}/pexels-photo-${27085501 + index}.jpeg',
+      'https://images.pexels.com/photos/\${27085501 + index}/pexels-photo-\${27085501 + index}.jpeg',
     };
   });
 
   final List<Category> categories = List.generate(
     6,
-    (index) => Category(
-      'https://images.pexels.com/photos/${27085501 + index}/pexels-photo-${27085501 + index}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'Category ${index + 1}',
+        (index) => Category(
+      'https://images.pexels.com/photos/\${27085501 + index}/pexels-photo-\${27085501 + index}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'Category \${index + 1}',
     ),
   );
+
+  String? _role;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserRole();
+  }
+
+  Future<void> _getUserRole() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final role = doc['role'];
+
+    if (!mounted) return;
+    setState(() {
+      _role = role;
+      _loading = false;
+    });
+  }
 
   void _showCategoryPopup(BuildContext context) {
     showDialog(
@@ -78,6 +101,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (!UserAccessControl.ProductsScreenState(_role!)) {
+      return const Scaffold(
+        body: Center(child: Text("You are not authorized to view this page.")),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page', style: TextStyle(color: Colors.white)),
@@ -133,10 +168,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   Widget _buildSectionHeader(
-    String title,
-    String actionText,
-    VoidCallback onAction,
-  ) {
+      String title,
+      String actionText,
+      VoidCallback onAction,
+      ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -167,7 +202,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
           brand: product['brand'],
           price: product['price'],
           discount: product['discount'],
-          onTap: () => debugPrint('Product ${index + 1} tapped'),
+          onTap: () => debugPrint('Product \${index + 1} tapped'),
         );
       },
     );

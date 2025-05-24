@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../../core/constants/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
+import '../../data/models/EmployeeModel.dart';
+import '../../data/repositories/employee_repository_impl.dart';
+import '../../data/datasources/firebase_employee_service.dart';
 import '../widgets/mange_action_buttons.dart';
 import '../widgets/mange_search_bar.dart';
 import 'add_employee_screen.dart';
 import 'edit_employee_screen.dart';
 
 class ManageEmployee extends StatefulWidget {
+  const ManageEmployee({super.key});
+
   @override
   State<ManageEmployee> createState() => _ManageEmployeeState();
 }
@@ -14,13 +20,45 @@ class ManageEmployee extends StatefulWidget {
 class _ManageEmployeeState extends State<ManageEmployee> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  String? _role;
+  bool _loading = true;
+
+  final _repo = EmployeeRepositoryImpl(FirebaseEmployeeService());
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserRole();
+  }
+
+  Future<void> _getUserRole() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final employee = await _repo.getEmployeeById(userId);
+    if (!mounted) return;
+    setState(() {
+      _role = employee?.role;
+      _loading = false;
+    });
+  }
 
   void _sortEmployees(String value) {
-    // Sorting logic can be implemented later if needed.
+    // Add sorting logic here if needed
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (!UserAccessControl.ManageEmployee(_role!)) {
+      return const Scaffold(
+        body: Center(child: Text('You are not authorized to view this page.')),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.background,
@@ -53,19 +91,18 @@ class _ManageEmployeeState extends State<ManageEmployee> {
             ),
             const SizedBox(height: 15),
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('users').snapshots(),
+              child: StreamBuilder<List<EmployeeModel>>(
+                stream: _repo.firebaseService.getAllEmployeesStream(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  final docs = snapshot.data?.docs ?? [];
+                  final employees = snapshot.data ?? [];
 
-                  final filtered = docs.where((doc) {
-                    final data = doc.data() as Map<String, dynamic>;
-                    final name = data['name']?.toLowerCase() ?? '';
-                    final job = data['jobTitle']?.toLowerCase() ?? '';
+                  final filtered = employees.where((employee) {
+                    final name = employee.name.toLowerCase();
+                    final job = employee.role.toLowerCase();
                     return name.contains(_searchQuery) || job.contains(_searchQuery);
                   }).toList();
 
@@ -76,20 +113,18 @@ class _ManageEmployeeState extends State<ManageEmployee> {
                   return ListView.builder(
                     itemCount: filtered.length,
                     itemBuilder: (context, index) {
-                      final data = filtered[index].data() as Map<String, dynamic>;
-                      final id = filtered[index].id;
-
+                      final employee = filtered[index];
                       return Card(
                         margin: const EdgeInsets.only(bottom: 10),
                         child: ListTile(
-                          title: Text(data['name'] ?? ''),
-                          subtitle: Text(data['jobTitle'] ?? ''),
+                          title: Text(employee.name),
+                          subtitle: Text(employee.role),
                           trailing: const Icon(Icons.edit, color: AppColors.primary),
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => EditEmployee(userId: id),
+                                builder: (_) => EditEmployee(userId: employee.id!),
                               ),
                             );
                           },

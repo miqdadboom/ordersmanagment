@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/features/products/presentation/cubit/product_management_cubit.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/product_management/custom_text_field.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/product_management/image_picker_widget.dart';
@@ -69,14 +70,16 @@ class ProductFormWidget extends StatelessWidget {
                 builder: (context, state) {
                   return ImagePickerWidget(
                     image: state is ProductImagePicked ? state.image : null,
-                    onTap:
-                        () =>
-                            context.read<ProductManagementCubit>().pickImage(),
+                    onTap: () =>
+                        context.read<ProductManagementCubit>().pickImage(),
                   );
                 },
               ),
               const SizedBox(height: 40),
-              SaveButton(onPressed: _submitForm),
+              SaveButton(
+                onPressed: _submitForm,
+                color: AppColors.primary,
+              ),
             ],
           ),
         ),

@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/user_access_control.dart';
 import '../../../../core/widgets/place.dart';
 import '../../../orders/data/models/order_model.dart';
 import '../../../orders/presentation/cubit/orders_cubit.dart';
@@ -26,6 +28,27 @@ class _ConfirmOrderState extends ConsumerState<ConfirmOrder> {
   final _notesController = TextEditingController();
   PlaceLocation? _selectedLocation;
 
+  String? _role;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserRole();
+  }
+
+  Future<void> _getUserRole() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final role = doc['role'];
+
+    if (!mounted) return;
+    setState(() {
+      _role = role;
+      _loading = false;
+    });
+  }
+
   List<OrderProduct> convertToOrderProducts(List<Map<String, dynamic>> rawProducts) {
     return rawProducts.map((p) {
       return OrderProduct(
@@ -42,7 +65,6 @@ class _ConfirmOrderState extends ConsumerState<ConfirmOrder> {
   void _savePlace(BuildContext context) {
     FocusScope.of(context).unfocus();
     final customerName = _nameController.text.trim();
-
 
     if (_selectedLocation == null || customerName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -78,6 +100,14 @@ class _ConfirmOrderState extends ConsumerState<ConfirmOrder> {
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (!UserAccessControl.ConfirmOrder(_role!)) {
+      return const Scaffold(body: Center(child: Text("You are not authorized to access this page.")));
+    }
+
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
