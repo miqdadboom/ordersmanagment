@@ -22,6 +22,11 @@ import 'features/cart_product/presentation/cart_screen/screens/cart_screen.dart'
 import 'features/employee/presentation/screens/add_employee_screen.dart';
 import 'features/employee/presentation/screens/edit_employee_screen.dart';
 import 'features/employee/presentation/screens/manage_employee_screen.dart';
+import 'features/notification/data/datasources/notification_local_data_source_impl.dart';
+import 'features/notification/data/datasources/notification_remote_data_source_impl.dart';
+import 'features/notification/data/repositories/notification_repository_impl.dart';
+import 'features/notification/presentation/screens/notification_detail_screen.dart';
+import 'features/notification/presentation/screens/notification_list_screen.dart';
 import 'features/orders/data/models/order_model.dart';
 import 'features/orders/domain/repositories/orders_repository_impl.dart';
 import 'features/products/presentation/screens/filter_products.dart';
@@ -45,6 +50,13 @@ void main() async {
     print("❌ Firebase init error: $e");
   }
 
+  final remoteDataSource = NotificationRemoteDataSourceImpl(); // mock or actual
+  final localDataSource = NotificationLocalDataSourceImpl(useMockData: true);
+  final notificationRepository = NotificationRepositoryImpl(
+    remoteDataSource: remoteDataSource,
+    localDataSource: localDataSource,
+  );
+
   final dataSource = OrderDataSourceImpl();
   final OrderRepository repository = OrderRepositoryImpl(dataSource: dataSource);
 
@@ -67,6 +79,12 @@ class MyApp extends StatelessWidget {
       home:  LoginScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
+        '/notificationDetail': (context) {
+          final notificationId = ModalRoute.of(context)!.settings.arguments as String;
+          return NotificationDetailScreen(notificationId: notificationId);
+        },
+        '/notificationList': (context) => const NotificationListScreen(),
+
         '/listOrder': (context) => ListOfOrdersScreen(),
         '/products': (context) {
           final args = ModalRoute.of(context)!.settings.arguments;

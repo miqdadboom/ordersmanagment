@@ -24,6 +24,8 @@ class _BottomNavigationWarehouseManager
         break;
       case 2:
         Navigator.pushReplacementNamed(context, '/cartScreen');
+      case 3:
+        Navigator.pushReplacementNamed(context, '/NotificationListScreen');
         break;
       default:
       // Order (1) and Notification (3) not implemented yet
