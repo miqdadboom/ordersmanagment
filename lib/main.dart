@@ -26,7 +26,7 @@ import 'features/orders/data/models/order_model.dart';
 import 'features/orders/domain/repositories/orders_repository_impl.dart';
 import 'features/products/presentation/screens/filter_products.dart';
 import 'features/products/presentation/screens/products_screen.dart';
-import 'features/products/product_view/screens/product_view.dart';
+import 'features/products/presentation/screens/product_view.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 void main() async {
