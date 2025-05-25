@@ -11,6 +11,7 @@ class ProductView extends StatelessWidget {
   final String name;
   final String brand;
   final double price;
+  final String description;
 
   const ProductView({
     super.key,
@@ -18,6 +19,7 @@ class ProductView extends StatelessWidget {
     required this.name,
     required this.brand,
     required this.price,
+    required this.description,
   });
 
   @override
@@ -28,61 +30,94 @@ class ProductView extends StatelessWidget {
       create: (_) => ProductQuantityCubit(),
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Column(
+          child: Stack(
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Column(
                 children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: screenWidth * 0.3,
-                        left: screenWidth * 0.04,
-                        right: screenWidth * 0.02,
-                      ),
-                      child: BlocBuilder<ProductQuantityCubit, int>(
-                        builder: (context, quantity) {
-                          final cubit = context.read<ProductQuantityCubit>();
-                          return TextDescription(
-                            name: name,
-                            brand: brand,
-                            starting: "Starting",
-                            price: price,
-                            promotional: "Promotional text",
-                            quantity: quantity,
-                            quantityController: TextEditingController(text: quantity.toString()),
-                            onIncrement: cubit.increment,
-                            onDecrement: cubit.decrement,
-                            onQuantityChanged: (oldQty, newQty, price) {
-                              cubit.setQuantity(newQty);
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            top: screenWidth * 0.3,
+                            left: screenWidth * 0.04,
+                            right: screenWidth * 0.02,
+                          ),
+                          child: BlocBuilder<ProductQuantityCubit, int>(
+                            builder: (context, quantity) {
+                              final cubit =
+                                  context.read<ProductQuantityCubit>();
+                              return TextDescription(
+                                name: name,
+                                brand: brand,
+                                starting: "Starting",
+                                price: price,
+                                promotional: "Promotional text",
+                                quantity: quantity,
+                                quantityController: TextEditingController(
+                                  text: quantity.toString(),
+                                ),
+                                onIncrement: cubit.increment,
+                                onDecrement: cubit.decrement,
+                                onQuantityChanged: (oldQty, newQty, price) {
+                                  cubit.setQuantity(newQty);
+                                },
+                              );
                             },
-                          );
-                        },
+                          ),
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: EdgeInsets.only(left: screenWidth * 0.01),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(50.0),
+                          ),
+                          child:
+                              imageUrl.trim().isNotEmpty
+                                  ? Image.network(
+                                    imageUrl,
+                                    height: screenWidth * 0.85,
+                                    width: screenWidth * 0.55,
+                                    fit: BoxFit.cover,
+                                  )
+                                  : Container(
+                                    height: screenWidth * 0.85,
+                                    width: screenWidth * 0.55,
+                                    color: Colors.grey.shade300,
+                                    child: const Icon(
+                                      Icons.image_not_supported,
+                                      size: 40,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                        ),
+                      ),
+                    ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: screenWidth * 0.01),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(50.0),
-                      ),
-                      child: Image.network(
-                        imageUrl,
-                        height: screenWidth * 0.85,
-                        width: screenWidth * 0.55,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    padding: const EdgeInsets.all(16.0),
+                    child: DescriptionProduct(description: description),
                   ),
+                  const SizedBox(height: 25),
+                  const SizeProduct(),
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: DescriptionProduct(),
+
+              // ✅ زر الرجوع في الزاوية الشمال العليا
+              Positioned(
+                top: 40,
+                left: 16,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    size: 28,
+                    color: Colors.black,
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
               ),
-              SizedBox(height: 25,),
-              const SizeProduct(),
             ],
           ),
         ),

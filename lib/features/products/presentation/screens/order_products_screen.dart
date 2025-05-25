@@ -6,7 +6,7 @@ import '../../../orders/domain/entities/order_product.dart' as order_product;
 class OrderProductsScreen extends StatelessWidget {
   final List<order_product.OrderProduct> products;
 
-  const OrderProductsScreen({super.key, this.products = const []});
+  const OrderProductsScreen({super.key, this.products = const [], required OrderProductCard});
 
   @override
   Widget build(BuildContext context) {

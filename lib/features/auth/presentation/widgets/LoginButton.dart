@@ -8,7 +8,7 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/productScreen');
+        Navigator.pushNamed(context, '/ProductsScreen');
       },
       child: Container(
         height: 66,
@@ -20,6 +20,7 @@ class LoginButton extends StatelessWidget {
           color: AppColors.primary,
           boxShadow: [
             BoxShadow(
+              // ignore: deprecated_member_use
               color: AppColors.primary.withOpacity(0.4),
               blurRadius: 20,
               offset: const Offset(0, 4),

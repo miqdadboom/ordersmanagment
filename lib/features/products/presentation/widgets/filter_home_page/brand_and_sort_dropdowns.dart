@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
 class BrandAndSortDropdowns extends StatelessWidget {
+  final List<String> availableBrands;
   final String selectedBrand;
   final String sortBy;
   final ValueChanged<String?> onBrandChanged;
@@ -9,6 +10,7 @@ class BrandAndSortDropdowns extends StatelessWidget {
 
   const BrandAndSortDropdowns({
     super.key,
+    required this.availableBrands,
     required this.selectedBrand,
     required this.sortBy,
     required this.onBrandChanged,
@@ -19,12 +21,13 @@ class BrandAndSortDropdowns extends StatelessWidget {
   Widget build(BuildContext context) {
     const dropdownTextStyle = TextStyle(
       color: AppColors.primary,
-      fontSize: 14, 
+      fontSize: 14,
       fontWeight: FontWeight.w500,
     );
 
     return Row(
       children: [
+        // 🟦 Brand Dropdown
         Expanded(
           child: Container(
             height: 40,
@@ -39,48 +42,33 @@ class BrandAndSortDropdowns extends StatelessWidget {
                 value: selectedBrand,
                 isExpanded: true,
                 style: dropdownTextStyle,
-                selectedItemBuilder: (BuildContext context) {
-                  return ['All Brands', 'Brand A', 'Brand B'].map<Widget>((
-                    String item,
-                  ) {
+                selectedItemBuilder: (context) {
+                  return availableBrands.map<Widget>((String item) {
                     return Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         item == 'All Brands' ? 'Brand' : item,
-                        style: dropdownTextStyle.copyWith(
-                          fontSize: 14,
-                        ),
+                        style: dropdownTextStyle,
                       ),
                     );
                   }).toList();
                 },
-                items: const [
-                  DropdownMenuItem(
-                    value: 'All Brands',
+                items: availableBrands.map<DropdownMenuItem<String>>((String brand) {
+                  return DropdownMenuItem<String>(
+                    value: brand,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Brand', style: dropdownTextStyle),
+                      child: Text(
+                        brand == 'All Brands' ? 'Brand' : brand,
+                        style: dropdownTextStyle,
+                      ),
                     ),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Brand A',
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Brand A', style: dropdownTextStyle),
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Brand B',
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Brand B', style: dropdownTextStyle),
-                    ),
-                  ),
-                ],
+                  );
+                }).toList(),
                 onChanged: onBrandChanged,
-                dropdownColor: Colors.white,
-                icon: Icon(Icons.arrow_drop_down, color: AppColors.primary),
+                icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
                 iconSize: 24,
+                dropdownColor: Colors.white,
               ),
             ),
           ),
@@ -88,6 +76,7 @@ class BrandAndSortDropdowns extends StatelessWidget {
 
         const SizedBox(width: 8),
 
+        // 🟦 Sort Dropdown
         Expanded(
           child: Container(
             height: 40,
@@ -102,19 +91,17 @@ class BrandAndSortDropdowns extends StatelessWidget {
                 value: sortBy,
                 isExpanded: true,
                 style: dropdownTextStyle,
-                selectedItemBuilder: (BuildContext context) {
-                  return ['Default', 'PriceLow', 'PriceHigh'].map<Widget>((
-                    String item,
-                  ) {
+                selectedItemBuilder: (context) {
+                  return ['Default', 'PriceLow', 'PriceHigh'].map<Widget>((String item) {
                     return Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         item == 'Default'
                             ? 'Sort'
                             : item == 'PriceLow'
-                            ? 'Price: Low to High'
-                            : 'Price: High to Low',
-                        style: dropdownTextStyle.copyWith(fontSize: 14),
+                                ? 'Price: Low to High'
+                                : 'Price: High to Low',
+                        style: dropdownTextStyle,
                       ),
                     );
                   }).toList();
@@ -131,27 +118,21 @@ class BrandAndSortDropdowns extends StatelessWidget {
                     value: 'PriceLow',
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Price: Low to High',
-                        style: dropdownTextStyle,
-                      ),
+                      child: Text('Price: Low to High', style: dropdownTextStyle),
                     ),
                   ),
                   DropdownMenuItem(
                     value: 'PriceHigh',
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Price: High to Low',
-                        style: dropdownTextStyle,
-                      ),
+                      child: Text('Price: High to Low', style: dropdownTextStyle),
                     ),
                   ),
                 ],
                 onChanged: onSortChanged,
-                dropdownColor: Colors.white,
-                icon: Icon(Icons.arrow_drop_down, color: AppColors.primary),
+                icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
                 iconSize: 24,
+                dropdownColor: Colors.white,
               ),
             ),
           ),

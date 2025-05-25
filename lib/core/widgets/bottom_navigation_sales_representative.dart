@@ -20,15 +20,14 @@ class _BottomNavigationSalesRepresentativeState
 
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/productScreen');
+        Navigator.pushNamed(context, '/ProductsScreen');
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/listOrder');
+        Navigator.pushNamed(context, '/listOrder');
       case 2:
-        Navigator.pushReplacementNamed(context, '/cartScreen');
+        Navigator.pushNamed(context, '/cartScreen');
         break;
       default:
-      // Order (1) and Notification (3) not implemented yet
         break;
     }
   }
@@ -46,7 +45,10 @@ class _BottomNavigationSalesRepresentativeState
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.view_list), label: "Order"),
         BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
-        BottomNavigationBarItem(icon: Icon(Icons.notifications_none), label: "Notification"),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.notifications_none),
+          label: "Notification",
+        ),
       ],
     );
   }

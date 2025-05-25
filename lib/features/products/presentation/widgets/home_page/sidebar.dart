@@ -59,6 +59,16 @@ class AppSidebar extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  leading: Icon(Icons.add_box_outlined, color: AppColors.icon),
+                  title: Text(
+                    'Add Product',
+                    style: TextStyle(color: AppColors.icon),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/productManagement');
+                  },
+                ),
+                ListTile(
                   leading: Icon(Icons.settings, color: AppColors.icon),
                   title: Text(
                     'Settings',
