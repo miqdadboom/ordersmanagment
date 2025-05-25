@@ -7,12 +7,18 @@ class CartProductItem extends StatelessWidget {
   final int index;
   final Map<String, dynamic> product;
 
-  const CartProductItem({super.key, required this.index, required this.product});
+  const CartProductItem({
+    super.key,
+    required this.index,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<CartCubit>();
-    final controller = TextEditingController(text: product['quantity'].toString());
+    final controller = TextEditingController(
+      text: product['quantity'].toString(),
+    );
 
     return GestureDetector(
       onTap: () {
@@ -24,6 +30,7 @@ class CartProductItem extends StatelessWidget {
             'name': product['title'],
             'brand': product['subtitle'],
             'price': product['price'],
+            'description': product['description'],
           },
         );
       },
@@ -36,7 +43,9 @@ class CartProductItem extends StatelessWidget {
         quantityController: controller,
         onTotalChange: cubit.updateTotal,
         onRemove: () => cubit.removeProduct(index),
-        onQuantityChanged: (oldQty, newQty, price) => cubit.updateQuantity(index, oldQty, newQty),
+        onQuantityChanged:
+            (oldQty, newQty, price) =>
+                cubit.updateQuantity(index, oldQty, newQty),
       ),
     );
   }

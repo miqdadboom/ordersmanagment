@@ -1,9 +1,8 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:flutter/material.dart';
 
 class ImagePickerWidget extends StatelessWidget {
-  
   final File? image;
   final VoidCallback onTap;
 
@@ -19,7 +18,7 @@ class ImagePickerWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: 200,
+        height: 150,
         decoration: BoxDecoration(
           color: AppColors.background,
           borderRadius: BorderRadius.circular(12),

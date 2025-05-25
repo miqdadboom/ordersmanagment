@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -25,8 +25,8 @@ class CustomTextField extends StatelessWidget {
         controller: controller,
         keyboardType: keyboardType,
         style: const TextStyle(color: AppColors.textDark),
-        validator:
-            (value) => value == null || value.isEmpty ? validatorMessage : null,
+        validator: (value) =>
+            value == null || value.isEmpty ? validatorMessage : null,
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: AppColors.primary),
           hintText: hintText,

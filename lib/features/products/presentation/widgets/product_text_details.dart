@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/widgets/common_text.dart';
 import '../../../cart_product/presentation/cart_screen/widgets/quantity_controller.dart';
+
 class TextDescription extends StatelessWidget {
   final String name;
   final String brand;
-  final String starting;
   final double price;
-  final String promotional;
   final int quantity;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
@@ -17,9 +16,7 @@ class TextDescription extends StatelessWidget {
     super.key,
     required this.name,
     required this.brand,
-    required this.starting,
     required this.price,
-    required this.promotional,
     required this.quantity,
     required this.onIncrement,
     required this.onDecrement,
@@ -36,12 +33,12 @@ class TextDescription extends StatelessWidget {
         const SizedBox(height: 10),
         CommonText(text: brand, size: 18, isBold: true),
         const SizedBox(height: 35),
-        CommonText(text: starting, size: 18, isBold: true),
+        CommonText(
+          text: '\$${price.toStringAsFixed(2)}',
+          size: 18,
+          isBold: true,
+        ),
         const SizedBox(height: 10),
-        CommonText(text: '\$${price.toStringAsFixed(2)}', size: 18, isBold: true),
-        const SizedBox(height: 10),
-        CommonText(text: promotional, size: 18, isBold: true),
-        const SizedBox(height: 30),
         QuantityController(
           quantity: quantity,
           price: price,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
 class PromoBanner extends StatefulWidget {
@@ -9,19 +10,24 @@ class PromoBanner extends StatefulWidget {
 }
 
 class _PromoBannerState extends State<PromoBanner> {
-  final List<String> images = [
-    'https://images.pexels.com/photos/27085501/pexels-photo-27085501/free-photo-of-overgrown-wall-of-an-apartment-building.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    'https://images.pexels.com/photos/31887348/pexels-photo-31887348/free-photo-of-elegant-spring-white-flowers-in-bloom.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    'https://images.pexels.com/photos/15619932/pexels-photo-15619932/free-photo-of-macro-of-green-leaf-on-black-background.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-  ];
-
   late final PageController _pageController;
   final int initialPage = 10000;
+  List<Map<String, dynamic>> banners = [];
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: initialPage);
+    fetchBanners();
+  }
+
+  Future<void> fetchBanners() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('promo_banners').get();
+
+    setState(() {
+      banners = snapshot.docs.map((doc) => doc.data()).toList();
+    });
   }
 
   @override
@@ -32,16 +38,22 @@ class _PromoBannerState extends State<PromoBanner> {
 
   @override
   Widget build(BuildContext context) {
+    if (banners.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return SizedBox(
       height: 200,
       child: PageView.builder(
         controller: _pageController,
+        itemCount: banners.length,
         itemBuilder: (context, index) {
-          final image = images[index % images.length];
+          final banner = banners[index % banners.length];
+
           return Stack(
             children: [
               Image.network(
-                image,
+                banner['imageUrl'] ?? '',
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,
@@ -51,12 +63,12 @@ class _PromoBannerState extends State<PromoBanner> {
                 width: double.infinity,
                 height: double.infinity,
               ),
-              const Positioned(
+              Positioned(
                 top: 16,
                 left: 16,
                 child: Text(
-                  'New product and offers',
-                  style: TextStyle(
+                  banner['title'] ?? '',
+                  style: const TextStyle(
                     color: AppColors.textLight,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

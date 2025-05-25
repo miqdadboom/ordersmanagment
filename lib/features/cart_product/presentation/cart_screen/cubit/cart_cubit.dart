@@ -7,18 +7,25 @@ class CartCubit extends Cubit<double> {
   List<Map<String, dynamic>> products = [];
 
   void initializeProducts() {
-    products = List.generate(13, (index) => {
-      "imageUrl": "https://images.unsplash.com/photo-1541643600914-78b084683601?fm=jpg&q=60&w=3000",
-      "title": "Product ${index + 1}",
-      "subtitle": "Brand A",
-      "price": 100.0,
-      "quantity": 1,
-    });
+    products = List.generate(
+      13,
+      (index) => {
+        "imageUrl":
+            "https://images.unsplash.com/photo-1541643600914-78b084683601?fm=jpg&q=60&w=3000",
+        "title": "Product ${index + 1}",
+        "subtitle": "Brand A",
+        "price": 100.0,
+        "quantity": 1,
+      },
+    );
     calculateTotal();
   }
 
   void calculateTotal() {
-    totalPrice = products.fold(0, (sum, item) => sum + item['price'] * item['quantity']);
+    totalPrice = products.fold(
+      0,
+      (sum, item) => sum + item['price'] * item['quantity'],
+    );
     emit(totalPrice);
   }
 

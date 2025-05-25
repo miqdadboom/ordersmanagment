@@ -20,14 +20,16 @@ class _LoginFormState extends State<LoginForm> {
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            );
 
         final uid = credential.user!.uid;
 
-        final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        final snapshot =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
         if (!snapshot.exists) {
           throw Exception('No role data found for this user');
@@ -35,22 +37,21 @@ class _LoginFormState extends State<LoginForm> {
 
         final role = snapshot.data()!['role'];
 
-
         if (role == 'admin') {
-          Navigator.pushReplacementNamed(context, '/productScreen');
+          Navigator.pushReplacementNamed(context, '/ProductsScreen');
         } else if (role == 'sales representative') {
-          Navigator.pushReplacementNamed(context, '/productScreen');
-
+          Navigator.pushReplacementNamed(context, '/ProductsScreen');
         } else if (role == 'warehouse employee') {
-          Navigator.pushReplacementNamed(context, '/productScreen');
+          Navigator.pushReplacementNamed(context, '/ProductsScreen');
         } else {
           throw Exception('Unknown role');
         }
-
       } on FirebaseAuthException catch (e) {
         String message = 'Login failed.';
-        if (e.code == 'user-not-found') message = 'No user found for that email.';
-        else if (e.code == 'wrong-password') message = 'Wrong password provided.';
+        if (e.code == 'user-not-found')
+          message = 'No user found for that email.';
+        else if (e.code == 'wrong-password')
+          message = 'Wrong password provided.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message), backgroundColor: Colors.red),
         );

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/features/products/domain/entities/category.dart';
+import 'package:flutter/material.dart';
 
 class CategorySection extends StatelessWidget {
   final Function(int index) onCategoryTap;

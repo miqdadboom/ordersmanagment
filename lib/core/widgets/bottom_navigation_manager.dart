@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
-import '../constants/app_colors.dart';
-
-class BottomNavigationManager extends StatefulWidget {
-  const BottomNavigationManager({super.key});
+class BottomNavigationSalesRepresentative extends StatefulWidget {
+  const BottomNavigationSalesRepresentative({super.key});
 
   @override
-  State<BottomNavigationManager> createState() =>
-      _BottomNavigationManager();
+  State<BottomNavigationSalesRepresentative> createState() =>
+      _BottomNavigationSalesRepresentativeState();
 }
 
-class _BottomNavigationManager
-    extends State<BottomNavigationManager> {
+class _BottomNavigationSalesRepresentativeState
+    extends State<BottomNavigationSalesRepresentative> {
   int _currentIndex = 0;
 
   void _onTabTapped(int index) {
@@ -21,13 +20,14 @@ class _BottomNavigationManager
 
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/productScreen');
+        Navigator.pushNamed(context, '/ProductsScreen');
         break;
+      case 1:
+        Navigator.pushNamed(context, '/listOrder');
       case 2:
-        Navigator.pushReplacementNamed(context, '/cartScreen');
+        Navigator.pushNamed(context, '/cartScreen');
         break;
       default:
-      // Order (1) and Notification (3) not implemented yet
         break;
     }
   }
@@ -44,8 +44,11 @@ class _BottomNavigationManager
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.view_list), label: "Order"),
-        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Product"),
-        BottomNavigationBarItem(icon: Icon(Icons.notifications_none), label: "Employee"),
+        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.notifications_none),
+          label: "Notification",
+        ),
       ],
     );
   }
