@@ -17,8 +17,8 @@ class ConfirmOrderBar extends StatelessWidget {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.primary, // Pale Robin Egg Blue
-            AppColors.cardBackground, // Persian Green
+            AppColors.background,
+            AppColors.cardBackground,
           ],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,

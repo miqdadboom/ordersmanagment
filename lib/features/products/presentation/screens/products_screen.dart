@@ -22,20 +22,20 @@ class ProductsScreen extends StatefulWidget {
 class _ProductsScreenState extends State<ProductsScreen> {
   final List<Map<String, dynamic>> products = List.generate(10, (index) {
     return {
-      'name': 'Product \${index + 1}',
-      'brand': 'Brand \${index + 1}',
-      'price': '\$${(index + 5) * 2}.99',
+      'name': 'Product ${index + 1}',
+      'brand': 'Brand ${index + 1}',
+      'price': '${(index + 5) * 2}.99',
       'discount': index % 3 == 0 ? '10% OFF' : null,
       'image':
-      'https://images.pexels.com/photos/\${27085501 + index}/pexels-photo-\${27085501 + index}.jpeg',
+      'https://images.pexels.com/photos/${27085501 + index}/pexels-photo-${27085501 + index}.jpeg',
     };
   });
 
   final List<Category> categories = List.generate(
     6,
         (index) => Category(
-      'https://images.pexels.com/photos/\${27085501 + index}/pexels-photo-\${27085501 + index}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'Category \${index + 1}',
+      'https://images.pexels.com/photos/${27085501 + index}/pexels-photo-${27085501 + index}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'Category ${index + 1}',
     ),
   );
 
@@ -115,10 +115,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page', style: TextStyle(color: Colors.white)),
+        title:  Text(
+            'Home Page',
+            style: TextStyle(
+                color: AppColors.textDark,
+                fontSize: 24,
+              fontWeight: FontWeight.bold
+            ),
+        ),
         backgroundColor: AppColors.primary,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme:  IconThemeData(
+            color: AppColors.textDark,
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -202,7 +211,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
           brand: product['brand'],
           price: product['price'],
           discount: product['discount'],
-          onTap: () => debugPrint('Product \${index + 1} tapped'),
+          onTap: () => debugPrint('Product ${index + 1} tapped'),
         );
       },
     );

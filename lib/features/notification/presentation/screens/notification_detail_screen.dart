@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +27,7 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: AppColors.primary,
         title: BlocBuilder<NotificationCubit, NotificationState>(
           builder: (context, state) {
             return Text(

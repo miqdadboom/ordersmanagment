@@ -10,14 +10,17 @@ class AddCart extends StatelessWidget {
   Widget build(BuildContext context) {
     double totalPrice = quantity * unitPrice;
     final screenWidth = MediaQuery.of(context).size.width;
-    final fontSize = screenWidth * 0.05;
 
     return Container(
       height: screenWidth * 0.22,
       padding:  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
       decoration: BoxDecoration(
-        color: AppColors.background,
-        boxShadow: [BoxShadow(blurRadius: 4, color: AppColors.boxShadow)],
+        gradient: LinearGradient(
+          colors: [
+            AppColors.background,
+            AppColors.cardBackground,
+          ],
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -27,7 +30,7 @@ class AddCart extends StatelessWidget {
             style:
             TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: fontSize,
+              fontSize: 24,
               color: AppColors.textDark,
             ),
           ),
@@ -36,7 +39,7 @@ class AddCart extends StatelessWidget {
             style:
             TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: fontSize,
+              fontSize: 24,
               color: AppColors.textDark,
             ),
           ),

@@ -64,7 +64,7 @@ class _OrderProductsScreenState extends State<OrderProductsScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              '\${widget.products.length} products in this order',
+              '${widget.products.length} products in this order',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
@@ -122,7 +122,7 @@ class _OrderProductsScreenState extends State<OrderProductsScreen> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              'Quantity: \${product.quantity}',
+                              'Quantity: ${product.quantity}',
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black54,

@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,6 +64,23 @@ class _ProductViewState extends State<ProductView> {
     return BlocProvider(
       create: (_) => ProductQuantityCubit(),
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          centerTitle: true,
+          title: Text(
+            'Product View',
+            style: TextStyle(
+              color: AppColors.textDark,
+              fontWeight: FontWeight.bold,
+                fontSize: 24
+            ),
+          ),
+          backgroundColor: AppColors.primary,
+          elevation: 0,
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -82,9 +100,7 @@ class _ProductViewState extends State<ProductView> {
                           return TextDescription(
                             name: widget.name,
                             brand: widget.brand,
-                            starting: "Starting",
                             price: widget.price,
-                            promotional: "Promotional text",
                             quantity: quantity,
                             quantityController: TextEditingController(text: quantity.toString()),
                             onIncrement: cubit.increment,
