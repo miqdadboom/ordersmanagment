@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'auth_routes.dart';
+import 'map_routes.dart';
 import 'order_routes.dart';
 import 'product_routes.dart';
 import 'employee_routes.dart';
@@ -14,4 +15,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   ...employeeRoutes,
   ...chatRoutes,
   ...notificationRoutes,
+  ...mapRoutes,
 };

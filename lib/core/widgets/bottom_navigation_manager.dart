@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
-class BottomNavigationSalesRepresentative extends StatefulWidget {
-  const BottomNavigationSalesRepresentative({super.key});
+import '../constants/app_colors.dart';
+
+class BottomNavigationManager extends StatefulWidget {
+  const BottomNavigationManager({super.key});
 
   @override
-  State<BottomNavigationSalesRepresentative> createState() =>
-      _BottomNavigationSalesRepresentativeState();
+  State<BottomNavigationManager> createState() => _BottomNavigationManager();
 }
 
-class _BottomNavigationSalesRepresentativeState
-    extends State<BottomNavigationSalesRepresentative> {
+class _BottomNavigationManager extends State<BottomNavigationManager> {
   int _currentIndex = 0;
 
   void _onTabTapped(int index) {
@@ -20,14 +19,13 @@ class _BottomNavigationSalesRepresentativeState
 
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/ProductsScreen');
+        Navigator.pushReplacementNamed(context, '/productScreen');
         break;
-      case 1:
-        Navigator.pushNamed(context, '/listOrder');
       case 2:
-        Navigator.pushNamed(context, '/cartScreen');
+        Navigator.pushReplacementNamed(context, '/cartScreen');
         break;
       default:
+        // Order (1) and Notification (3) not implemented yet
         break;
     }
   }
@@ -44,10 +42,13 @@ class _BottomNavigationSalesRepresentativeState
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.view_list), label: "Order"),
-        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.shopping_cart),
+          label: "Product",
+        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications_none),
-          label: "Notification",
+          label: "Employee",
         ),
       ],
     );

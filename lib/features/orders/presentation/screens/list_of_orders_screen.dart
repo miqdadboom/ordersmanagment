@@ -1,5 +1,6 @@
 // lib/presentation/screens/list_of_orders_screen.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/utils/user_access_control.dart';
@@ -53,10 +54,11 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
+        backgroundColor: AppColors.primary,
         centerTitle: true,
-        title: const Text('Orders', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+        title:  Text('Orders', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
         automaticallyImplyLeading: false,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -103,12 +105,12 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
             child: Column(
               children: [
                 _buildSearchBar(),
-                const Padding(
+                 Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
                     'List of incoming orders',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: AppColors.textDark,
                       fontSize: 32,
                       fontWeight: FontWeight.w500,
                     ),
@@ -148,15 +150,18 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
             child: Container(
               height: 42,
               decoration: BoxDecoration(
-                color: const Color(0xFF39A18B),
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: AppColors.border,
+                  width: 1.5,
+                ),
               ),
               child: const TextField(
                 decoration: InputDecoration(
                   hintText: 'search',
-                  border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  hintStyle: TextStyle(color: Colors.black54, fontSize: 16),
+                  hintStyle: TextStyle(color: AppColors.textDark, fontSize: 16),
                 ),
               ),
             ),
@@ -166,8 +171,12 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: const Color(0xFF39A18B),
+              color: AppColors.background,
               borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: AppColors.border,
+                width: 1.5,
+              ),
             ),
             child: const Icon(Icons.filter_list),
           ),

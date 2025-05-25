@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/bottom_navigation_warehouse_manager.dart';
@@ -31,13 +32,14 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
+        backgroundColor: AppColors.primary,
         automaticallyImplyLeading: false,
-        title: const Text(
+        title:  Text(
           'Notifications',
           style: TextStyle(
-            color: Colors.black,
+            color: AppColors.textDark,
             fontSize: 24,
             fontFamily: 'Roboto',
             fontWeight: FontWeight.bold,
@@ -78,8 +80,8 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
                     padding: const EdgeInsets.only(left: 24, top: 16, bottom: 8),
                     child: Text(
                       '${unreadCount > 0 ? '$unreadCount unread' : 'No unread'} notifications',
-                      style: const TextStyle(
-                        color: Colors.black,
+                      style:  TextStyle(
+                        color: AppColors.textDark,
                         fontSize: 14,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w300,
@@ -118,8 +120,8 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
           padding: const EdgeInsets.only(left: 24, top: 16),
           child: Text(
             title,
-            style: const TextStyle(
-              color: Colors.black,
+            style:  TextStyle(
+              color: AppColors.textDark,
               fontSize: 18,
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w400,

@@ -61,9 +61,15 @@ class _ManageEmployeeState extends State<ManageEmployee> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textDark,
-        title: const Text("Company Employee"),
+        backgroundColor: AppColors.primary,
+        title:  Text(
+            "Company Employee",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textDark,
+          ),
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

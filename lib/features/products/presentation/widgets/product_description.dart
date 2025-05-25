@@ -9,13 +9,13 @@ class DescriptionProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity, // 👈 عشان ياخذ العرض كامل
+      width: double.infinity, 
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
-      ), // 👈 مسافة من اليسار واليمين
+      ),
       child: Column(
         crossAxisAlignment:
-            CrossAxisAlignment.start, // 👈 كل العناصر تبدأ من اليسار
+            CrossAxisAlignment.start,
         children: [
           Text(
             "Description",

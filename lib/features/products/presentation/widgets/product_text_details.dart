@@ -38,7 +38,7 @@ class TextDescription extends StatelessWidget {
           size: 18,
           isBold: true,
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 30),
         QuantityController(
           quantity: quantity,
           price: price,

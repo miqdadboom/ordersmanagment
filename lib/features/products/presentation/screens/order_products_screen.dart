@@ -1,15 +1,57 @@
 // lib/orders/presentation/screens/order_products_screen.dart
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../core/utils/user_access_control.dart';
 import '../../../../core/widgets/bottom_navigation_warehouse_manager.dart';
 import '../../../orders/domain/entities/order_product.dart' as order_product;
 
-class OrderProductsScreen extends StatelessWidget {
+class OrderProductsScreen extends StatefulWidget {
   final List<order_product.OrderProduct> products;
 
   const OrderProductsScreen({super.key, this.products = const []});
 
   @override
+  State<OrderProductsScreen> createState() => _OrderProductsScreenState();
+}
+
+class _OrderProductsScreenState extends State<OrderProductsScreen> {
+  String? _role;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserRole();
+  }
+
+  Future<void> _getUserRole() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final role = doc['role'];
+
+    if (!mounted) return;
+    setState(() {
+      _role = role;
+      _loading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (!UserAccessControl.OrderProductsScreen(_role!)) {
+      return const Scaffold(
+        body: Center(
+          child: Text("You are not authorized to access this page."),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
@@ -26,7 +68,7 @@ class OrderProductsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              '${products.length} products in this order',
+              '${widget.products.length} products in this order',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
@@ -37,10 +79,10 @@ class OrderProductsScreen extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: products.length,
+              itemCount: widget.products.length,
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final product = products[index];
+                final product = widget.products[index];
                 return Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(

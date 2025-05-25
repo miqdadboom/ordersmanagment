@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
-class BottomNavigationWarehouseManager extends StatefulWidget {
-  const BottomNavigationWarehouseManager({super.key});
+import '../constants/app_colors.dart';
+
+
+class BottomNavigationSalesRepresentative extends StatefulWidget {
+  const BottomNavigationSalesRepresentative({super.key});
 
   @override
-  State<BottomNavigationWarehouseManager> createState() =>
-      _BottomNavigationWarehouseManager();
+  State<BottomNavigationSalesRepresentative> createState() =>
+      _BottomNavigationSalesRepresentativeState();
 }
 
-class _BottomNavigationWarehouseManager
-    extends State<BottomNavigationWarehouseManager> {
+class _BottomNavigationSalesRepresentativeState
+    extends State<BottomNavigationSalesRepresentative> {
   int _currentIndex = 0;
 
   void _onTabTapped(int index) {
@@ -20,13 +22,17 @@ class _BottomNavigationWarehouseManager
 
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/ProductsScreen');
+        Navigator.pushNamed(context, '/ProductsScreen');
         break;
+      case 1:
+        Navigator.pushNamed(context, '/listOrder');
       case 2:
-        Navigator.pushReplacementNamed(context, '/cartScreen');
+        Navigator.pushNamed(context, '/cartScreen');
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/notificationList');
         break;
       default:
-        // Order (1) and Notification (3) not implemented yet
         break;
     }
   }
@@ -43,15 +49,10 @@ class _BottomNavigationWarehouseManager
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.view_list), label: "Order"),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart),
-          label: "Product",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.notifications_none),
-          label: "Notification",
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+        BottomNavigationBarItem(icon: Icon(Icons.notifications_none), label: "Notification"),
       ],
     );
   }
 }
+

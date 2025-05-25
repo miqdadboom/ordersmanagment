@@ -1,11 +1,15 @@
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../core/utils/user_access_control.dart';
 import '../cubit/product_quantity_cubit.dart';
 import '../widgets/add_cart_bar.dart';
 import '../widgets/product_description.dart';
 import '../widgets/product_text_details.dart';
 
-class ProductView extends StatelessWidget {
+class ProductView extends StatefulWidget {
   final String imageUrl;
   final String name;
   final String brand;
@@ -22,104 +26,127 @@ class ProductView extends StatelessWidget {
   });
 
   @override
+  State<ProductView> createState() => _ProductViewState();
+}
+
+class _ProductViewState extends State<ProductView> {
+  String? _role;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserRole();
+  }
+
+  Future<void> _getUserRole() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final role = doc['role'];
+
+    if (!mounted) return;
+    setState(() {
+      _role = role;
+      _loading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (!UserAccessControl.ProductView(_role!)) {
+      return const Scaffold(
+        body: Center(child: Text('You are not authorized to view this page.')),
+      );
+    }
+
     final screenWidth = MediaQuery.of(context).size.width;
 
     return BlocProvider(
       create: (_) => ProductQuantityCubit(),
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          centerTitle: true,
+          title: Text(
+            'Product View',
+            style: TextStyle(
+              color: AppColors.textDark,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          backgroundColor: AppColors.primary,
+          elevation: 0,
+        ),
         body: SingleChildScrollView(
-          child: Stack(
+          child: Column(
             children: [
-              Column(
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: screenWidth * 0.3,
-                            left: screenWidth * 0.04,
-                            right: screenWidth * 0.02,
-                          ),
-                          child: BlocBuilder<ProductQuantityCubit, int>(
-                            builder: (context, quantity) {
-                              final cubit =
-                                  context.read<ProductQuantityCubit>();
-                              return TextDescription(
-                                name: name,
-                                brand: brand,
-                                price: price,
-                                quantity: quantity,
-                                quantityController: TextEditingController(
-                                  text: quantity.toString(),
-                                ),
-                                onIncrement: cubit.increment,
-                                onDecrement: cubit.decrement,
-                                onQuantityChanged: (oldQty, newQty, price) {
-                                  cubit.setQuantity(newQty);
-                                },
-                              );
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: screenWidth * 0.3,
+                        left: screenWidth * 0.04,
+                        right: screenWidth * 0.02,
+                      ),
+                      child: BlocBuilder<ProductQuantityCubit, int>(
+                        builder: (context, quantity) {
+                          final cubit = context.read<ProductQuantityCubit>();
+                          return TextDescription(
+                            name: widget.name,
+                            brand: widget.brand,
+                            price: widget.price,
+                            quantity: quantity,
+                            quantityController: TextEditingController(
+                              text: quantity.toString(),
+                            ),
+                            onIncrement: cubit.increment,
+                            onDecrement: cubit.decrement,
+                            onQuantityChanged: (oldQty, newQty, _) {
+                              cubit.setQuantity(newQty);
                             },
-                          ),
-                        ),
+                          );
+                        },
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: screenWidth * 0.01),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(50.0),
-                          ),
-                          child:
-                              imageUrl.trim().isNotEmpty
-                                  ? Image.network(
-                                    imageUrl,
-                                    height: screenWidth * 0.85,
-                                    width: screenWidth * 0.55,
-                                    fit: BoxFit.cover,
-                                  )
-                                  : Container(
-                                    height: screenWidth * 0.85,
-                                    width: screenWidth * 0.55,
-                                    color: Colors.grey.shade300,
-                                    child: const Icon(
-                                      Icons.image_not_supported,
-                                      size: 40,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: DescriptionProduct(description: description),
+                    padding: EdgeInsets.only(left: screenWidth * 0.01),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(50.0),
+                      ),
+                      child: Image.network(
+                        widget.imageUrl,
+                        height: screenWidth * 0.85,
+                        width: screenWidth * 0.55,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 25),
                 ],
               ),
-
-              // ✅ زر الرجوع في الزاوية الشمال العليا
-              Positioned(
-                top: 40,
-                left: 16,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 28,
-                    color: Colors.black,
-                  ),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: DescriptionProduct(description: widget.description),
               ),
+              const SizedBox(height: 25),
             ],
           ),
         ),
         bottomNavigationBar: BlocBuilder<ProductQuantityCubit, int>(
           builder: (context, quantity) {
-            return AddCart(quantity: quantity, unitPrice: price);
+            return AddCart(quantity: quantity, unitPrice: widget.price);
           },
         ),
       ),

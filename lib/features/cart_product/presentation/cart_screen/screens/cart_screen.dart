@@ -73,7 +73,7 @@ class _CartScreenState extends State<CartScreen> {
       ],
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.background,
+          backgroundColor: AppColors.primary,
           automaticallyImplyLeading: false,
           elevation: 0,
           title: CommonText(
