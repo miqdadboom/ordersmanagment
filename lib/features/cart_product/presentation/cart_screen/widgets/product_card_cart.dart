@@ -1,27 +1,21 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../domain/entities/quantity_model.dart';
 import '../cubit/cart_cubit.dart';
 import 'quantity_controller.dart';
 
-class ProductCard extends StatefulWidget {
-  final String imageUrl;
-  final String title;
-  final String subtitle;
-  final double price;
-  final int quantity;
+class ProductCardCart extends StatefulWidget {
+  final ProductEntity product;
   final Function(double) onTotalChange;
   final VoidCallback onRemove;
   final TextEditingController quantityController;
   final Function(int oldQuantity, int newQuantity, double price) onQuantityChanged;
 
-  const ProductCard({
+  const ProductCardCart({
     super.key,
-    required this.imageUrl,
-    required this.title,
-    required this.subtitle,
-    required this.price,
-    required this.quantity,
+    required this.product,
     required this.onTotalChange,
     required this.onRemove,
     required this.quantityController,
@@ -29,16 +23,16 @@ class ProductCard extends StatefulWidget {
   });
 
   @override
-  State<ProductCard> createState() => _ProductCardState();
+  State<ProductCardCart> createState() => _ProductCardCartState();
 }
 
-class _ProductCardState extends State<ProductCard> {
+class _ProductCardCartState extends State<ProductCardCart> {
   late int quantity;
 
   @override
   void initState() {
     super.initState();
-    quantity = widget.quantity;
+    quantity = widget.product.quantity;
   }
 
   void increment() {
@@ -51,9 +45,9 @@ class _ProductCardState extends State<ProductCard> {
     });
 
     final cubit = context.read<CartCubit>();
-    final index = cubit.products.indexWhere((p) => p['title'] == widget.title);
+    final index = cubit.state.indexWhere((p) => p['title'] == widget.product.title);
     if (index != -1) {
-      cubit.updateQuantity(index, oldQuantity, newQuantity);
+      cubit.updateQuantity(index, newQuantity);
     }
 
   }
@@ -69,9 +63,9 @@ class _ProductCardState extends State<ProductCard> {
       });
 
       final cubit = context.read<CartCubit>();
-      final index = cubit.products.indexWhere((p) => p['title'] == widget.title);
+      final index = cubit.state.indexWhere((p) => p['title'] == widget.product.title);
       if (index != -1) {
-        cubit.updateQuantity(index, oldQuantity, newQuantity);
+        cubit.updateQuantity(index, newQuantity);
       }
 
     }
@@ -121,7 +115,7 @@ class _ProductCardState extends State<ProductCard> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  widget.imageUrl,
+                  widget.product.imageUrl,
                   width: screenWidth * 0.25,
                   height: screenWidth * 0.25,
                   fit: BoxFit.cover,
@@ -135,7 +129,7 @@ class _ProductCardState extends State<ProductCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.title,
+                        widget.product.title,
                         style: TextStyle(
                           fontSize: screenWidth * 0.05,
                           fontWeight: FontWeight.bold,
@@ -143,7 +137,7 @@ class _ProductCardState extends State<ProductCard> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        widget.subtitle,
+                        widget.product.brand,
                         style: TextStyle(
                           fontSize: screenWidth * 0.035,
                           color: AppColors.textDark,
@@ -167,8 +161,7 @@ class _ProductCardState extends State<ProductCard> {
             bottom: 8,
             right: 8,
             child: QuantityController(
-              quantity: quantity,
-              price: widget.price,
+              model: QuantityModel(quantity: quantity, price: widget.product.price),
               quantityController: widget.quantityController,
               onDecrement: decrement,
               onIncrement: increment,

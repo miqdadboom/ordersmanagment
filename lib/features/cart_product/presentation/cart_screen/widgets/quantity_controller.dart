@@ -1,9 +1,10 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../../../domain/entities/quantity_model.dart';
+
 class QuantityController extends StatelessWidget {
-  final int quantity;
-  final double price;
+  final QuantityModel model;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
   final TextEditingController quantityController;
@@ -11,8 +12,7 @@ class QuantityController extends StatelessWidget {
 
   const QuantityController({
     super.key,
-    required this.quantity,
-    required this.price,
+    required this.model,
     required this.onDecrement,
     required this.onIncrement,
     required this.quantityController,
@@ -69,8 +69,8 @@ class QuantityController extends StatelessWidget {
               ),
               onChanged: (value) {
                 final parsed = int.tryParse(value);
-                if (parsed != null && parsed > 0 && parsed != quantity) {
-                  onQuantityChanged(quantity, parsed, price);
+                if (parsed != null && parsed > 0 && parsed != model.quantity) {
+                  onQuantityChanged(model.quantity, parsed, model.price);
                 }
               },
             ),
@@ -90,7 +90,7 @@ class QuantityController extends StatelessWidget {
               child: Icon(
                 Icons.remove,
                 size: buttonSize * 0.5,
-                color: quantity > 1 ? AppColors.quantityIcons : AppColors.quantityIcons,
+                color: model.quantity > 1 ? AppColors.quantityIcons : AppColors.quantityIcons,
               ),
             ),
           ),

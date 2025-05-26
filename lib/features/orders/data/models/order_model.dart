@@ -11,6 +11,7 @@ class OrderEntity {
   final List<OrderProduct> products;
   final double? latitude;
   final double? longitude;
+  final String createdBy;
 
   const OrderEntity({
     required this.id,
@@ -22,5 +23,34 @@ class OrderEntity {
     required this.products,
     required this.latitude,
     required this.longitude,
+    required this.createdBy,
   });
+
+
+  factory OrderEntity.fromMap(Map<String, dynamic> data, String id) {
+    final List<OrderProduct> products = (data['products'] as List<dynamic>).map((item) {
+      return OrderProduct(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        name: item['title'] ?? 'Unknown',
+        description: '',
+        quantity: item['quantity'] ?? 1,
+        passed: true,
+        imageUrl: item['imageUrl'],
+      );
+    }).toList();
+
+    return OrderEntity(
+      id: id,
+      customerName: data['customerName'] ?? 'Unknown',
+      customerAddress: data['location'] ?? 'Unknown',
+      status: 'Pending',
+      estimatedTime: '2 hours',
+      products: products,
+      productImage: products.isNotEmpty ? products[0].imageUrl : null,
+      latitude: data['latitude'],
+      longitude: data['longitude'],
+      createdBy: data['createdBy'] ?? '',
+    );
+  }
+
 }

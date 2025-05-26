@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/product_card.dart';
+import 'package:flutter/material.dart';
+import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
 
 class ProductSearchDelegate extends SearchDelegate {
   final List<Map<String, dynamic>> allProducts;
@@ -49,11 +50,18 @@ class ProductSearchDelegate extends SearchDelegate {
       itemCount: results.length,
       itemBuilder: (context, index) {
         final product = results[index];
-        return ProductCard(
-          image: product['image'],
-          name: product['name'],
-          brand: product['brand'],
-          price: product['price'],
+
+        final entity = ProductEntity(
+          imageUrl: product['image'] ?? '',
+          title: product['name'] ?? '',
+          brand: product['brand'] ?? '',
+          price: double.tryParse(product['price'].toString()) ?? 0.0,
+          description: product['description'] ?? '',
+          quantity: product['quantity'] ?? 1,
+        );
+
+        return ProductCardHome(
+          product: entity,
           discount: product['discount'],
           onTap: () => debugPrint('${product['name']} tapped'),
         );

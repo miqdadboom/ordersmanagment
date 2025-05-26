@@ -18,6 +18,7 @@ class OrderDataSourceImpl implements OrderDataSource {
         productImage: null,
         latitude: 31.9522,
         longitude: 35.2332,
+        createdBy: "sample_sales_user_id",
         products: [
           OrderProduct(
             id: "p1",

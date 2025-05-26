@@ -1,5 +1,5 @@
-// lib/features/confirm_order/presentation/cubit/confirm_order_controller.dart
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../orders/data/models/order_model.dart';
 import '../../../orders/domain/entities/order_product.dart';
@@ -30,6 +30,7 @@ class ConfirmOrderController {
     if (selectedLocation == null || name.isEmpty) return null;
 
     final products = convertToOrderProducts(cartProducts);
+    final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     return OrderEntity(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -41,6 +42,7 @@ class ConfirmOrderController {
       estimatedTime: '2 hours',
       products: products,
       productImage: products.isNotEmpty ? cartProducts[0]['imageUrl'] : null,
+      createdBy: userId,
     );
   }
 

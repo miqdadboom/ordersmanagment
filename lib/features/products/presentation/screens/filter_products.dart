@@ -5,7 +5,8 @@ import 'package:final_tasks_front_end/features/products/presentation/widgets/fil
 import 'package:final_tasks_front_end/features/products/presentation/widgets/filter_home_page/makeup_type_dialog.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/filter_home_page/makeup_type_filter.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/filter_home_page/search_bar.dart';
-import 'package:final_tasks_front_end/features/products/presentation/widgets/product_grid.dart';
+
+import '../widgets/product_grid.dart';
 
 class FilterProductsScreen extends StatefulWidget {
   final String categoryName;

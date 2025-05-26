@@ -4,10 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/utils/user_access_control.dart';
+import '../../../cart_product/domain/entities/quantity_model.dart';
+import '../../../cart_product/presentation/cart_screen/cubit/cart_cubit.dart';
+import '../../../cart_product/presentation/cart_screen/widgets/quantity_controller.dart';
 import '../cubit/product_quantity_cubit.dart';
-import '../widgets/add_cart_bar.dart';
-import '../widgets/product_description.dart';
-import '../widgets/product_text_details.dart';
+import '../widgets/product_view/add_cart_bar.dart';
+import '../widgets/product_view/product_description.dart';
+import '../widgets/product_view/product_text_details.dart';
 
 class ProductView extends StatefulWidget {
   final String imageUrl;
@@ -66,8 +69,11 @@ class _ProductViewState extends State<ProductView> {
 
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return BlocProvider(
-      create: (_) => ProductQuantityCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => ProductQuantityCubit()),
+        BlocProvider(create: (_) => CartCubit()..loadCartProducts()),
+      ],
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -102,19 +108,31 @@ class _ProductViewState extends State<ProductView> {
                       child: BlocBuilder<ProductQuantityCubit, int>(
                         builder: (context, quantity) {
                           final cubit = context.read<ProductQuantityCubit>();
-                          return TextDescription(
-                            name: widget.name,
-                            brand: widget.brand,
-                            price: widget.price,
-                            quantity: quantity,
-                            quantityController: TextEditingController(
-                              text: quantity.toString(),
-                            ),
-                            onIncrement: cubit.increment,
-                            onDecrement: cubit.decrement,
-                            onQuantityChanged: (oldQty, newQty, _) {
-                              cubit.setQuantity(newQty);
-                            },
+                          final quantityController = TextEditingController(text: quantity.toString());
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(widget.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textDark)),
+                              const SizedBox(height: 10),
+                              Text(widget.brand, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark)),
+                              const SizedBox(height: 20),
+                              Text(
+                                '\$${widget.price.toStringAsFixed(2)}',
+                                style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark),
+                              ),
+                              const SizedBox(height: 50),
+
+                              QuantityController(
+                                model: QuantityModel(quantity: quantity, price: widget.price),
+                                quantityController: quantityController,
+                                onIncrement: cubit.increment,
+                                onDecrement: cubit.decrement,
+                                onQuantityChanged: (oldQty, newQty, _) {
+                                  cubit.setQuantity(newQty);
+                                },
+                              ),
+                            ],
                           );
                         },
                       ),
@@ -146,7 +164,31 @@ class _ProductViewState extends State<ProductView> {
         ),
         bottomNavigationBar: BlocBuilder<ProductQuantityCubit, int>(
           builder: (context, quantity) {
-            return AddCart(quantity: quantity, unitPrice: widget.price);
+            return AddCart(
+                quantity: quantity,
+                unitPrice: widget.price,
+              onAdd: () async {
+                  final product = {
+                    'imageUrl': widget.imageUrl,
+                    'title': widget.name,
+                    'brand': widget.brand,
+                    'price': widget.price,
+                    'description': widget.description,
+                    'quantity': quantity,
+                  };
+                  await context.read<CartCubit>().addProductToCart(product);
+                  if(context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                       SnackBar(
+                          content: Text(
+                            "Product added to cart",
+                            style: TextStyle(color: AppColors.snakeColor),
+                          ),
+                      ),
+                    );
+                  }
+              }
+            );
           },
         ),
       ),

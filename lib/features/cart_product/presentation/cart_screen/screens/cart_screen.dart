@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../../core/user_role_access.dart';
 import '../../../../../core/utils/user_access_control.dart';
 import '../../../../confirm_order/presentation/screens/confirm_order.dart';
 import '../../../../orders/data/datasources/order_data_source_impl.dart';
@@ -31,14 +32,11 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    _getUserRole();
+    _initializeScreen();
   }
 
-  Future<void> _getUserRole() async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
-    final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    final role = doc['role'];
-
+  Future<void> _initializeScreen() async {
+    final role = await UserRoleAccess.getUserRole();
     if (!mounted) return;
     setState(() {
       _role = role;
@@ -62,7 +60,7 @@ class _CartScreenState extends State<CartScreen> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => CartCubit()..initializeProducts()),
+        BlocProvider(create: (_) => CartCubit()..loadCartProducts()),
         BlocProvider(
           create: (_) {
             final dataSource = OrderDataSourceImpl();
@@ -87,24 +85,26 @@ class _CartScreenState extends State<CartScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              BlocBuilder<CartCubit, double>(
-                builder: (context, total) => ConfirmOrderBar(
-                  totalPrice: total,
-                  onConfirm: () {
-                    final cartProducts = context.read<CartCubit>().products;
-                    final ordersCubit = context.read<OrdersCubit>();
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: ordersCubit,
-                          child: ConfirmOrder(cartProducts: cartProducts),
+              BlocBuilder<CartCubit, List<Map<String, dynamic>>>(
+                builder: (context, state) {
+                  double total = context.read<CartCubit>().calculateTotal();
+                  return ConfirmOrderBar(
+                    totalPrice: total,
+                    onConfirm: () {
+                      final cartProducts = context.read<CartCubit>().state;
+                      final ordersCubit = context.read<OrdersCubit>();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: ordersCubit,
+                            child: ConfirmOrder(cartProducts: cartProducts),
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  );
+                },
               ),
               const Divider(height: 1),
               SizedBox(height: 60, child: BottomNavigationSalesRepresentative()),

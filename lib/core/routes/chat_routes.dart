@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../features/chat_bot/presentation/screens/home_screen.dart';
+import '../../../features/chat_bot/presentation/screens/home_chat_bot_screen.dart';
 import '../../../features/chat_bot/presentation/screens/conversations_screen.dart';
 import '../../../features/chat_bot/presentation/screens/chat_screen.dart';
 

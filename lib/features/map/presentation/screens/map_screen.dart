@@ -22,8 +22,8 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logic = MapLogicController(); // اسم جديد
-    final flutterMapController = MapController(); // هذا خاص بـ flutter_map
+    final logic = MapLogicController();
+    final flutterMapController = MapController();
     final initialLatLng = LatLng(location.latitude, location.longitude);
 
     return ChangeNotifierProvider<MapLogicController>.value(

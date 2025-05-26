@@ -27,7 +27,7 @@ Widget buildBlocProviders({required Widget child}) {
 
   return MultiBlocProvider(
     providers: [
-      BlocProvider(create: (_) => OrdersCubit(orderRepository)..loadOrders()),
+      BlocProvider(create: (_) => OrdersCubit(orderRepository)), // ✅ بدون loadOrderByRole هنا
       BlocProvider(
         create: (_) => NotificationCubit(
           getNotifications: GetNotifications(notificationRepository),

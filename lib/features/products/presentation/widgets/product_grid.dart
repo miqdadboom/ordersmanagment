@@ -1,5 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/product_card.dart';
+import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
+
+import 'home_page/product_card.dart';
+
 
 class ProductGrid extends StatelessWidget {
   final List<Map<String, dynamic>> products;
@@ -37,29 +43,69 @@ class ProductGrid extends StatelessWidget {
             childAspectRatio: 0.7,
           ),
           itemBuilder: (context, index) {
-            final product = products[index];
-            return ProductCard(
-              image: product['image'] ?? '',
-              name: product['name'] ?? '',
-              brand: product['brand'] ?? '',
-              price: product['price']?.toString() ?? '',
-              discount: product['discount'],
+            final productMap = products[index];
+
+            final productEntity = ProductEntity(
+              imageUrl: productMap['image'] ?? '',
+              title: productMap['name'] ?? '',
+              brand: productMap['brand'] ?? '',
+              price: double.tryParse(productMap['price'].toString()) ?? 0.0,
+              description: productMap['description'] ?? '',
+              quantity: productMap['quantity'] ?? 1,
+            );
+
+           return ProductCardHome(
+              product: productEntity,
+              discount: productMap['discount'],
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  '/productView',
-                  arguments: {
-                    'imageUrl': product['image'] ?? '',
-                    'name': product['name'] ?? '',
-                    'brand': product['brand'] ?? '',
-                    'price':
-                        double.tryParse(product['price'].toString()) ??
-                        0.0, // ✅
-                    'description': product['description'] ?? '',
-                  },
+                Navigator.pushNamed(context, '/productView', arguments: {
+                  'imageUrl': productEntity.imageUrl,
+                  'name': productEntity.title,
+                  'brand': productEntity.brand,
+                  'price': productEntity.price,
+                  'description': productEntity.description,
+                });
+              },
+              onAddToCart: () async {
+                final cartItem = {
+                  'title': productEntity.title,
+                  'brand': productEntity.brand,
+                  'price': productEntity.price,
+                  'quantity': 1,
+                  'imageUrl': productEntity.imageUrl,
+                  'description': productEntity.description,
+                };
+
+                final userId = FirebaseAuth.instance.currentUser!.uid;
+                final cartRef = FirebaseFirestore.instance.collection('cart').doc(userId);
+
+                final doc = await cartRef.get();
+                List<dynamic> items = [];
+                if (doc.exists) {
+                  items = doc.data()?['products'] ?? [];
+                }
+
+                final existingIndex = items.indexWhere((item) => item['title'] == productEntity.title);
+                if (existingIndex == -1) {
+                  items.add(cartItem);
+                } else {
+                  items[existingIndex]['quantity'] += 1;
+                }
+
+                await cartRef.set({'products': items});
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                   SnackBar(content:
+                  Text(
+                      'Added to cart',
+                    style: TextStyle(
+                      color: AppColors.snakeColor,
+                    ),
+                    ),
+                  ),
                 );
               },
-            );
+           );
           },
         ),
       ],

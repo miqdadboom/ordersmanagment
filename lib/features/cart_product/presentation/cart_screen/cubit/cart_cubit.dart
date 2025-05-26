@@ -1,48 +1,82 @@
+// ✅ CartCubit: تخزين جميع بيانات المنتج في Firebase + دعم الكمية وتعديلها
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CartCubit extends Cubit<double> {
-  CartCubit() : super(0);
+class CartCubit extends Cubit<List<Map<String, dynamic>>> {
+  CartCubit() : super([]);
 
-  double totalPrice = 0;
-  List<Map<String, dynamic>> products = [];
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
 
-  void initializeProducts() {
-    products = List.generate(
-      13,
-      (index) => {
-        "imageUrl":
-            "https://images.unsplash.com/photo-1541643600914-78b084683601?fm=jpg&q=60&w=3000",
-        "title": "Product ${index + 1}",
-        "subtitle": "Brand A",
-        "price": 100.0,
-        "quantity": 1,
-      },
-    );
-    calculateTotal();
+  Future<void> loadCartProducts() async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return;
+
+    final doc = await _firestore.collection('cart').doc(userId).get();
+    if (doc.exists) {
+      final data = doc.data();
+      if (data != null && data['products'] != null) {
+        final products = List<Map<String, dynamic>>.from(data['products']);
+        emit(products);
+      }
+    }
   }
 
-  void calculateTotal() {
-    totalPrice = products.fold(
-      0,
-      (sum, item) => sum + item['price'] * item['quantity'],
-    );
-    emit(totalPrice);
+  Future<void> addProductToCart(Map<String, dynamic> product) async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return;
+
+    final docRef = _firestore.collection('cart').doc(userId);
+    final doc = await docRef.get();
+
+    List<Map<String, dynamic>> updatedProducts = [];
+
+    if (doc.exists && doc.data() != null && doc.data()!['products'] != null) {
+      updatedProducts = List<Map<String, dynamic>>.from(doc.data()!['products']);
+    }
+
+    final index = updatedProducts.indexWhere((p) => p['title'] == product['title']);
+    if (index != -1) {
+      updatedProducts[index]['quantity'] += product['quantity'];
+    } else {
+      updatedProducts.add(product);
+    }
+
+    await docRef.set({'products': updatedProducts});
+    emit(updatedProducts);
   }
 
-  void updateTotal(double change) {
-    totalPrice += change;
-    emit(totalPrice);
+  Future<void> updateQuantity(int index, int newQty) async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return;
+
+    final updatedProducts = List<Map<String, dynamic>>.from(state);
+    updatedProducts[index]['quantity'] = newQty;
+
+    await _firestore.collection('cart').doc(userId).set({
+      'products': updatedProducts,
+    });
+
+    emit(updatedProducts);
   }
 
-  void removeProduct(int index) {
-    totalPrice -= products[index]['price'] * products[index]['quantity'];
-    products.removeAt(index);
-    emit(totalPrice);
+  Future<void> removeProduct(int index) async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return;
+
+    final updatedProducts = List<Map<String, dynamic>>.from(state);
+    updatedProducts.removeAt(index);
+
+    await _firestore.collection('cart').doc(userId).set({
+      'products': updatedProducts,
+    });
+
+    emit(updatedProducts);
   }
 
-  void updateQuantity(int index, int oldQty, int newQty) {
-    totalPrice += (newQty - oldQty) * products[index]['price'];
-    products[index]['quantity'] = newQty;
-    emit(totalPrice);
+  double calculateTotal() {
+    return state.fold(0, (sum, item) => sum + item['price'] * item['quantity']);
   }
 }

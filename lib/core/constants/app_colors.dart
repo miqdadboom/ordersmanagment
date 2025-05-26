@@ -71,5 +71,7 @@ class AppColors {
   static const secondaryColor = Color(0xFF03DAC6);
   static const backgroundColor = Color(0xFFD3D5D7);
   static const notSelectedItem = Color(0xFF000000);
+  static const snakeColor = Color(0xFF00FF00);
+
 
 }

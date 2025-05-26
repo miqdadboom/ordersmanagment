@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
+import '../../../../core/user_role_access.dart';
 import '../../data/models/EmployeeModel.dart';
 import '../../data/repositories/employee_repository_impl.dart';
 import '../../data/datasources/firebase_employee_service.dart';
@@ -28,15 +29,14 @@ class _ManageEmployeeState extends State<ManageEmployee> {
   @override
   void initState() {
     super.initState();
-    _getUserRole();
+    _initializeScreen();
   }
 
-  Future<void> _getUserRole() async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
-    final employee = await _repo.getEmployeeById(userId);
+  Future<void> _initializeScreen() async {
+    final role = await UserRoleAccess.getUserRole();
     if (!mounted) return;
     setState(() {
-      _role = employee?.role;
+      _role = role;
       _loading = false;
     });
   }

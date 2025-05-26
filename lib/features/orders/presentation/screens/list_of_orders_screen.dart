@@ -1,12 +1,13 @@
-// lib/presentation/screens/list_of_orders_screen.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/user_access_control.dart';
 import '../../../../core/widgets/bottom_navigation_warehouse_manager.dart';
 import '../../data/models/order_model.dart';
 import '../../domain/entities/order_product.dart';
+import '../cubit/orders_cubit.dart';
 import '../widgets/order_card.dart';
 
 class ListOfOrdersScreen extends StatefulWidget {
@@ -23,19 +24,22 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
   @override
   void initState() {
     super.initState();
-    _getUserRole();
+    _getUserRoleAndLoadOrders();
   }
 
-  Future<void> _getUserRole() async {
+  Future<void> _getUserRoleAndLoadOrders() async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
     final role = doc['role'];
 
     if (!mounted) return;
+
     setState(() {
       _role = role;
       _loading = false;
     });
+
+    context.read<OrdersCubit>().loadOrderByRole(role: role, userId: userId);
   }
 
   @override
@@ -47,7 +51,6 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
     }
 
     if (!UserAccessControl.ListOfOrdersScreen(_role!)) {
-
       return const Scaffold(
         body: Center(child: Text("You are not authorized to access this page.")),
       );
@@ -58,54 +61,20 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         centerTitle: true,
-        title:  Text('Orders', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+        title: const Text('Orders', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         automaticallyImplyLeading: false,
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('orders')
-            .orderBy('timestamp', descending: true)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+      body: BlocBuilder<OrdersCubit, List<OrderEntity>>(
+        builder: (context, orders) {
+          if (orders.isEmpty) {
             return const Center(child: Text('No orders found.'));
           }
-
-          final orders = snapshot.data!.docs.map((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            final List<OrderProduct> products = (data['products'] as List<dynamic>).map((item) {
-              return OrderProduct(
-                id: DateTime.now().millisecondsSinceEpoch.toString(),
-                name: item['title'] ?? 'Unknown',
-                description: '',
-                quantity: item['quantity'] ?? 1,
-                passed: true,
-                imageUrl: item['imageUrl'],
-              );
-            }).toList();
-
-            return OrderEntity(
-              id: doc.id,
-              customerName: data['customerName'] ?? 'Unknown',
-              customerAddress: data['location'] ?? 'Unknown',
-              latitude: data['latitude'],
-              longitude: data['longitude'],
-              status: 'Pending',
-              estimatedTime: '2 hours',
-              products: products,
-              productImage: products.isNotEmpty ? products[0].imageUrl : null,
-            );
-          }).toList();
 
           return SingleChildScrollView(
             child: Column(
               children: [
                 _buildSearchBar(),
-                 Padding(
+                const Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
                     'List of incoming orders',

@@ -8,21 +8,18 @@ class CartProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartCubit, dynamic>(
-        builder: (context, state) {
-      final cubit = context.read<CartCubit>();
-      final products = cubit.products;
-
-      if (products.isEmpty) {
-        return const Center(child: Text('Your cart is empty.'));
-      }
+    return BlocBuilder<CartCubit, List<Map<String, dynamic>>>(
+      builder: (context, products) {
+        if (products.isEmpty) {
+          return const Center(child: Text('Your cart is empty'));
+        }
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       physics: const BouncingScrollPhysics(),
       itemCount: products.length,
       itemBuilder: (context, index) {
-        final product = cubit.products[index];
+        final product = products[index];
         return CartProductItem(index: index, product: product);
       },
     );

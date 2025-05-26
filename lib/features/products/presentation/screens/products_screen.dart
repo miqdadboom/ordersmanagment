@@ -9,7 +9,8 @@ import 'package:final_tasks_front_end/features/products/presentation/widgets/hom
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/product_search_delegate.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/promo_banner.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/sidebar.dart';
-import 'package:final_tasks_front_end/features/products/presentation/widgets/product_grid.dart';
+
+import '../widgets/product_grid.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -162,7 +163,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           ProductGrid(
                             products: products,
                             enableSorting:
-                                false, // بدون sorting في الصفحة الرئيسية
+                                false, //
                           ),
                         ],
                       ),

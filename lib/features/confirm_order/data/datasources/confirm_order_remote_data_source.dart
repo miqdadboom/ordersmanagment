@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ConfirmOrderRemoteDataSource {
   static Future<void> sendOrderToFirebase({
@@ -8,7 +9,11 @@ class ConfirmOrderRemoteDataSource {
     required double longitude,
     required List<Map<String, dynamic>> products,
   }) async {
+    final currentUser = FirebaseAuth.instance.currentUser!;
+    final userId = currentUser.uid;
+
     await FirebaseFirestore.instance.collection('orders').add({
+      'createdBy': userId,
       'customerName': customerName,
       'location': location,
       'latitude': latitude,

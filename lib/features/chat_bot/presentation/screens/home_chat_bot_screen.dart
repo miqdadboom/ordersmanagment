@@ -6,6 +6,7 @@ import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
 import 'package:final_tasks_front_end/features/chat_bot/presentation/widgets/animated_intro.dart';
 import 'package:final_tasks_front_end/features/chat_bot/presentation/widgets/features_section.dart';
 import 'package:final_tasks_front_end/features/chat_bot/presentation/widgets/start_chat_button.dart';
+import '../../../../core/user_role_access.dart';
 import 'conversations_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,14 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _getUserRole();
+    _initializeScreen();
   }
 
-  Future<void> _getUserRole() async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
-    final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    final role = doc['role'];
-
+  Future<void> _initializeScreen() async {
+    final role = await UserRoleAccess.getUserRole();
     if (!mounted) return;
     setState(() {
       _role = role;
@@ -44,8 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Center(child: CircularProgressIndicator()),
       );
     }
-
-    print('🧪 ROLE: $_role'); // Debug: Show role in console
 
     if (!UserAccessControl.HomeScreen(_role!)) {
       return const Scaffold(

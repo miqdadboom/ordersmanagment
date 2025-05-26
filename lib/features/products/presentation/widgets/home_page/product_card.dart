@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
 
-class ProductCard extends StatelessWidget {
-  final String image;
-  final String name;
-  final String brand;
-  final String price;
+class ProductCardHome extends StatelessWidget {
+  final ProductEntity product;
   final String? discount;
   final VoidCallback onTap;
   final VoidCallback? onAddToCart;
 
-  const ProductCard({
+  const ProductCardHome({
     super.key,
-    required this.image,
-    required this.name,
-    required this.brand,
-    required this.price,
+    required this.product,
     this.discount,
     required this.onTap,
     this.onAddToCart,
@@ -53,7 +48,7 @@ class ProductCard extends StatelessWidget {
                     width: double.infinity,
                     color: AppColors.cardWithoutImage,
                     child: Image.network(
-                      image,
+                      product.imageUrl,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Column(
@@ -82,7 +77,7 @@ class ProductCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        name,
+                        product.title,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -92,7 +87,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        brand,
+                        product.brand,
                         style: TextStyle(
                           fontSize: 12,
                           color: AppColors.textCardBrand,
@@ -105,7 +100,7 @@ class ProductCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            price,
+                            '\$${product.price}',
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
