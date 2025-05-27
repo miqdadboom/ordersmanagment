@@ -1,4 +1,5 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/features/products/presentation/screens/edit_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +19,7 @@ class ProductView extends StatefulWidget {
   final String brand;
   final double price;
   final String description;
+  final String documentId;
 
   const ProductView({
     super.key,
@@ -26,6 +28,7 @@ class ProductView extends StatefulWidget {
     required this.brand,
     required this.price,
     required this.description,
+    required this.documentId,
   });
 
   @override
@@ -53,6 +56,84 @@ class _ProductViewState extends State<ProductView> {
       _role = role;
       _loading = false;
     });
+  }
+
+  Future<void> _deleteProductFromFirestore(BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(widget.documentId) // ✅ استخدم الـ ID مباشرة
+          .delete();
+
+      if (context.mounted) {
+        Navigator.of(context).pop(); // ✅ ارجع للخلف بعد الحذف
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Product deleted successfully")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error deleting product: $e")));
+    }
+  }
+
+  void _confirmDelete(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text(
+              'Confirm Deletion',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: const Text(
+              'Are you sure you want to delete this product?',
+              textAlign: TextAlign.center,
+            ),
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.logOutField,
+                  foregroundColor: AppColors.logOutText,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(true); // ✅ يتم الحذف
+                },
+                child: const Text('Delete'),
+              ),
+              const SizedBox(width: 12),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.cancel,
+                  side: const BorderSide(color: AppColors.cancelField),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: () => Navigator.of(context).pop(false), // ❌ إلغاء
+                child: const Text('Cancel'),
+              ),
+            ],
+          ),
+    );
+
+    if (confirmed == true) {
+      await _deleteProductFromFirestore(context);
+    }
   }
 
   @override
@@ -91,6 +172,30 @@ class _ProductViewState extends State<ProductView> {
           ),
           backgroundColor: AppColors.primary,
           elevation: 0,
+          actions: [
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                if (value == 'edit') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (_) =>
+                              EditProductScreen(documentId: widget.documentId),
+                    ),
+                  );
+                } else if (value == 'delete') {
+                  _confirmDelete(context);
+                }
+              },
+
+              itemBuilder:
+                  (context) => [
+                    const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                    const PopupMenuItem(value: 'delete', child: Text('Delete')),
+                  ],
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -108,23 +213,46 @@ class _ProductViewState extends State<ProductView> {
                       child: BlocBuilder<ProductQuantityCubit, int>(
                         builder: (context, quantity) {
                           final cubit = context.read<ProductQuantityCubit>();
-                          final quantityController = TextEditingController(text: quantity.toString());
+                          final quantityController = TextEditingController(
+                            text: quantity.toString(),
+                          );
 
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(widget.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textDark)),
+                              Text(
+                                widget.name,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textDark,
+                                ),
+                              ),
                               const SizedBox(height: 10),
-                              Text(widget.brand, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark)),
+                              Text(
+                                widget.brand,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textDark,
+                                ),
+                              ),
                               const SizedBox(height: 20),
                               Text(
                                 '\$${widget.price.toStringAsFixed(2)}',
-                                style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textDark,
+                                ),
                               ),
                               const SizedBox(height: 50),
 
                               QuantityController(
-                                model: QuantityModel(quantity: quantity, price: widget.price),
+                                model: QuantityModel(
+                                  quantity: quantity,
+                                  price: widget.price,
+                                ),
                                 quantityController: quantityController,
                                 onIncrement: cubit.increment,
                                 onDecrement: cubit.decrement,
@@ -165,29 +293,29 @@ class _ProductViewState extends State<ProductView> {
         bottomNavigationBar: BlocBuilder<ProductQuantityCubit, int>(
           builder: (context, quantity) {
             return AddCart(
-                quantity: quantity,
-                unitPrice: widget.price,
+              quantity: quantity,
+              unitPrice: widget.price,
               onAdd: () async {
-                  final product = {
-                    'imageUrl': widget.imageUrl,
-                    'title': widget.name,
-                    'brand': widget.brand,
-                    'price': widget.price,
-                    'description': widget.description,
-                    'quantity': quantity,
-                  };
-                  await context.read<CartCubit>().addProductToCart(product);
-                  if(context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(
-                          content: Text(
-                            "Product added to cart",
-                            style: TextStyle(color: AppColors.snakeColor),
-                          ),
+                final product = {
+                  'imageUrl': widget.imageUrl,
+                  'title': widget.name,
+                  'brand': widget.brand,
+                  'price': widget.price,
+                  'description': widget.description,
+                  'quantity': quantity,
+                };
+                await context.read<CartCubit>().addProductToCart(product);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "Product added to cart",
+                        style: TextStyle(color: AppColors.snakeColor),
                       ),
-                    );
-                  }
-              }
+                    ),
+                  );
+                }
+              },
             );
           },
         ),

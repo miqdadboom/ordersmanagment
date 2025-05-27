@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/features/products/presentation/screens/product_view.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
@@ -63,7 +64,25 @@ class ProductSearchDelegate extends SearchDelegate {
         return ProductCardHome(
           product: entity,
           discount: product['discount'],
-          onTap: () => debugPrint('${product['name']} tapped'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => ProductView(
+                      imageUrl: product['image'] ?? '',
+                      name: product['name'] ?? '',
+                      brand: product['brand'] ?? '',
+                      price:
+                          double.tryParse(product['price'].toString()) ?? 0.0,
+                      description: product['description'] ?? '',
+                      documentId:
+                          product['documentId'] ??
+                          '', 
+                    ),
+              ),
+            );
+          },
         );
       },
     );

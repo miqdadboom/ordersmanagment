@@ -50,9 +50,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
           await FirebaseFirestore.instance.collection('products').get();
       setState(() {
         products =
-            snapshot.docs
-                .map((doc) => doc.data() as Map<String, dynamic>)
-                .toList();
+            snapshot.docs.map((doc) {
+              final data = doc.data();
+              data['documentId'] = doc.id; // ✅ أضف الـ ID هنا
+              return data;
+            }).toList();
         isLoading = false;
       });
     } catch (e) {
@@ -131,44 +133,49 @@ class _ProductsScreenState extends State<ProductsScreen> {
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const PromoBanner(),
-                    CategorySection(
-                      categories: categories,
-                      onCategoryTap: (index) {
-                        final categoryName = categories[index].name;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => FilterProductsScreen(
-                                  categoryName: categoryName,
-                                ),
-                          ),
-                        );
-                      },
-
-                      onViewAllTap: () => _showCategoryPopup(context),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          _buildSectionHeader('Products', 'View All', () {
-                            debugPrint('View All Products clicked');
-                          }),
-                          const SizedBox(height: 16),
-                          ProductGrid(
-                            products: products,
-                            enableSorting:
-                                false, //
-                          ),
-                        ],
+              : RefreshIndicator(
+                onRefresh: () async {
+                  await getCategories();
+                  await getProducts();
+                },
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(), // ✅ ضروري
+                  child: Column(
+                    children: [
+                      const PromoBanner(),
+                      CategorySection(
+                        categories: categories,
+                        onCategoryTap: (index) {
+                          final categoryName = categories[index].name;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => FilterProductsScreen(
+                                    categoryName: categoryName,
+                                  ),
+                            ),
+                          );
+                        },
+                        onViewAllTap: () => _showCategoryPopup(context),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            _buildSectionHeader('Products', 'View All', () {
+                              debugPrint('View All Products clicked');
+                            }),
+                            const SizedBox(height: 16),
+                            ProductGrid(
+                              products: products,
+                              enableSorting: false,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
     );

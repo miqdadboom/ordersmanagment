@@ -1,4 +1,3 @@
-
 import 'package:final_tasks_front_end/features/products/presentation/cubit/product_management_cubit.dart';
 import 'package:final_tasks_front_end/features/products/presentation/cubit/product_management_state.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/product_management/custom_text_field.dart';
@@ -11,7 +10,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
 class ProductFormWidget extends StatefulWidget {
-  const ProductFormWidget({super.key});
+  final Map<String, dynamic>? productData;
+
+  const ProductFormWidget({super.key, this.productData});
 
   @override
   State<ProductFormWidget> createState() => _ProductFormWidgetState();
@@ -35,6 +36,20 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
     'Fragrance': ['Perfume', 'Body Spray'],
   };
 
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.productData != null) {
+      _nameController.text = widget.productData!['name'] ?? '';
+      _brandController.text = widget.productData!['brand'] ?? '';
+      _priceController.text = widget.productData!['price'].toString();
+      _descriptionController.text = widget.productData!['description'] ?? '';
+      selectedMainType = widget.productData!['mainType'];
+      selectedSubType = widget.productData!['subType'];
+    }
+  }
+
   InputDecoration _buildDropdownDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
@@ -52,12 +67,12 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
     );
   }
 
-  Future<void> addProduct() async {
+  Future<void> saveProduct() async {
     final cubit = context.read<ProductManagementCubit>();
 
     if (_formKey.currentState!.validate()) {
       try {
-        String? imageUrl;
+        String imageUrl = widget.productData?['image'] ?? '';
 
         if (cubit.state is ProductImagePicked) {
           final imageFile = (cubit.state as ProductImagePicked).image;
@@ -66,27 +81,9 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
             'product_images/$fileName.jpg',
           );
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Uploading image...'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-
-          try {
-            final bytes = await imageFile.readAsBytes();
-            await storageRef.putData(bytes);
-            imageUrl = await storageRef.getDownloadURL();
-          } catch (e, s) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Image upload failed: $e'),
-                backgroundColor: Colors.red,
-              ),
-            );
-            print('❌ Stack trace: $s');
-            return;
-          }
+          final bytes = await imageFile.readAsBytes();
+          await storageRef.putData(bytes);
+          imageUrl = await storageRef.getDownloadURL();
         }
 
         final productData = {
@@ -94,36 +91,49 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
           'brand': _brandController.text.trim(),
           'price': double.tryParse(_priceController.text.trim()) ?? 0.0,
           'description': _descriptionController.text.trim(),
-          'image': imageUrl ?? '',
+          'image': imageUrl,
           'mainType': selectedMainType ?? '',
           'subType': selectedSubType ?? '',
-          'createdAt': FieldValue.serverTimestamp(),
+          'updatedAt': FieldValue.serverTimestamp(),
         };
 
-        await FirebaseFirestore.instance
-            .collection('products')
-            .add(productData);
+        if (widget.productData != null) {
+          await FirebaseFirestore.instance
+              .collection('products')
+              .doc(widget.productData!['documentId'])
+              .update(productData);
+        } else {
+          await FirebaseFirestore.instance
+              .collection('products')
+              .add(productData);
+        }
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Product added successfully!'),
+          SnackBar(
+            content: Text(
+              widget.productData != null
+                  ? 'Product updated successfully!'
+                  : 'Product added successfully!',
+            ),
             backgroundColor: Colors.green,
           ),
         );
 
-        cubit.clearFields();
-        _nameController.clear();
-        _brandController.clear();
-        _priceController.clear();
-        _descriptionController.clear();
-        setState(() {
-          selectedMainType = null;
-          selectedSubType = null;
-        });
+        if (widget.productData == null) {
+          cubit.clearFields();
+          _nameController.clear();
+          _brandController.clear();
+          _priceController.clear();
+          _descriptionController.clear();
+          setState(() {
+            selectedMainType = null;
+            selectedSubType = null;
+          });
+        }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to add product: ${e.toString()}'),
+            content: Text('Failed: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -178,7 +188,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                             value: type,
                             child: Text(
                               type,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: AppColors.primary,
                                 fontSize: 16,
                               ),
@@ -207,7 +217,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                             value: sub,
                             child: Text(
                               sub,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: AppColors.primary,
                                 fontSize: 16,
                               ),
@@ -233,7 +243,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                 },
               ),
               const SizedBox(height: 40),
-              SaveButton(onPressed: addProduct, color: AppColors.primary),
+              SaveButton(onPressed: saveProduct, color: AppColors.primary),
             ],
           ),
         ),

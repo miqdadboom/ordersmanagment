@@ -27,7 +27,6 @@ class BrandAndSortDropdowns extends StatelessWidget {
 
     return Row(
       children: [
-        // 🟦 Brand Dropdown
         Expanded(
           child: Container(
             height: 40,
@@ -76,7 +75,6 @@ class BrandAndSortDropdowns extends StatelessWidget {
 
         const SizedBox(width: 8),
 
-        // 🟦 Sort Dropdown
         Expanded(
           child: Container(
             height: 40,

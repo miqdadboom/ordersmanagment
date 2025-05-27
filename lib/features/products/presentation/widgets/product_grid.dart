@@ -3,9 +3,7 @@ import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
-
 import 'home_page/product_card.dart';
-
 
 class ProductGrid extends StatelessWidget {
   final List<Map<String, dynamic>> products;
@@ -54,17 +52,22 @@ class ProductGrid extends StatelessWidget {
               quantity: productMap['quantity'] ?? 1,
             );
 
-           return ProductCardHome(
+            return ProductCardHome(
               product: productEntity,
               discount: productMap['discount'],
               onTap: () {
-                Navigator.pushNamed(context, '/productView', arguments: {
-                  'imageUrl': productEntity.imageUrl,
-                  'name': productEntity.title,
-                  'brand': productEntity.brand,
-                  'price': productEntity.price,
-                  'description': productEntity.description,
-                });
+                Navigator.pushNamed(
+                  context,
+                  '/productView',
+                  arguments: {
+                    'imageUrl': productEntity.imageUrl,
+                    'name': productEntity.title,
+                    'brand': productEntity.brand,
+                    'price': productEntity.price,
+                    'description': productEntity.description,
+                    'documentId': productMap['documentId'], // ✅ تم تمريره
+                  },
+                );
               },
               onAddToCart: () async {
                 final cartItem = {
@@ -85,7 +88,8 @@ class ProductGrid extends StatelessWidget {
                   items = doc.data()?['products'] ?? [];
                 }
 
-                final existingIndex = items.indexWhere((item) => item['title'] == productEntity.title);
+                final existingIndex =
+                    items.indexWhere((item) => item['title'] == productEntity.title);
                 if (existingIndex == -1) {
                   items.add(cartItem);
                 } else {
@@ -95,17 +99,15 @@ class ProductGrid extends StatelessWidget {
                 await cartRef.set({'products': items});
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                   SnackBar(content:
-                  Text(
+                  SnackBar(
+                    content: Text(
                       'Added to cart',
-                    style: TextStyle(
-                      color: AppColors.snakeColor,
-                    ),
+                      style: TextStyle(color: AppColors.snakeColor),
                     ),
                   ),
                 );
               },
-           );
+            );
           },
         ),
       ],

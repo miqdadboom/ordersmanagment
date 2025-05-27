@@ -5,7 +5,6 @@ import 'package:final_tasks_front_end/features/products/presentation/widgets/fil
 import 'package:final_tasks_front_end/features/products/presentation/widgets/filter_home_page/makeup_type_dialog.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/filter_home_page/makeup_type_filter.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/filter_home_page/search_bar.dart';
-
 import '../widgets/product_grid.dart';
 
 class FilterProductsScreen extends StatefulWidget {
@@ -100,9 +99,10 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
           }).toList();
     }
 
-    if (sortBy == 'Price: Low to High') {
+    // ✅ فرز السعر بطريقة صحيحة
+    if (sortBy == 'PriceLow') {
       filtered.sort((a, b) => (a['price'] ?? 0.0).compareTo(b['price'] ?? 0.0));
-    } else if (sortBy == 'Price: High to Low') {
+    } else if (sortBy == 'PriceHigh') {
       filtered.sort((a, b) => (b['price'] ?? 0.0).compareTo(a['price'] ?? 0.0));
     }
 

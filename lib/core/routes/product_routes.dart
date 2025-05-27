@@ -21,11 +21,12 @@ final Map<String, WidgetBuilder> productRoutes = {
       brand: args['brand'],
       price: args['price'],
       description: args['description'] is String ? args['description'] : '',
+      documentId: args['documentId'] ?? '',
     );
   },
   '/productViewCart': (context) {
     final args =
-    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return ProductViewCart(
       imageUrl: args['imageUrl'],
       name: args['name'],
