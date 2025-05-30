@@ -34,5 +34,12 @@ class FirebaseEmployeeService {
     await _collection.doc(userId).delete();
   }
 
-  getAllEmployeesStream() {}
+  // جلب جميع الموظفين كبث مباشر
+  Stream<List<EmployeeModel>> getAllEmployeesStream() {
+    return _collection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return EmployeeModel.fromFirestore(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
+  }
 }

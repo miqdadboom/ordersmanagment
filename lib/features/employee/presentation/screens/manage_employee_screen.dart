@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
-import '../../../../core/user_role_access.dart';
 import '../../data/models/EmployeeModel.dart';
 import '../../data/repositories/employee_repository_impl.dart';
 import '../../data/datasources/firebase_employee_service.dart';
 import '../widgets/mange_action_buttons.dart';
 import '../widgets/mange_search_bar.dart';
-import 'add_employee_screen.dart';
 import 'edit_employee_screen.dart';
 
 class ManageEmployee extends StatefulWidget {
@@ -23,26 +21,30 @@ class _ManageEmployeeState extends State<ManageEmployee> {
   String _searchQuery = '';
   String? _role;
   bool _loading = true;
+  bool _sortAscending = true; // حالة السورت
 
   final _repo = EmployeeRepositoryImpl(FirebaseEmployeeService());
 
   @override
   void initState() {
     super.initState();
-    _initializeScreen();
+    _getUserRole();
   }
 
-  Future<void> _initializeScreen() async {
-    final role = await UserRoleAccess.getUserRole();
+  Future<void> _getUserRole() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final employee = await _repo.getEmployeeById(userId);
     if (!mounted) return;
     setState(() {
-      _role = role;
+      _role = employee?.role;
       _loading = false;
     });
   }
 
-  void _sortEmployees(String value) {
-    // Add sorting logic here if needed
+  void _sortEmployees(String _) {
+    setState(() {
+      _sortAscending = !_sortAscending;
+    });
   }
 
   @override
@@ -62,14 +64,8 @@ class _ManageEmployeeState extends State<ManageEmployee> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title:  Text(
-            "Company Employee",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textDark,
-          ),
-        ),
+        foregroundColor: AppColors.textLight,
+        title: const Text("Company Employee"),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -111,6 +107,13 @@ class _ManageEmployeeState extends State<ManageEmployee> {
                     final job = employee.role.toLowerCase();
                     return name.contains(_searchQuery) || job.contains(_searchQuery);
                   }).toList();
+
+                  // هنا تم تفعيل الفرز
+                  filtered.sort((a, b) {
+                    return _sortAscending
+                        ? a.name.compareTo(b.name)
+                        : b.name.compareTo(a.name);
+                  });
 
                   if (filtered.isEmpty) {
                     return const Center(child: Text("No employees found"));

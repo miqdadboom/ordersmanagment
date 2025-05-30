@@ -74,4 +74,8 @@ class AppColors {
   static const snakeColor = Color(0xFF00FF00);
 
 
+
+  static const success = Color(0xFF4CAF50);
+  static const error = Color(0xFFF44336);
+
 }
