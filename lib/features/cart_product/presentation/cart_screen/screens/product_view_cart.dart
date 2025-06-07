@@ -1,4 +1,5 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,10 +99,10 @@ class _ProductViewCartState extends State<ProductViewCart> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
                 child: DescriptionProduct(description: widget.product.description),
               ),
-              const SizedBox(height: 25),
+              AppSizedBox.height(context, 0.03),
             ],
           ),
         ),

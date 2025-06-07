@@ -52,7 +52,10 @@ class ConfirmOrderActions extends StatelessWidget {
           style:  AppTextStyles.actionButtonText(context),
         ),
         style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.06,
+            vertical: MediaQuery.of(context).size.height * 0.015,
+          ),
         ),
       ),
     );

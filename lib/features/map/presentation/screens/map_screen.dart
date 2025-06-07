@@ -27,6 +27,11 @@ class MapScreen extends StatelessWidget {
     final flutterMapController = MapController();
     final initialLatLng = LatLng(location.latitude, location.longitude);
 
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    final markerSize = screenWidth * 0.2;
+    final iconSize = screenWidth * 0.1;
+
     return ChangeNotifierProvider<MapLogicCubit>.value(
       value: logic,
       child: Scaffold(
@@ -66,13 +71,13 @@ class MapScreen extends StatelessWidget {
                       ? []
                       : [
                     Marker(
-                      width: 80.0,
-                      height: 80.0,
+                      width: markerSize,
+                      height: markerSize,
                       point: controller.pickedLocation ?? initialLatLng,
                       child: Icon(
                         Icons.location_pin,
                         color: AppColors.lableMap,
-                        size: 40,
+                        size: iconSize,
                       ),
                     ),
                   ],

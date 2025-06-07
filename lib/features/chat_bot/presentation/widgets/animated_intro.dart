@@ -9,7 +9,9 @@ class AnimatedIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 30),
+      margin: EdgeInsets.symmetric(
+        vertical: MediaQuery.of(context).size.height * 0.035,
+      ),
       child: AnimatedTextKit(
         displayFullTextOnTap: true,
         isRepeatingAnimation: false,

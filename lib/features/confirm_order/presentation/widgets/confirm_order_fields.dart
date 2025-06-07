@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/widgets/location_input.dart';
 import '../../../../../core/widgets/place.dart';
@@ -46,7 +47,7 @@ class ConfirmOrderFields extends StatelessWidget {
           ),
           SizedBox(height: screenHeight * 0.03),
           LocationInput(onSelectLocation: onLocationSelected),
-          const SizedBox(height: 20),
+          AppSizedBox.height(context, 0.025),
           TextFormField(
             maxLines: 3,
             controller: notesController,

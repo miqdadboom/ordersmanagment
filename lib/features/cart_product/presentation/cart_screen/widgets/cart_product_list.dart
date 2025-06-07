@@ -15,7 +15,10 @@ class CartProductList extends StatelessWidget {
         }
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.04,
+        vertical: MediaQuery.of(context).size.height * 0.02,
+      ),
       physics: const BouncingScrollPhysics(),
       itemCount: products.length,
       itemBuilder: (context, index) {

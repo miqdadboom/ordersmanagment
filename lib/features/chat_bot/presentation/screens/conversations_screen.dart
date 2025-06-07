@@ -30,7 +30,7 @@ class ConversationsScreen extends StatelessWidget {
               return const Center(child: Text('No conversations found.'));
             }
             return ListView.builder(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.025),
               itemCount: cubit.conversations.length,
               itemBuilder: (context, index) {
                 final convo = cubit.conversations[index];

@@ -56,17 +56,21 @@ class ConversationItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: AppColors.border),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 6),
+      margin: EdgeInsets.symmetric(
+        vertical: MediaQuery.of(context).size.height * 0.007,
+      ),
       child: Stack(
         children: [
          ListTile(
-          contentPadding: const EdgeInsets.all(16),
-          title: Text(
+           contentPadding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.045),
+           title: Text(
             title,
             style: AppTextStyles.conversationTitle(context),
           ),
           subtitle: Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.01,
+            ),
             child: Text(
               lastMessage,
               maxLines: 2,

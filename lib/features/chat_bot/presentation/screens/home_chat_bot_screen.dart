@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
@@ -62,17 +63,20 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               CustomAppBar(title: 'Chat Ai'),
-              const Expanded(
+               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                  padding: EdgeInsets.symmetric(
+                    vertical: MediaQuery.of(context).size.height * 0.01,
+                    horizontal: MediaQuery.of(context).size.width * 0.05,
+                  ),
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
                         AnimatedIntro(),
                         FeaturesSection(),
-                        SizedBox(height: 15),
+                        AppSizedBox.height(context, 0.02),
                         StartChatButton(),
-                        SizedBox(height: 30),
+                        AppSizedBox.height(context, 0.04),
                       ],
                     ),
                   ),

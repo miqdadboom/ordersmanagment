@@ -1,4 +1,5 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,9 +111,12 @@ class _CartScreenState extends State<CartScreen> {
                   );
                 },
               ),
-              const Divider(height: 1),
+               Divider(height: 1),
               if (_buildBottomNavigationBar() != null)
-                SizedBox(height: 60, child: _buildBottomNavigationBar()!),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.075,
+                  child: _buildBottomNavigationBar()!,
+                ),
             ],
           ),
         ),

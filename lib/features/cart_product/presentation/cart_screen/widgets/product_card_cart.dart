@@ -1,4 +1,5 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,8 +102,10 @@ class _ProductCardCartState extends State<ProductCardCart> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(8),
+      margin: EdgeInsets.symmetric(
+        vertical: MediaQuery.of(context).size.height * 0.01,
+      ),
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: AppColors.background,
@@ -122,10 +125,14 @@ class _ProductCardCartState extends State<ProductCardCart> {
                   fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(width: 6),
+              AppSizedBox.width(context, 0.015),
+
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 30, left: 5),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height * 0.04,
+                    left: MediaQuery.of(context).size.width * 0.015,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -133,7 +140,8 @@ class _ProductCardCartState extends State<ProductCardCart> {
                         widget.product.title,
                         style:  AppTextStyles.productCardTitle(context),
                       ),
-                      const SizedBox(height: 4),
+                      AppSizedBox.height(context, 0.005),
+
                       Text(
                         widget.product.brand,
                         style: AppTextStyles.productCardBrand(context),
@@ -153,8 +161,8 @@ class _ProductCardCartState extends State<ProductCardCart> {
             ),
           ),
           Positioned(
-            bottom: 8,
-            right: 8,
+            bottom: MediaQuery.of(context).size.height * 0.01,
+            right: MediaQuery.of(context).size.width * 0.02,
             child: QuantityController(
               model: QuantityModel(quantity: quantity, price: widget.product.price),
               quantityController: widget.quantityController,

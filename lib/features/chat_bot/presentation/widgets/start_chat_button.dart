@@ -55,7 +55,10 @@ class StartChatButton extends StatelessWidget {
       onPressed: () => _startNewChat(context),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.background,
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+        padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.1,
+          vertical: MediaQuery.of(context).size.height * 0.018,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         elevation: 5,
       ),
