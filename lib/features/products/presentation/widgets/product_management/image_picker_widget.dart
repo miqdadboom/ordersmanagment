@@ -14,30 +14,45 @@ class ImagePickerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: 150,
+        height: screenHeight * 0.15, // ~150
         decoration: BoxDecoration(
           color: AppColors.background,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(screenWidth * 0.03), // ~12
           border: Border.all(color: AppColors.primary, width: 2),
         ),
         child:
             image != null
                 ? ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(image!, fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                  child: Image.file(
+                    image!,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
                 )
                 : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.image, size: 50, color: AppColors.primary),
-                    SizedBox(height: 10),
+                  children: [
+                    Icon(
+                      Icons.image,
+                      size: screenWidth * 0.12, // ~50
+                      color: AppColors.primary,
+                    ),
+                    SizedBox(height: screenHeight * 0.012), // ~10
                     Text(
                       "Tap to add image",
-                      style: TextStyle(color: AppColors.primary),
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: screenWidth * 0.04, // ~16
+                      ),
                     ),
                   ],
                 ),

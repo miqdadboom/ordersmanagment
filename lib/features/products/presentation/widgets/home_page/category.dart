@@ -16,44 +16,55 @@ class CategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(screenWidth * 0.04), // تقريبًا 16
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Category',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: screenWidth * 0.06, // تقريبًا 24
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               TextButton(
                 onPressed: onViewAllTap,
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),
                 child: Text(
                   'View All',
-                  style: TextStyle(fontSize: 14, color: AppColors.viewAll),
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.035, // تقريبًا 14
+                    color: AppColors.viewAll,
+                  ),
                 ),
               ),
             ],
           ),
         ),
         SizedBox(
-          height: 100,
+          height: screenHeight * 0.12, // تقريبًا 100 على شاشة 800
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
             itemBuilder: (context, index) {
               final category = categories[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.02,
+                ), // تقريبًا 8
                 child: GestureDetector(
                   onTap: () => onCategoryTap(index),
                   child: Column(
                     children: [
                       Container(
-                        width: 80,
-                        height: 80,
+                        width: screenWidth * 0.2, // تقريبًا 80 على شاشة 400
+                        height: screenWidth * 0.2,
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
                           image: DecorationImage(
@@ -63,12 +74,12 @@ class CategorySection extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: screenHeight * 0.0075), // تقريبًا 6
                       Text(
                         category.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textDark,
-                          fontSize: 10,
+                          fontSize: screenWidth * 0.025, // تقريبًا 10
                           fontWeight: FontWeight.w400,
                         ),
                       ),

@@ -38,12 +38,15 @@ class _PromoBannerState extends State<PromoBanner> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     if (banners.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
     return SizedBox(
-      height: 200,
+      height: screenHeight * 0.25, // بدل 200
       child: PageView.builder(
         controller: _pageController,
         itemCount: banners.length,
@@ -64,25 +67,32 @@ class _PromoBannerState extends State<PromoBanner> {
                 height: double.infinity,
               ),
               Positioned(
-                top: 16,
-                left: 16,
+                top: screenHeight * 0.02, // بدل 16
+                left: screenWidth * 0.04,
                 child: Text(
                   banner['title'] ?? '',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textLight,
-                    fontSize: 20,
+                    fontSize: screenWidth * 0.05, // بدل 20
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               Positioned(
-                bottom: 16,
-                right: 16,
+                bottom: screenHeight * 0.02,
+                right: screenWidth * 0.04,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.textLight,
                     foregroundColor: AppColors.textDark,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.04,
+                      vertical: screenHeight * 0.012,
+                    ),
+                    textStyle: TextStyle(
+                      fontSize: screenWidth * 0.035, // حجم نص الزر
+                    ),
                   ),
                   child: const Text('Shop Now'),
                 ),

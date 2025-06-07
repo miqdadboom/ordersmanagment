@@ -8,16 +8,29 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return TextField(
-      onChanged: onChanged, // ✅ استخدم الدالة الممرّرة
+      onChanged: onChanged,
+      style: TextStyle(
+        fontSize: screenWidth * 0.04, // ~16
+      ),
       decoration: InputDecoration(
         hintText: 'Search',
-        prefixIcon: const Icon(Icons.search),
+        hintStyle: TextStyle(fontSize: screenWidth * 0.04),
+        prefixIcon: Icon(
+          Icons.search,
+          size: screenWidth * 0.06, // ~24
+        ),
         filled: true,
         fillColor: AppColors.searchBar,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(screenWidth * 0.025), // ~10
           borderSide: BorderSide.none,
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          vertical: screenWidth * 0.03, // ~12
+          horizontal: screenWidth * 0.04, // ~16
         ),
       ),
     );

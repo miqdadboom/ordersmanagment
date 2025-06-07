@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/features/products/data/firebase/product_repository.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/filter_home_page/brand_and_sort_dropdowns.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/filter_home_page/makeup_type_dialog.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/filter_home_page/makeup_type_filter.dart';
@@ -9,8 +9,13 @@ import '../widgets/product_grid.dart';
 
 class FilterProductsScreen extends StatefulWidget {
   final String categoryName;
+  final ProductRepository productRepository;
 
-  const FilterProductsScreen({super.key, this.categoryName = 'All'});
+  FilterProductsScreen({
+    super.key,
+    this.categoryName = 'All',
+    ProductRepository? productRepository,
+  }) : productRepository = productRepository ?? ProductRepository();
 
   @override
   State<FilterProductsScreen> createState() => _FilterProductsScreenState();
@@ -36,13 +41,9 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
 
   Future<void> fetchProductsByBrand() async {
     try {
-      final snapshot =
-          await FirebaseFirestore.instance
-              .collection('products')
-              .where('mainType', isEqualTo: widget.categoryName)
-              .get();
-
-      final fetched = snapshot.docs.map((doc) => doc.data()).toList();
+      final fetched = await widget.productRepository.getProductsByCategory(
+        widget.categoryName,
+      );
 
       setState(() {
         allProducts = fetched;
@@ -165,7 +166,7 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                   slivers: [
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.all(screenWidth * 0.04), // ~16
+                        padding: EdgeInsets.all(screenWidth * 0.04),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -177,7 +178,7 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                                 });
                               },
                             ),
-                            SizedBox(height: screenHeight * 0.025), // ~20
+                            SizedBox(height: screenHeight * 0.025),
                             MakeupTypeFilter(
                               makeupTypes: makeupTypes,
                               selectedTypes: selectedTypes,
@@ -185,7 +186,7 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                               onViewAllPressed:
                                   () => showAllTypesDialog(context),
                             ),
-                            SizedBox(height: screenHeight * 0.02), // ~16
+                            SizedBox(height: screenHeight * 0.02),
                             BrandAndSortDropdowns(
                               availableBrands: availableBrands,
                               selectedBrand: selectedBrand,
@@ -203,15 +204,15 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                                 });
                               },
                             ),
-                            SizedBox(height: screenHeight * 0.025), // ~20
+                            SizedBox(height: screenHeight * 0.025),
                             Text(
                               'Found ${products.length} Results',
                               style: TextStyle(
-                                fontSize: screenWidth * 0.045, // ~18
+                                fontSize: screenWidth * 0.045,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: screenHeight * 0.015), // ~12
+                            SizedBox(height: screenHeight * 0.015),
                             ProductGrid(
                               products: products,
                               enableSorting: true,

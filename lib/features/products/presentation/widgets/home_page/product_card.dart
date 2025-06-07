@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
 
-class ProductCardHome extends StatelessWidget {
+class ProductCardHome extends StatefulWidget {
   final ProductEntity product;
   final String? discount;
   final VoidCallback onTap;
@@ -17,13 +17,30 @@ class ProductCardHome extends StatelessWidget {
   });
 
   @override
+  State<ProductCardHome> createState() => _ProductCardHomeState();
+}
+
+class _ProductCardHomeState extends State<ProductCardHome> {
+  bool added = false;
+
+  void _handleAddToCart() {
+    setState(() {
+      added = true;
+    });
+    widget.onAddToCart?.call();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.cardField,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(screenWidth * 0.03),
           boxShadow: [
             BoxShadow(
               color: AppColors.cardShadow,
@@ -40,15 +57,15 @@ class ProductCardHome extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(12),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(screenWidth * 0.03),
                   ),
                   child: Container(
-                    height: 140,
+                    height: screenHeight * 0.17,
                     width: double.infinity,
                     color: AppColors.cardWithoutImage,
                     child: Image.network(
-                      product.imageUrl,
+                      widget.product.imageUrl,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Column(
@@ -56,10 +73,10 @@ class ProductCardHome extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.image_not_supported,
-                              size: 40,
+                              size: screenWidth * 0.1,
                               color: AppColors.imageNotSupported,
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: screenHeight * 0.01),
                             Text(
                               'No Image',
                               style: TextStyle(color: AppColors.noImageText),
@@ -71,57 +88,60 @@ class ProductCardHome extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+                  padding: EdgeInsets.fromLTRB(
+                    screenWidth * 0.03,
+                    screenWidth * 0.03,
+                    screenWidth * 0.03,
+                    screenWidth * 0.025,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        product.title,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        widget.product.title,
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.04,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: screenHeight * 0.005),
                       Text(
-                        product.brand,
+                        widget.product.brand,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: screenWidth * 0.03,
                           color: AppColors.textCardBrand,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: screenHeight * 0.01),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '\$${product.price}',
-                            style: const TextStyle(
-                              fontSize: 14,
+                            '\$${widget.product.price}',
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.035,
                               fontWeight: FontWeight.bold,
                               color: AppColors.priceOfCard,
                             ),
                           ),
                           GestureDetector(
-                            onTap:
-                                onAddToCart ??
-                                () => debugPrint('Add to cart tapped'),
+                            onTap: _handleAddToCart,
                             child: Container(
-                              width: 30,
-                              height: 30,
+                              width: screenWidth * 0.075,
+                              height: screenWidth * 0.075,
                               decoration: const BoxDecoration(
                                 color: AppColors.primary,
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
-                                Icons.add,
+                              child: Icon(
+                                added ? Icons.check : Icons.add,
                                 color: AppColors.iconSize,
-                                size: 18,
+                                size: screenWidth * 0.045,
                               ),
                             ),
                           ),
@@ -132,24 +152,24 @@ class ProductCardHome extends StatelessWidget {
                 ),
               ],
             ),
-            if (discount != null)
+            if (widget.discount != null)
               Positioned(
-                top: 8,
-                right: 8,
+                top: screenWidth * 0.02,
+                right: screenWidth * 0.02,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.02,
+                    vertical: screenHeight * 0.005,
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.discountsOfCard,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(screenWidth * 0.02),
                   ),
                   child: Text(
-                    discount!,
-                    style: const TextStyle(
+                    widget.discount!,
+                    style: TextStyle(
                       color: AppColors.textLight,
-                      fontSize: 12,
+                      fontSize: screenWidth * 0.03,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

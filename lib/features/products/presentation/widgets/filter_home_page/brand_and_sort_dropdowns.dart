@@ -19,9 +19,12 @@ class BrandAndSortDropdowns extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const dropdownTextStyle = TextStyle(
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final dropdownTextStyle = TextStyle(
       color: AppColors.primary,
-      fontSize: 14,
+      fontSize: screenWidth * 0.035, // ~14
       fontWeight: FontWeight.w500,
     );
 
@@ -29,12 +32,14 @@ class BrandAndSortDropdowns extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            height: 40,
+            height: screenHeight * 0.05, // ~40
             alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.03,
+            ), // ~12
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.primary),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(screenWidth * 0.025), // ~10
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
@@ -52,37 +57,43 @@ class BrandAndSortDropdowns extends StatelessWidget {
                     );
                   }).toList();
                 },
-                items: availableBrands.map<DropdownMenuItem<String>>((String brand) {
-                  return DropdownMenuItem<String>(
-                    value: brand,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        brand == 'All Brands' ? 'Brand' : brand,
-                        style: dropdownTextStyle,
-                      ),
-                    ),
-                  );
-                }).toList(),
+                items:
+                    availableBrands.map<DropdownMenuItem<String>>((
+                      String brand,
+                    ) {
+                      return DropdownMenuItem<String>(
+                        value: brand,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            brand == 'All Brands' ? 'Brand' : brand,
+                            style: dropdownTextStyle,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                 onChanged: onBrandChanged,
-                icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
-                iconSize: 24,
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: AppColors.primary,
+                  size: screenWidth * 0.06,
+                ), // ~24
                 dropdownColor: Colors.white,
               ),
             ),
           ),
         ),
 
-        const SizedBox(width: 8),
+        SizedBox(width: screenWidth * 0.02), // ~8
 
         Expanded(
           child: Container(
-            height: 40,
+            height: screenHeight * 0.05, // ~40
             alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.primary),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(screenWidth * 0.025),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
@@ -90,21 +101,23 @@ class BrandAndSortDropdowns extends StatelessWidget {
                 isExpanded: true,
                 style: dropdownTextStyle,
                 selectedItemBuilder: (context) {
-                  return ['Default', 'PriceLow', 'PriceHigh'].map<Widget>((String item) {
+                  return ['Default', 'PriceLow', 'PriceHigh'].map<Widget>((
+                    String item,
+                  ) {
                     return Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         item == 'Default'
                             ? 'Sort'
                             : item == 'PriceLow'
-                                ? 'Price: Low to High'
-                                : 'Price: High to Low',
+                            ? 'Price: Low to High'
+                            : 'Price: High to Low',
                         style: dropdownTextStyle,
                       ),
                     );
                   }).toList();
                 },
-                items: const [
+                items: [
                   DropdownMenuItem(
                     value: 'Default',
                     child: Align(
@@ -116,20 +129,29 @@ class BrandAndSortDropdowns extends StatelessWidget {
                     value: 'PriceLow',
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Price: Low to High', style: dropdownTextStyle),
+                      child: Text(
+                        'Price: Low to High',
+                        style: dropdownTextStyle,
+                      ),
                     ),
                   ),
                   DropdownMenuItem(
                     value: 'PriceHigh',
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Price: High to Low', style: dropdownTextStyle),
+                      child: Text(
+                        'Price: High to Low',
+                        style: dropdownTextStyle,
+                      ),
                     ),
                   ),
                 ],
                 onChanged: onSortChanged,
-                icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
-                iconSize: 24,
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: AppColors.primary,
+                  size: screenWidth * 0.06,
+                ),
                 dropdownColor: Colors.white,
               ),
             ),

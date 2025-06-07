@@ -24,15 +24,24 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 12),
-        const Text("Main Type", style: TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
+        SizedBox(height: screenHeight * 0.015), // ~12
+        Text(
+          "Main Type",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: screenWidth * 0.04, // ~16
+          ),
+        ),
+        SizedBox(height: screenHeight * 0.01), // ~8
         DropdownButtonFormField<String>(
           value: selectedMainType,
-          decoration: _buildDropdownDecoration("Select main type"),
+          decoration: _buildDropdownDecoration("Select main type", screenWidth),
           items:
               mainTypes.map((type) {
                 return DropdownMenuItem(value: type, child: Text(type));
@@ -40,18 +49,24 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
           onChanged: (value) {
             setState(() {
               selectedMainType = value;
-              selectedSubType = null; // reset subtype
+              selectedSubType = null;
               widget.onChanged(selectedMainType ?? '', '');
             });
           },
         ),
 
-        const SizedBox(height: 16),
-        const Text("Sub Type", style: TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
+        SizedBox(height: screenHeight * 0.02), // ~16
+        Text(
+          "Sub Type",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: screenWidth * 0.04,
+          ),
+        ),
+        SizedBox(height: screenHeight * 0.01),
         DropdownButtonFormField<String>(
           value: selectedSubType,
-          decoration: _buildDropdownDecoration("Select sub type"),
+          decoration: _buildDropdownDecoration("Select sub type", screenWidth),
           items:
               (selectedMainType != null
                       ? subTypesMap[selectedMainType] ?? []
@@ -61,7 +76,6 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
                         DropdownMenuItem<String>(value: sub, child: Text(sub)),
                   )
                   .toList(),
-
           onChanged: (value) {
             setState(() {
               selectedSubType = value;
@@ -73,16 +87,19 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
     );
   }
 
-  InputDecoration _buildDropdownDecoration(String hint) {
+  InputDecoration _buildDropdownDecoration(String hint, double screenWidth) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: AppColors.primary),
+      hintStyle: TextStyle(
+        color: AppColors.primary,
+        fontSize: screenWidth * 0.035, // ~14
+      ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(screenWidth * 0.03), // ~12
         borderSide: const BorderSide(color: AppColors.primary),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(screenWidth * 0.03),
         borderSide: const BorderSide(color: AppColors.primary, width: 2),
       ),
       filled: true,

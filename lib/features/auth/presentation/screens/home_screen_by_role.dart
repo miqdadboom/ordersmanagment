@@ -13,9 +13,7 @@ class HomeScreenByRole extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!UserAccessControl.HomeScreen(role)) {
-      return const Scaffold(
-        body: Center(child: Text("Unauthorized")),
-      );
+      return const Scaffold(body: Center(child: Text("Unauthorized")));
     }
 
     Widget bottomBar;
@@ -27,13 +25,9 @@ class HomeScreenByRole extends StatelessWidget {
     } else if (role == 'warehouse employee') {
       bottomBar = const BottomNavigationWarehouseManager();
     } else {
-      return const Scaffold(
-        body: Center(child: Text("Unknown role")),
-      );
+      return const Scaffold(body: Center(child: Text("Unknown role")));
     }
 
-    return Scaffold(
-      body: const ProductsScreen(),
-    );
+    return Scaffold(body: ProductsScreen());
   }
 }

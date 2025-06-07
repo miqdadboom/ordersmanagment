@@ -50,16 +50,22 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
     }
   }
 
-  InputDecoration _buildDropdownDecoration(String hintText) {
+  InputDecoration _buildDropdownDecoration(
+    String hintText,
+    double screenWidth,
+  ) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: const TextStyle(color: AppColors.primary),
+      hintStyle: TextStyle(
+        color: AppColors.primary,
+        fontSize: screenWidth * 0.04,
+      ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(screenWidth * 0.03), // ~12
         borderSide: const BorderSide(color: AppColors.primary),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(screenWidth * 0.03),
         borderSide: const BorderSide(color: AppColors.primary, width: 2),
       ),
       filled: true,
@@ -143,14 +149,20 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.04, // ~16
+        vertical: screenHeight * 0.005, // ~8
+      ),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 30),
+              SizedBox(height: screenHeight * 0.04), // ~30
               CustomTextField(
                 controller: _nameController,
                 hintText: "Product Name",
@@ -176,11 +188,14 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                 icon: Icons.description,
                 validatorMessage: 'Please enter the description',
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: screenHeight * 0.01),
               DropdownButtonFormField<String>(
                 value: selectedMainType,
-                style: const TextStyle(color: AppColors.primary),
-                decoration: _buildDropdownDecoration("Main Type"),
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: screenWidth * 0.04,
+                ),
+                decoration: _buildDropdownDecoration("Main Type", screenWidth),
                 items:
                     mainTypes
                         .map(
@@ -188,9 +203,9 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                             value: type,
                             child: Text(
                               type,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.primary,
-                                fontSize: 16,
+                                fontSize: screenWidth * 0.04,
                               ),
                             ),
                           ),
@@ -203,11 +218,14 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                   });
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: screenHeight * 0.02),
               DropdownButtonFormField<String>(
                 value: selectedSubType,
-                style: const TextStyle(color: AppColors.primary),
-                decoration: _buildDropdownDecoration("Sub Type"),
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: screenWidth * 0.04,
+                ),
+                decoration: _buildDropdownDecoration("Sub Type", screenWidth),
                 items:
                     (selectedMainType != null
                             ? subTypesMap[selectedMainType] ?? []
@@ -217,9 +235,9 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                             value: sub,
                             child: Text(
                               sub,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.primary,
-                                fontSize: 16,
+                                fontSize: screenWidth * 0.04,
                               ),
                             ),
                           ),
@@ -231,7 +249,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                   });
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: screenHeight * 0.02),
               BlocBuilder<ProductManagementCubit, ProductManagementState>(
                 builder: (context, state) {
                   return ImagePickerWidget(
@@ -242,8 +260,8 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                   );
                 },
               ),
-              const SizedBox(height: 40),
-              SaveButton(onPressed: saveProduct, color: AppColors.primary),
+              SizedBox(height: screenHeight * 0.032), // ~40
+              SaveButton(onPressed: saveProduct),
             ],
           ),
         ),

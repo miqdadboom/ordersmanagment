@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_tasks_front_end/features/products/data/firebase/product_repository.dart';
 import 'package:final_tasks_front_end/features/products/presentation/cubit/product_management_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
@@ -63,7 +64,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           isLoading
               ? const Center(child: CircularProgressIndicator())
               : BlocProvider(
-                create: (_) => ProductManagementCubit(),
+                create: (_) => ProductManagementCubit(ProductRepository()),
                 child: ProductFormWidget(productData: productData),
               ),
     );

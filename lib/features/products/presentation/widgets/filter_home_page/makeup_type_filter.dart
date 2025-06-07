@@ -17,27 +17,36 @@ class MakeupTypeFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            const Text(
+            Text(
               'Type of Makeup',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: screenWidth * 0.04, // ~16
+              ),
             ),
             const Spacer(),
             TextButton(
               onPressed: onViewAllPressed,
-              child: const Text(
+              child: Text(
                 'view all',
-                style: TextStyle(color: AppColors.textDark),
+                style: TextStyle(
+                  color: AppColors.textDark,
+                  fontSize: screenWidth * 0.035, // ~14
+                ),
               ),
             ),
           ],
         ),
         SizedBox(
-          height: 40,
+          height: screenHeight * 0.05, // ~40
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -45,7 +54,7 @@ class MakeupTypeFilter extends StatelessWidget {
                   makeupTypes.map((type) {
                     final isSelected = selectedTypes.contains(type);
                     return Padding(
-                      padding: const EdgeInsets.only(right: 8),
+                      padding: EdgeInsets.only(right: screenWidth * 0.02), // ~8
                       child: FilterChip(
                         label: Text(
                           type,
@@ -53,16 +62,18 @@ class MakeupTypeFilter extends StatelessWidget {
                             color:
                                 isSelected ? Colors.white : AppColors.primary,
                             fontWeight: FontWeight.w500,
+                            fontSize: screenWidth * 0.035,
                           ),
                         ),
                         selected: isSelected,
                         onSelected: (_) => onTypeSelected(type),
-                        selectedColor:
-                            AppColors.primary, 
-                        backgroundColor: Colors.grey[100], 
-                        checkmarkColor: Colors.white, 
+                        selectedColor: AppColors.primary,
+                        backgroundColor: Colors.grey[100],
+                        checkmarkColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(
+                            screenWidth * 0.05,
+                          ), // ~20
                           side: BorderSide(
                             color:
                                 isSelected
@@ -71,10 +82,10 @@ class MakeupTypeFilter extends StatelessWidget {
                             width: 1,
                           ),
                         ),
-                        elevation: 2,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 4,
+                        elevation: 1.5, // Slightly smaller than 2
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.03, // ~12
+                          vertical: screenHeight * 0.005, // ~4
                         ),
                       ),
                     );

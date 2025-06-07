@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/features/products/data/firebase/category_repository.dart';
+import 'package:final_tasks_front_end/features/products/data/firebase/product_repository.dart';
 import 'package:final_tasks_front_end/features/products/domain/entities/category.dart';
-import 'package:final_tasks_front_end/features/products/presentation/screens/filter_products.dart';
+import 'package:final_tasks_front_end/features/products/presentation/screens/filter_products_screen.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/category.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/product_search_delegate.dart';
 import 'package:final_tasks_front_end/features/products/presentation/widgets/home_page/promo_banner.dart';
@@ -14,7 +16,15 @@ import 'package:final_tasks_front_end/features/products/presentation/widgets/hom
 import '../widgets/product_grid.dart';
 
 class ProductsScreen extends StatefulWidget {
-  const ProductsScreen({super.key});
+  final ProductRepository productRepository;
+  final CategoryRepository categoryRepository;
+
+  ProductsScreen({
+    super.key,
+    ProductRepository? productRepository,
+    CategoryRepository? categoryRepository,
+  }) : productRepository = productRepository ?? ProductRepository(),
+       categoryRepository = categoryRepository ?? CategoryRepository();
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -42,7 +52,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
-    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
     setState(() {
       _role = doc.data()?['role'];
     });
@@ -50,9 +61,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   Future<void> getCategories() async {
     try {
-      final snapshot = await FirebaseFirestore.instance.collection('categories').get();
+      final fetchedCategories = await widget.categoryRepository.getCategories();
       setState(() {
-        categories = snapshot.docs.map((doc) => Category.fromJson(doc.data())).toList();
+        categories = fetchedCategories;
       });
     } catch (e) {
       debugPrint('Error loading categories: $e');
@@ -61,13 +72,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   Future<void> getProducts() async {
     try {
-      final snapshot = await FirebaseFirestore.instance.collection('products').get();
+      final fetchedProducts = await widget.productRepository.getProducts();
       setState(() {
-        products = snapshot.docs.map((doc) {
-          final data = doc.data();
-          data['documentId'] = doc.id;
-          return data;
-        }).toList();
+        products = fetchedProducts;
         isLoading = false;
       });
     } catch (e) {
@@ -99,7 +106,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => FilterProductsScreen(categoryName: category.name),
+                        builder:
+                            (_) => FilterProductsScreen(
+                              categoryName: category.name,
+                              productRepository: widget.productRepository,
+                            ),
                       ),
                     );
                   },
@@ -133,6 +144,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     if (_role == null || isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -174,20 +188,22 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => FilterProductsScreen(categoryName: categoryName),
+                      builder:
+                          (_) => FilterProductsScreen(
+                            categoryName: categoryName,
+                            productRepository: widget.productRepository,
+                          ),
                     ),
                   );
                 },
                 onViewAllTap: () => _showCategoryPopup(context),
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(screenWidth * 0.04),
                 child: Column(
                   children: [
-                    _buildSectionHeader('Products', 'View All', () {
-                      debugPrint('View All Products clicked');
-                    }),
-                    const SizedBox(height: 16),
+                    _buildSectionHeader(screenWidth),
+                    SizedBox(height: screenHeight * 0.02),
                     ProductGrid(products: products, enableSorting: false),
                   ],
                 ),
@@ -199,13 +215,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 
-  Widget _buildSectionHeader(String title, String actionText, VoidCallback onAction) {
+  Widget _buildSectionHeader(double screenWidth) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          title,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          'Products',
+          style: TextStyle(
+            fontSize: screenWidth * 0.06,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );

@@ -48,24 +48,36 @@ class _MakeupTypeDialogState extends State<MakeupTypeDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return AlertDialog(
-      title: const Text('Select Makeup Types'),
+      title: Text(
+        'Select Makeup Types',
+        style: TextStyle(
+          fontSize: screenWidth * 0.05, // ~20
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       content: SingleChildScrollView(
         child: Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: screenWidth * 0.02, // ~8
+          runSpacing: screenHeight * 0.01, // ~8
           children:
               widget.makeupTypes.map((type) {
                 final isSelected = tempSelectedTypes.contains(type);
                 return ChoiceChip(
-                  label: Text(type),
+                  label: Text(
+                    type,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.035, // ~14
+                      color:
+                          isSelected ? AppColors.textLight : AppColors.textDark,
+                    ),
+                  ),
                   selected: isSelected,
                   onSelected: (_) => handleToggle(type),
                   selectedColor: AppColors.primary,
-                  labelStyle: TextStyle(
-                    color:
-                        isSelected ? AppColors.textLight : AppColors.textDark,
-                  ),
                   checkmarkColor: Colors.white,
                 );
               }).toList(),
@@ -74,7 +86,13 @@ class _MakeupTypeDialogState extends State<MakeupTypeDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Close'),
+          child: Text(
+            'Close',
+            style: TextStyle(
+              fontSize: screenWidth * 0.04, // ~16
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
       ],
     );

@@ -6,21 +6,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/product_management/product_form_widget.dart';
 
 class ProductManagementScreen extends StatelessWidget {
-  const ProductManagementScreen({super.key});
+  final ProductRepository productRepository;
+
+  ProductManagementScreen({super.key, ProductRepository? productRepository})
+    : productRepository = productRepository ?? ProductRepository();
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return BlocProvider(
-      create: (context) => ProductManagementCubit(ProductRepository()),
+      create: (context) => ProductManagementCubit(productRepository),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
             'Add Product',
             style: TextStyle(
               color: AppColors.textLight,
-              fontSize: screenWidth * 0.05, // ~20
+              fontSize: screenWidth * 0.05,
               fontWeight: FontWeight.bold,
             ),
           ),

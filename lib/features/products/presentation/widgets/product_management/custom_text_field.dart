@@ -19,24 +19,37 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01), // ~8
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
-        style: const TextStyle(color: AppColors.textDark),
-        validator: (value) =>
-            value == null || value.isEmpty ? validatorMessage : null,
+        style: TextStyle(
+          color: AppColors.textDark,
+          fontSize: screenWidth * 0.04, // ~16
+        ),
+        validator:
+            (value) => value == null || value.isEmpty ? validatorMessage : null,
         decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: AppColors.primary),
+          prefixIcon: Icon(
+            icon,
+            color: AppColors.primary,
+            size: screenWidth * 0.06, // ~24
+          ),
           hintText: hintText,
-          hintStyle: const TextStyle(color: AppColors.primary),
+          hintStyle: TextStyle(
+            color: AppColors.primary,
+            fontSize: screenWidth * 0.04,
+          ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(screenWidth * 0.03), // ~12
             borderSide: const BorderSide(color: AppColors.primary),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(screenWidth * 0.03),
             borderSide: const BorderSide(color: AppColors.primary, width: 2),
           ),
           filled: true,

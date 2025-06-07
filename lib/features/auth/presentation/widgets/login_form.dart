@@ -24,15 +24,13 @@ class _LoginFormState extends State<LoginForm> {
       try {
         final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            );
 
         final uid = credential.user!.uid;
-        final snapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .get();
+        final snapshot =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
         if (!snapshot.exists) {
           throw Exception('No role data found for this user');
@@ -40,14 +38,15 @@ class _LoginFormState extends State<LoginForm> {
 
         final role = snapshot.data()!['role'];
 
-        // ✅ Use the new function to get the correct route based on role
+        if (!mounted) return; // ✅ تأكد أن ال context ما زال فعال
+
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (_) => HomeScreenByRole(role: role),
-          ),
+          MaterialPageRoute(builder: (_) => HomeScreenByRole(role: role)),
         );
       } on FirebaseAuthException catch (e) {
+        if (!mounted) return; // ✅ أضف هذا السطر هنا
+
         String message = 'Login failed.';
         if (e.code == 'user-not-found') {
           message = 'No user found for that email.';
@@ -59,11 +58,14 @@ class _LoginFormState extends State<LoginForm> {
           SnackBar(content: Text(message), backgroundColor: Colors.red),
         );
       } catch (e) {
+        if (!mounted) return; // ✅ وأضفه هنا أيضًا
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
         );
       }
     } else {
+      if (!mounted) return; // ✅ تحقق قبل استخدام context
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill all fields'),

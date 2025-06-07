@@ -30,10 +30,13 @@ class ProductSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     final results =
         allProducts.where((product) {
           final name = product['name'].toString().toLowerCase();
-          return name.contains(query.toLowerCase());
+          return name.contains(query.trim().toLowerCase());
         }).toList();
 
     if (results.isEmpty) {
@@ -41,12 +44,12 @@ class ProductSearchDelegate extends SearchDelegate {
     }
 
     return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      padding: EdgeInsets.all(screenWidth * 0.04), // ~16
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 0.7,
+        mainAxisSpacing: screenHeight * 0.015, // ~12
+        crossAxisSpacing: screenWidth * 0.03, // ~12
+        childAspectRatio: screenWidth / (screenHeight / 1.4),
       ),
       itemCount: results.length,
       itemBuilder: (context, index) {
@@ -76,9 +79,7 @@ class ProductSearchDelegate extends SearchDelegate {
                       price:
                           double.tryParse(product['price'].toString()) ?? 0.0,
                       description: product['description'] ?? '',
-                      documentId:
-                          product['documentId'] ??
-                          '', 
+                      documentId: product['documentId'] ?? '',
                     ),
               ),
             );
@@ -90,10 +91,11 @@ class ProductSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     final suggestions =
         allProducts.where((product) {
           final name = product['name'].toString().toLowerCase();
-          return name.contains(query.toLowerCase());
+          return name.contains(query.trim().toLowerCase());
         }).toList();
 
     return ListView.builder(
@@ -101,8 +103,16 @@ class ProductSearchDelegate extends SearchDelegate {
       itemBuilder: (context, index) {
         final product = suggestions[index];
         return ListTile(
-          title: Text(product['name']),
-          subtitle: Text(product['brand']),
+          title: Text(
+            product['name'],
+            style: TextStyle(fontSize: screenWidth * 0.045), // ~18
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
+            product['brand'],
+            style: TextStyle(fontSize: screenWidth * 0.035), // ~14
+            overflow: TextOverflow.ellipsis,
+          ),
           onTap: () {
             query = product['name'];
             showResults(context);

@@ -6,32 +6,35 @@ class AppSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Drawer(
       child: Column(
         children: [
           Container(
             color: AppColors.primary,
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 70,
-              bottom: 20,
+            padding: EdgeInsets.only(
+              left: screenWidth * 0.04, // ~16
+              right: screenWidth * 0.04,
+              top: screenHeight * 0.09, // ~70
+              bottom: screenHeight * 0.025, // ~20
             ),
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(
+                  radius: screenWidth * 0.075, // ~30
+                  backgroundImage: const NetworkImage(
                     'https://i.pravatar.cc/150?img=3',
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: screenWidth * 0.04), // ~16
                 Expanded(
                   child: Text(
                     'Ahmad istatieh',
                     style: TextStyle(
                       color: AppColors.background,
-                      fontSize: 22,
+                      fontSize: screenWidth * 0.055, // ~22
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -49,30 +52,48 @@ class AppSidebar extends StatelessWidget {
                   leading: Icon(
                     Icons.chat_bubble_outline,
                     color: AppColors.icon,
+                    size: screenWidth * 0.06,
                   ),
                   title: Text(
                     'Chatbot',
-                    style: TextStyle(color: AppColors.icon),
+                    style: TextStyle(
+                      color: AppColors.icon,
+                      fontSize: screenWidth * 0.045,
+                    ),
                   ),
                   onTap: () {
                     Navigator.pushNamed(context, '/homeScreen');
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.add_box_outlined, color: AppColors.icon),
+                  leading: Icon(
+                    Icons.add_box_outlined,
+                    color: AppColors.icon,
+                    size: screenWidth * 0.06,
+                  ),
                   title: Text(
                     'Add Product',
-                    style: TextStyle(color: AppColors.icon),
+                    style: TextStyle(
+                      color: AppColors.icon,
+                      fontSize: screenWidth * 0.045,
+                    ),
                   ),
                   onTap: () {
                     Navigator.pushNamed(context, '/ProductManagementScreen');
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.settings, color: AppColors.icon),
+                  leading: Icon(
+                    Icons.settings,
+                    color: AppColors.icon,
+                    size: screenWidth * 0.06,
+                  ),
                   title: Text(
                     'Settings',
-                    style: TextStyle(color: AppColors.icon),
+                    style: TextStyle(
+                      color: AppColors.icon,
+                      fontSize: screenWidth * 0.045,
+                    ),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -81,13 +102,25 @@ class AppSidebar extends StatelessWidget {
               ],
             ),
           ),
+
           Padding(
-            padding: const EdgeInsets.only(bottom: 50.0, left: 8, right: 8),
+            padding: EdgeInsets.only(
+              bottom: screenHeight * 0.06, // ~50
+              left: screenWidth * 0.02,
+              right: screenWidth * 0.02,
+            ),
             child: ListTile(
-              leading: const Icon(Icons.logout, color: AppColors.lougOut),
-              title: const Text(
+              leading: Icon(
+                Icons.logout,
+                color: AppColors.lougOut,
+                size: screenWidth * 0.06,
+              ),
+              title: Text(
                 'Log out',
-                style: TextStyle(color: AppColors.lougOut),
+                style: TextStyle(
+                  color: AppColors.lougOut,
+                  fontSize: screenWidth * 0.045,
+                ),
               ),
               onTap: () {
                 showDialog(
@@ -109,12 +142,14 @@ class AppSidebar extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.logOutField,
                               foregroundColor: AppColors.logOutText,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 12,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.06, // ~24
+                                vertical: screenHeight * 0.015, // ~12
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(
+                                  screenWidth * 0.02,
+                                ), // ~8
                               ),
                             ),
                             onPressed: () {
@@ -122,19 +157,21 @@ class AppSidebar extends StatelessWidget {
                             },
                             child: const Text('Log out'),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: screenWidth * 0.03), // ~12
                           OutlinedButton(
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.cancel,
                               side: const BorderSide(
                                 color: AppColors.cancelField,
                               ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 12,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.06,
+                                vertical: screenHeight * 0.015,
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(
+                                  screenWidth * 0.02,
+                                ), // ~8
                               ),
                             ),
                             onPressed: () => Navigator.of(context).pop(),
