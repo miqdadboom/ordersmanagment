@@ -34,5 +34,11 @@ class FirebaseEmployeeService {
     await _collection.doc(userId).delete();
   }
 
-  getAllEmployeesStream() {}
+  Stream<List<EmployeeModel>> getAllEmployeesStream() {
+    return _collection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return EmployeeModel.fromFirestore(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
+  }
 }

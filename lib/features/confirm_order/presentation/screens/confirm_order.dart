@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/features/cart_product/presentation/cart_screen/cubit/cart_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,7 +7,7 @@ import '../../../../core/widgets/place.dart';
 import '../widgets/confirm_order_actions.dart';
 import '../widgets/confirm_order_fields.dart';
 import '../widgets/confirm_order_header.dart';
-import '../cubit/confirm_order_controller.dart';
+import '../../domain/use_cases/confirm_order_cubit.dart';
 import '../../../orders/presentation/screens/list_of_orders_screen.dart';
 import '../../../orders/presentation/cubit/orders_cubit.dart';
 
@@ -20,14 +21,16 @@ class ConfirmOrder extends ConsumerStatefulWidget {
 }
 
 class _ConfirmOrderState extends ConsumerState<ConfirmOrder> {
-  final ConfirmOrderController _controller = ConfirmOrderController();
+  final ConfirmOrderCubit _controller = ConfirmOrderCubit();
+  final _formKey = GlobalKey<FormState>();
 
   void _submitOrder(BuildContext context) {
+
+    if(!_formKey.currentState!.validate()) return;
+
     final order = _controller.createOrder(widget.cartProducts);
     if (order == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter name and select location')),
-      );
+
       return;
     }
 
@@ -69,6 +72,7 @@ class _ConfirmOrderState extends ConsumerState<ConfirmOrder> {
               children: [
                 ConfirmOrderHeader(screenWidth: screenWidth),
                 ConfirmOrderFields(
+                  formKey: _formKey,
                   nameController: _controller.nameController,
                   notesController: _controller.notesController,
                   onLocationSelected: (PlaceLocation location) {
@@ -77,6 +81,7 @@ class _ConfirmOrderState extends ConsumerState<ConfirmOrder> {
                     });
                   },
                 ),
+
                 const Spacer(),
                 ConfirmOrderActions(
                   onSend: () async {
@@ -85,6 +90,15 @@ class _ConfirmOrderState extends ConsumerState<ConfirmOrder> {
                       cartProducts: widget.cartProducts,
                     );
                     _submitOrder(context);
+
+                    final cartCubit = context.read<CartCubit>();
+                    cartCubit.clearCart();
+
+                    _controller.nameController.clear();
+                    _controller.notesController.clear();
+                    setState(() {
+                      _controller.selectedLocation = null;
+                    });
                   },
                 ),
               ],

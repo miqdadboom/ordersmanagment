@@ -1,7 +1,9 @@
 import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../data/models/chat_message_entity.dart';
 import '../cubit/chat_cubit.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
@@ -19,29 +21,37 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     ref.read(chatCubitProvider.notifier).loadChatHistory(widget.conversationId);
   }
 
+  ChatUser toChatUser(Author author) {
+    return ChatUser(
+      id: author.id,
+      firstName: author.name,
+    );
+  }
+
+  ChatMessage toChatMessage(ChatMessageEntity entity) {
+    return ChatMessage(
+      text: entity.text,
+      user: toChatUser(entity.author),
+      createdAt: entity.createdAt,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final messages = ref.watch(chatCubitProvider);
+    final entityMessages = ref.watch(chatCubitProvider);
     final chatCubit = ref.read(chatCubitProvider.notifier);
-    final user = chatCubit.user;
-    final bot = chatCubit.bot;
+    final user = toChatUser(chatCubit.user);
+    final bot = toChatUser(chatCubit.bot);
+    final messages = entityMessages.map(toChatMessage).toList();
     final isTyping = ref.watch(isTypingProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "Chat Bot",
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textDark,
-          ),
-        ),
-        backgroundColor: AppColors.primary,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.textDark),
-          onPressed: () => Navigator.pushReplacementNamed(context, '/homeScreen'),
+      appBar: CustomAppBar(
+          title: 'Chat Bot',
+        customLeading: IconButton(
+            onPressed: () => Navigator.pushReplacementNamed(context, '/homeScreen'),
+            icon: Icon(Icons.arrow_back),
+          color: AppColors.textLight,
         ),
       ),
       body: Column(
@@ -49,7 +59,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           Expanded(
             child: DashChat(
               currentUser: user,
-              onSend: (message) => chatCubit.sendMessage(ref, widget.conversationId, message),
+              onSend: (message) =>
+                  chatCubit.sendMessage(ref, widget.conversationId, message.text),
               messages: messages,
               typingUsers: isTyping ? [bot] : [],
               messageOptions: MessageOptions(

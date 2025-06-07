@@ -1,12 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
-class SuggetionBox extends StatelessWidget {
+class SuggestionBox extends StatelessWidget {
   final String header;
   final String body;
   final Color color;
-  const SuggetionBox({
+  const SuggestionBox({
     super.key,
     required this.header,
     required this.body,
@@ -26,17 +27,14 @@ class SuggetionBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(header,
-              style:  TextStyle(
-                  fontFamily: "Cera Pro",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textLight)),
+              style:  AppTextStyles.headerSuggestion(context),
+          ),
           const SizedBox(
             height: 5,
           ),
           Text(body,
-              style: const TextStyle(
-                  fontFamily: "Cera Pro", fontSize: 18, color: AppColors.textLight)),
+              style: AppTextStyles.bodySuggestion(context),
+          ),
         ],
       ),
     );

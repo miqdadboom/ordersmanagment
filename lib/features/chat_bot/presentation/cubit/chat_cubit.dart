@@ -1,46 +1,55 @@
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
-import 'package:dash_chat_2/dash_chat_2.dart';
 import '../../data/datasources/chat_database.dart';
+import '../../data/models/chat_message_entity.dart';
 
-final chatCubitProvider = StateNotifierProvider.autoDispose<ChatCubit, List<ChatMessage>>(
+final chatCubitProvider = StateNotifierProvider.autoDispose<ChatCubit, List<ChatMessageEntity>>(
       (ref) => ChatCubit(),
 );
 
 final isTypingProvider = StateProvider.autoDispose<bool>((ref) => false);
 
-class ChatCubit extends StateNotifier<List<ChatMessage>> {
+class ChatCubit extends StateNotifier<List<ChatMessageEntity>> {
   ChatCubit() : super([]);
 
-  final _user = ChatUser(id: '1', firstName: 'Adham');
-  final _bot = ChatUser(id: '2', firstName: 'ChatAi');
+  final Author _user = Author(id: '1', name: 'Adham');
+  final Author _bot = Author(id: '2', name: 'ChatAi');
 
   final _chatGpt = OpenAI.instance.build(
     token: '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',
     baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 5)),
   );
 
-  ChatUser get user => _user;
-  ChatUser get bot => _bot;
+  Author get user => _user;
+  Author get bot => _bot;
 
   Future<void> loadChatHistory(int conversationId) async {
     final storedMessages = await ChatDatabase.instance.getMessages(conversationId);
     state = storedMessages.map((msg) {
-      return ChatMessage(
+      return ChatMessageEntity(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         text: msg['content'],
-        user: msg['sender'] == _user.firstName ? _user : _bot,
         createdAt: DateTime.parse(msg['timestamp']),
+        author: msg['sender'] == _user.name ? _user : _bot,
       );
     }).toList();
   }
 
-  Future<void> sendMessage(WidgetRef ref, int conversationId, ChatMessage message) async {
+  Future<void> sendMessage(WidgetRef ref, int conversationId, String messageText) async {
+    final message = ChatMessageEntity(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      text: messageText,
+      createdAt: DateTime.now(),
+      author: _user,
+    );
+
     state = [message, ...state];
     ref.read(isTypingProvider.notifier).state = true;
 
     await ChatDatabase.instance.insertMessage(
       conversationId,
-      _user.firstName!,
+      _user.name,
       message.text,
       'text',
     );
@@ -51,8 +60,8 @@ class ChatCubit extends StateNotifier<List<ChatMessage>> {
   Future<void> _getBotResponse(WidgetRef ref, int conversationId) async {
     final messagesHistory = state.reversed.map((msg) {
       return {
-        'role': msg.user == _user ? 'user' : 'assistant',
-        'content': msg.text
+        'role': msg.author.id == _user.id ? 'user' : 'assistant',
+        'content': msg.text,
       };
     }).toList();
 
@@ -65,17 +74,19 @@ class ChatCubit extends StateNotifier<List<ChatMessage>> {
     final response = await _chatGpt.onChatCompletion(request: request);
     for (var element in response!.choices) {
       if (element.message != null) {
-        final botMessage = ChatMessage(
+        final botMessage = ChatMessageEntity(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
           text: element.message!.content,
-          user: _bot,
           createdAt: DateTime.now(),
+          author: _bot,
         );
+
         state = [botMessage, ...state];
         ref.read(isTypingProvider.notifier).state = false;
 
         await ChatDatabase.instance.insertMessage(
           conversationId,
-          _bot.firstName!,
+          _bot.name,
           botMessage.text,
           'text',
         );

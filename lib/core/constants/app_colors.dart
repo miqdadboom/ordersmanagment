@@ -12,6 +12,7 @@ class AppColors {
   static const textDark = Color(0xFF000000); // Main stroke, titles, contents
   static const textDescription = Color(0xFF403F3F);
   static const textLight = Color(0xFFFFFFFF); // Light text (optional)
+  static const arrowBack = Color(0xFFFFFFFF);
 
   static const border = Color(0xFF000000);
   static const boxShadow = Color(0xFF000000);
@@ -72,6 +73,9 @@ class AppColors {
   static const backgroundColor = Color(0xFFD3D5D7);
   static const notSelectedItem = Color(0xFF000000);
   static const snakeColor = Color(0xFF00FF00);
+
+  static const success = Color(0xFF4CAF50);
+  static const error = Color(0xFFF44336);
 
 
 }

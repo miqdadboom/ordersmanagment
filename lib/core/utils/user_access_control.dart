@@ -14,6 +14,7 @@ class UserAccessControl {
   static bool OrderProductsScreen(String role) {
     return role == 'admin' || role == 'warehouse employee';
   }
+
   static bool OrderDetailsScreen(String role) {
     return role == 'admin' || role == 'warehouse employee';
   }
@@ -35,6 +36,19 @@ class UserAccessControl {
   }
 
   static bool ListOfOrdersScreen(String role) {
-    return role == 'admin' || role == 'warehouse employee' || role == 'sales representative';  }
+    return role == 'admin' || role == 'warehouse employee' || role == 'sales representative';
+  }
 
+  static String getHomeRouteForRole(String role) {
+    switch (role) {
+      case 'admin':
+        return '/manage';
+      case 'sales representative':
+        return '/productScreen';
+      case 'warehouse employee':
+        return '/ProductsScreen';
+      default:
+        return '/productScreen';
+    }
+  }
 }

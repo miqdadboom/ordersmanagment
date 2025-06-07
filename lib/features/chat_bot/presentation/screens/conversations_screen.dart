@@ -1,3 +1,5 @@
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../cubit/conversations_cubit.dart';
@@ -11,11 +13,12 @@ class ConversationsScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => ConversationsCubit()..loadConversations(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Conversations'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
+        appBar: CustomAppBar(
+          title: 'Conversations',
+          customLeading: IconButton(
             onPressed: () => Navigator.pushReplacementNamed(context, '/homeScreen'),
+            icon: Icon(Icons.arrow_back),
+            color: AppColors.textLight,
           ),
         ),
         body: Consumer<ConversationsCubit>(

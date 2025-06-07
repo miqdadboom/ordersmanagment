@@ -1,5 +1,6 @@
+import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import '../../../../../core/widgets/common_text.dart';
+import '../../../../core/constants/app_text_styles.dart';
 
 class ConfirmOrderHeader extends StatelessWidget {
   final double screenWidth;
@@ -7,10 +8,10 @@ class ConfirmOrderHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CommonText(
-      text: "You are Confirm this order ?",
-      isBold: true,
-      size: screenWidth * 0.07,
+    return Text(
+      "You are Confirm this order ?",
+      style: AppTextStyles.confirmOrderHeader(context),
+      textAlign: TextAlign.center,
     );
   }
 }

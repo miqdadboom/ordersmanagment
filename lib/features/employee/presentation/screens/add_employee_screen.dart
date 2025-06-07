@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
-import '../../../products/presentation/widgets/product_management/save_button.dart';
 import '../../data/datasources/firebase_employee_service.dart';
 import '../../data/models/EmployeeModel.dart';
 import '../../data/repositories/employee_repository_impl.dart';
 import '../widgets/add_employee_appbar.dart';
 import '../widgets/add_employee_text_field.dart';
+import '../widgets/add_save_button.dart';
 
 class AddEmployee extends StatefulWidget {
   const AddEmployee({super.key});
@@ -23,13 +22,13 @@ class _AddEmployeeState extends State<AddEmployee> {
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
   final _distributionController = TextEditingController();
-  String _selectedRole = 'employee';
+  String? _selectedRole;
   final Color primaryColor = AppColors.primary;
 
   final _repo = EmployeeRepositoryImpl(FirebaseEmployeeService());
 
   Future<void> _submitForm(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && _selectedRole != null) {
       final confirm = await _showConfirmationDialog(context, 'Confirm', 'Are you sure?');
       if (!confirm) return;
 
@@ -39,20 +38,34 @@ class _AddEmployeeState extends State<AddEmployee> {
         phone: _phoneController.text.trim(),
         address: _addressController.text.trim(),
         distributionLine: _distributionController.text.trim(),
-        role: _selectedRole, id: null,
+        role: _selectedRole!,
+        id: null,
       );
 
       try {
         await _repo.addEmployee(employee, _passwordController.text.trim());
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Employee added successfully"), backgroundColor: Colors.green),
+           SnackBar(
+            content: Text("Employee added successfully"),
+            backgroundColor: AppColors.success,
+          ),
         );
         _clearFields();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error: $e"), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text("Error: $e"),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
+    } else if (_selectedRole == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please select a role"),
+          backgroundColor: AppColors.error,
+        ),
+      );
     }
   }
 
@@ -63,7 +76,7 @@ class _AddEmployeeState extends State<AddEmployee> {
     _phoneController.clear();
     _addressController.clear();
     _distributionController.clear();
-    setState(() => _selectedRole = 'employee');
+    setState(() => _selectedRole = null);
   }
 
   Future<bool> _showConfirmationDialog(BuildContext context, String title, String content) async {
@@ -77,8 +90,7 @@ class _AddEmployeeState extends State<AddEmployee> {
           ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text('Confirm')),
         ],
       ),
-    )) ??
-        false;
+    )) ?? false;
   }
 
   @override
@@ -113,19 +125,24 @@ class _AddEmployeeState extends State<AddEmployee> {
   }
 
   Widget _buildRoleDropdown() {
+    final items = const [
+      DropdownMenuItem(value: 'salesRepresentative', child: Text('Sales Representative')),
+      DropdownMenuItem(value: 'warehouseEmployee', child: Text('Warehouse Employee')),
+    ];
+
     return DropdownButtonFormField<String>(
       value: _selectedRole,
       decoration: InputDecoration(
         labelText: 'Select Role',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      items: const [
-        DropdownMenuItem(value: 'employee', child: Text('Sales Representative')),
-        DropdownMenuItem(value: 'storekeeper', child: Text('Warehouse Employee')),
-      ],
+      items: items,
       onChanged: (value) {
-        if (value != null) setState(() => _selectedRole = value);
+        setState(() {
+          _selectedRole = value;
+        });
       },
+      validator: (value) => value == null ? 'Please select a role' : null,
     );
   }
 }

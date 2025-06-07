@@ -12,6 +12,7 @@ class OrderEntity {
   final double? latitude;
   final double? longitude;
   final String createdBy;
+  final String? notes;
 
   const OrderEntity({
     required this.id,
@@ -24,6 +25,7 @@ class OrderEntity {
     required this.latitude,
     required this.longitude,
     required this.createdBy,
+    this.notes,
   });
 
 
@@ -43,6 +45,7 @@ class OrderEntity {
       id: id,
       customerName: data['customerName'] ?? 'Unknown',
       customerAddress: data['location'] ?? 'Unknown',
+      notes: data['notes'],
       status: 'Pending',
       estimatedTime: '2 hours',
       products: products,

@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/user_access_control.dart';
+import '../../../../core/widgets/bottom_navigation_manager.dart';
+import '../../../../core/widgets/bottom_navigation_sales_representative.dart';
 import '../../../../core/widgets/bottom_navigation_warehouse_manager.dart';
 import '../../data/models/order_model.dart';
 import '../../domain/entities/order_product.dart';
@@ -40,6 +42,18 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
     });
 
     context.read<OrdersCubit>().loadOrderByRole(role: role, userId: userId);
+  }
+
+  Widget? _buildBottomNavigationBar() {
+    if (_role == 'admin') {
+      return const BottomNavigationManager();
+    } else if (_role == 'sales representative') {
+      return const BottomNavigationSalesRepresentative();
+    } else if (_role == 'warehouse employee') {
+      return const BottomNavigationWarehouseManager();
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -102,7 +116,9 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
           );
         },
       ),
-      bottomNavigationBar: const BottomNavigationWarehouseManager(),
+      bottomNavigationBar: SafeArea(
+        child: SizedBox(height: 60, child: _buildBottomNavigationBar() ?? const SizedBox()),
+      ),
     );
   }
 

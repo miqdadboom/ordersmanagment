@@ -1,6 +1,8 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_text_styles.dart';
+
 class ConversationItem extends StatelessWidget {
   final String title;
   final String lastMessage;
@@ -23,7 +25,9 @@ class ConversationItem extends StatelessWidget {
       context: context,
       builder: (context) =>
           AlertDialog(
-            title: const Text('Confirm Deletion'),
+            title:  Text('Confirm Deletion',
+              style: AppTextStyles.dialogTitle(context),
+            ),
             content: const Text(
                 'Are you sure you want to delete this conversation?'),
             actions: [
@@ -59,7 +63,7 @@ class ConversationItem extends StatelessWidget {
           contentPadding: const EdgeInsets.all(16),
           title: Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: AppTextStyles.conversationTitle(context),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -67,12 +71,12 @@ class ConversationItem extends StatelessWidget {
               lastMessage,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style:  TextStyle(fontSize: 14, color: AppColors.conversatioTextMessage),
+              style:  AppTextStyles.conversationMessage(context),
             ),
           ),
           trailing: Text(
                 lastUpdated,
-                style:  TextStyle(fontSize: 12, color: AppColors.conversatioDateMessage),
+                style:  AppTextStyles.conversationDate(context),
               ),
               onTap: onTap,
         ),

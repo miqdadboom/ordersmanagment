@@ -1,4 +1,3 @@
-// ✅ CartCubit: تخزين جميع بيانات المنتج في Firebase + دعم الكمية وتعديلها
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,5 +77,14 @@ class CartCubit extends Cubit<List<Map<String, dynamic>>> {
 
   double calculateTotal() {
     return state.fold(0, (sum, item) => sum + item['price'] * item['quantity']);
+  }
+
+  Future<void> clearCart() async {
+    final userId = _auth.currentUser?.uid;
+    if(userId == null) return;
+
+    await _firestore.collection('cart').doc(userId).set({'products': []});
+
+    emit([]);
   }
 }

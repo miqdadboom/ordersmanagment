@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 import '../../data/datasources/chat_database.dart';
-import '../screens/chat_screen.dart';
 
 class StartChatButton extends StatelessWidget {
   const StartChatButton({super.key});
@@ -12,7 +12,9 @@ class StartChatButton extends StatelessWidget {
       builder: (context) {
         String tempTitle = "";
         return AlertDialog(
-          title: const Text("New Conversation"),
+          title:  Text("New Conversation",
+            style: AppTextStyles.dialogTitle(context),
+          ),
           content: TextField(
             autofocus: true,
             decoration: const InputDecoration(hintText: "Enter conversation title"),
@@ -21,11 +23,17 @@ class StartChatButton extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, null),
-              child: const Text("Cancel"),
+              child:  Text(
+                  "Cancel",
+                style: AppTextStyles.dialogButton(context),
+              ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, tempTitle.isEmpty ? "New Chat" : tempTitle),
-              child: const Text("Create"),
+              child:  Text(
+                  "Create",
+                style: AppTextStyles.dialogButton(context),
+              ),
             ),
           ],
         );
@@ -53,12 +61,7 @@ class StartChatButton extends StatelessWidget {
       ),
       child: Text(
         "Start New Chat",
-        style: TextStyle(
-          color: AppColors.textDark,
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          fontFamily: "Cera Pro",
-        ),
+        style: AppTextStyles.chatButton(context),
       ),
     );
   }

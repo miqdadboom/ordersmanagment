@@ -7,6 +7,7 @@ import Foundation
 
 import audio_session
 import cloud_firestore
+import connectivity_plus
 import file_selector_macos
 import firebase_app_check
 import firebase_auth
@@ -26,6 +27,7 @@ import video_player_avfoundation
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AudioSessionPlugin.register(with: registry.registrar(forPlugin: "AudioSessionPlugin"))
   FLTFirebaseFirestorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseFirestorePlugin"))
+  ConnectivityPlugin.register(with: registry.registrar(forPlugin: "ConnectivityPlugin"))
   FileSelectorPlugin.register(with: registry.registrar(forPlugin: "FileSelectorPlugin"))
   FLTFirebaseAppCheckPlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseAppCheckPlugin"))
   FLTFirebaseAuthPlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseAuthPlugin"))

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
 import '../../../../core/user_role_access.dart';
+import '../../../../core/widgets/bottom_navigation_manager.dart';
 import '../../data/models/EmployeeModel.dart';
 import '../../data/repositories/employee_repository_impl.dart';
 import '../../data/datasources/firebase_employee_service.dart';
@@ -45,6 +46,13 @@ class _ManageEmployeeState extends State<ManageEmployee> {
     // Add sorting logic here if needed
   }
 
+  Widget? _buildBottomNavigationBar() {
+    if (_role == 'admin') {
+      return const BottomNavigationManager();
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_loading) {
@@ -62,19 +70,16 @@ class _ManageEmployeeState extends State<ManageEmployee> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title:  Text(
-            "Company Employee",
+        automaticallyImplyLeading: false,
+        title: Text(
+          "Company Employee",
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
-            color: AppColors.textDark,
+            color: AppColors.textLight,
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -144,17 +149,8 @@ class _ManageEmployeeState extends State<ManageEmployee> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: AppColors.selectedItemNavigation,
-        unselectedItemColor: AppColors.notSelectedItemNavigation,
-        currentIndex: 2,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Order'),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Employee'),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Product'),
-        ],
-        onTap: (index) {},
+      bottomNavigationBar: SafeArea(
+        child: SizedBox(height: 60, child: _buildBottomNavigationBar() ?? const SizedBox()),
       ),
     );
   }

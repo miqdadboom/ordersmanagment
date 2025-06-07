@@ -1,6 +1,5 @@
+import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
 import 'package:final_tasks_front_end/features/chat_bot/presentation/widgets/animated_intro.dart';
@@ -62,19 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              AppBar(
-                backgroundColor: AppColors.backgroundChat,
-                title: const Text(
-                  "Chat Ai",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Cera Pro",
-                    fontSize: 32,
-                  ),
-                ),
-                centerTitle: true,
-                elevation: 0,
-              ),
+              CustomAppBar(title: 'Chat Ai'),
               const Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),

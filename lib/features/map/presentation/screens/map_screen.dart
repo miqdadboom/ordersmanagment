@@ -4,7 +4,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/widgets/place.dart';
-import '../cubit/map_controller.dart';
+import '../../../../core/constants/custom_app_bar.dart';
+import '../cubit/map_cubit.dart';
 
 class MapScreen extends StatelessWidget {
   final PlaceLocation location;
@@ -22,26 +23,29 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logic = MapLogicController();
+    final logic = MapLogicCubit();
     final flutterMapController = MapController();
     final initialLatLng = LatLng(location.latitude, location.longitude);
 
-    return ChangeNotifierProvider<MapLogicController>.value(
+    return ChangeNotifierProvider<MapLogicCubit>.value(
       value: logic,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(isSelecting ? 'Pick your location' : 'Your Location'),
-          actions: [
-            if (isSelecting)
-              IconButton(
-                icon: const Icon(Icons.save),
-                onPressed: () {
-                  Navigator.of(context).pop(logic.pickedLocation);
-                },
-              ),
-          ],
+        appBar: CustomAppBar(
+          title: isSelecting ? 'Pick your location' : 'Your Location',
+          showBackButton: true,
+          actions: isSelecting
+              ? [
+            IconButton(
+              icon: const Icon(Icons.save),
+              color: AppColors.textLight,
+              onPressed: () {
+                Navigator.of(context).pop(logic.pickedLocation);
+              },
+            ),
+          ]
+              : [],
         ),
-        body: Consumer<MapLogicController>(
+        body: Consumer<MapLogicCubit>(
           builder: (context, controller, _) {
             return FlutterMap(
               mapController: flutterMapController,

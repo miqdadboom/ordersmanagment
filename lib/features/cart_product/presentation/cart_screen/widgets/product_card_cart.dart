@@ -2,6 +2,7 @@ import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../core/constants/app_text_styles.dart';
 import '../../../domain/entities/quantity_model.dart';
 import '../cubit/cart_cubit.dart';
 import 'quantity_controller.dart';
@@ -81,14 +82,14 @@ class _ProductCardCartState extends State<ProductCardCart> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: TextStyle(color: AppColors.textDark)),
+            child: Text('Cancel', style: AppTextStyles.dialogCancelButton(context)),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               widget.onRemove();
             },
-            child: Text('Delete', style: TextStyle(color: AppColors.iconDelete)),
+            child: Text('Delete', style: AppTextStyles.dialogDeleteButton(context)),
           ),
         ],
       ),
@@ -130,18 +131,12 @@ class _ProductCardCartState extends State<ProductCardCart> {
                     children: [
                       Text(
                         widget.product.title,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.05,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style:  AppTextStyles.productCardTitle(context),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         widget.product.brand,
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.035,
-                          color: AppColors.textDark,
-                        ),
+                        style: AppTextStyles.productCardBrand(context),
                       ),
                     ],
                   ),

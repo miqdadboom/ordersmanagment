@@ -20,13 +20,17 @@ class _BottomNavigationWarehouseManager
 
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/ProductsScreen');
+        Navigator.pushNamed(context, '/ProductsScreen');
         break;
+      case 1:
+        Navigator.pushNamed(context, '/listOrder');
       case 2:
-        Navigator.pushReplacementNamed(context, '/cartScreen');
+        Navigator.pushNamed(context, '/cartScreen');
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/notificationList');
         break;
       default:
-        // Order (1) and Notification (3) not implemented yet
         break;
     }
   }
@@ -45,7 +49,7 @@ class _BottomNavigationWarehouseManager
         BottomNavigationBarItem(icon: Icon(Icons.view_list), label: "Order"),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_cart),
-          label: "Product",
+          label: "Cart",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications_none),

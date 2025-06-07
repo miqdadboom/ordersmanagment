@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -9,24 +11,36 @@ class ConfirmOrderRemoteDataSource {
     required double longitude,
     required List<Map<String, dynamic>> products,
   }) async {
-    final currentUser = FirebaseAuth.instance.currentUser!;
-    final userId = currentUser.uid;
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser!;
+      final userId = currentUser.uid;
 
-    await FirebaseFirestore.instance.collection('orders').add({
-      'createdBy': userId,
-      'customerName': customerName,
-      'location': location,
-      'latitude': latitude,
-      'longitude': longitude,
-      'timestamp': DateTime.now().toIso8601String(),
-      'products': products,
-    });
+      await FirebaseFirestore.instance.collection('orders').add({
+        'createdBy': userId,
+        'customerName': customerName,
+        'location': location,
+        'latitude': latitude,
+        'longitude': longitude,
+        'timestamp': DateTime.now().toIso8601String(),
+        'products': products,
+      });
 
-    await FirebaseFirestore.instance.collection('notifications').add({
-      'title': 'new order',
-      'body': 'A new order has arrived from $customerName ',
-      'timestamp': DateTime.now().toIso8601String(),
-      'isRead': false,
-    });
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'title': 'new order',
+        'body': 'A new order has arrived from $customerName ',
+        'timestamp': DateTime.now().toIso8601String(),
+        'isRead': false,
+      });
+    } on FirebaseException catch (e) {
+      throw Exception('Firebase error: ${e.message}');
+    }
+    on SocketException {
+      throw Exception('No internet connection. Please check your network.');
+    }
+    on FormatException {
+      throw Exception('Invalid data format encountered.');
+    } catch (e) {
+      throw Exception('Unexpected error occurred: $e');
+    }
   }
 }

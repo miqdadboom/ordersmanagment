@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -35,15 +36,11 @@ class ConfirmOrderBar extends StatelessWidget {
               children: [
                 Text(
                   "Total price",
-                  style: TextStyle(color: AppColors.textDark, fontSize: screenWidth * 0.045,fontWeight: FontWeight.bold),
+                  style: AppTextStyles.totalPriceLabel(context),
                 ),
                 Text(
                   "\$${totalPrice.toStringAsFixed(1)}",
-                  style: TextStyle(
-                    color: AppColors.textDark,
-                    fontSize: screenWidth * 0.055,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTextStyles.totalPriceValue(context),
                 ),
               ],
             ),
@@ -68,11 +65,7 @@ class ConfirmOrderBar extends StatelessWidget {
               ),
               child:  Text(
                 "Confirm order",
-                style: TextStyle(
-                  color: AppColors.textDark,
-                  fontSize: screenWidth * 0.045,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTextStyles.confirmOrderButton(context),
               ),
             ),
           ),

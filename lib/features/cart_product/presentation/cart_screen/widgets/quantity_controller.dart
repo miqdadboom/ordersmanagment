@@ -1,4 +1,5 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 import '../../../domain/entities/quantity_model.dart';
@@ -58,10 +59,7 @@ class QuantityController extends StatelessWidget {
               controller: quantityController,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
-              style: TextStyle(
-                fontSize: buttonSize * 0.45,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTextStyles.quantityTextField(context),
               decoration: const InputDecoration(
                 isDense: true,
                 contentPadding: EdgeInsets.only(top: 4, bottom: 0),

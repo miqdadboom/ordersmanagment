@@ -1,21 +1,18 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
-import 'package:final_tasks_front_end/core/widgets/bottom_navigation_manager.dart';
+import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../core/user_role_access.dart';
 import '../../../../../core/utils/user_access_control.dart';
+import '../../../../../core/widgets/bottom_navigation_manager.dart';
 import '../../../../confirm_order/presentation/screens/confirm_order.dart';
 import '../../../../orders/data/datasources/order_data_source_impl.dart';
-import '../../../../orders/data/repositories/orders_repository_impl.dart';
 import '../../../../orders/domain/repositories/orders_repository.dart';
 import '../../../../orders/domain/repositories/orders_repository_impl.dart';
 import '../../../../orders/presentation/cubit/orders_cubit.dart';
 import '../cubit/cart_cubit.dart';
 import '../widgets/cart_product_list.dart';
 import '../../../../../core/widgets/bottom_navigation_sales_representative.dart';
-import '../../../../../core/widgets/common_text.dart';
 import '../widgets/confirm_order_bar.dart';
 
 class CartScreen extends StatefulWidget {
@@ -44,6 +41,16 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 
+  Widget? _buildBottomNavigationBar() {
+    if (_role == 'admin') {
+      return const BottomNavigationManager();
+    } else if (_role == 'sales representative') {
+      return const BottomNavigationSalesRepresentative();
+    } else {
+      return null; // No bottom bar for unauthorized roles
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_loading) {
@@ -70,16 +77,9 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.primary,
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          title: CommonText(
-            text: "Shopping Cart",
-            isBold: true,
-            size: MediaQuery.of(context).size.width * 0.06,
-          ),
-          centerTitle: true,
+        appBar: CustomAppBar(
+            title: 'Shopping Cart',
+          showBackButton: false,
         ),
         bottomNavigationBar: SafeArea(
           child: Column(
@@ -91,13 +91,17 @@ class _CartScreenState extends State<CartScreen> {
                   return ConfirmOrderBar(
                     totalPrice: total,
                     onConfirm: () {
-                      final cartProducts = context.read<CartCubit>().state;
+                      final cartCubit = context.read<CartCubit>();
+                      final cartProducts = cartCubit.state;
                       final ordersCubit = context.read<OrdersCubit>();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: ordersCubit,
+                          builder: (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(value: ordersCubit),
+                              BlocProvider.value(value: cartCubit),
+                            ],
                             child: ConfirmOrder(cartProducts: cartProducts),
                           ),
                         ),
@@ -107,7 +111,8 @@ class _CartScreenState extends State<CartScreen> {
                 },
               ),
               const Divider(height: 1),
-              SizedBox(height: 60, child: BottomNavigationSalesRepresentative()),
+              if (_buildBottomNavigationBar() != null)
+                SizedBox(height: 60, child: _buildBottomNavigationBar()!),
             ],
           ),
         ),

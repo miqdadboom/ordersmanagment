@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'auth_routes.dart';
+import 'bottom_bar_routes.dart';
 import 'map_routes.dart';
 import 'order_routes.dart';
 import 'product_routes.dart';
@@ -16,4 +17,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   ...chatRoutes,
   ...notificationRoutes,
   ...mapRoutes,
+  ...bottomBarRoutes,
 };

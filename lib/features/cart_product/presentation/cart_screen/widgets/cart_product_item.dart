@@ -32,14 +32,31 @@ class CartProductItem extends StatelessWidget {
       quantity: product['quantity'] ?? 1,
     );
 
-    return ProductCardCart(
-      product: productEntity,
-      quantityController: controller,
-      onRemove: () => cubit.removeProduct(index),
-      onTotalChange: (_) {},
-      onQuantityChanged: (oldQty, newQty, price) {
-        cubit.updateQuantity(index, newQty);
-      },
+    return GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            '/productViewCart',
+            arguments: {
+              'imageUrl': product['imageUrl'],
+              'name': product['title'],
+              'brand': product['subtitle'],
+              'price': product['price'],
+              'description': product['description'] ?? '',
+            },
+          );
+        },
+
+         child:  ProductCardCart(
+            product: productEntity,
+            quantityController: controller,
+            onRemove: () => cubit.removeProduct(index),
+            onTotalChange: (_) {},
+            onQuantityChanged: (oldQty, newQty, price) {
+              cubit.updateQuantity(index, newQty);
+            },
+    ),
     );
+    }
   }
-}
+
