@@ -60,30 +60,32 @@ class CategorySection extends StatelessWidget {
                 ), // تقريبًا 8
                 child: GestureDetector(
                   onTap: () => onCategoryTap(index),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: screenWidth * 0.2, // تقريبًا 80 على شاشة 400
-                        height: screenWidth * 0.2,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(category.imageUrl),
-                            fit: BoxFit.cover,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          width: screenWidth * 0.2, // تقريبًا 80 على شاشة 400
+                          height: screenWidth * 0.2,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(category.imageUrl),
+                              fit: BoxFit.cover,
+                            ),
+                            shape: BoxShape.circle,
                           ),
-                          shape: BoxShape.circle,
                         ),
-                      ),
-                      SizedBox(height: screenHeight * 0.0075), // تقريبًا 6
-                      Text(
-                        category.name,
-                        style: TextStyle(
-                          color: AppColors.textDark,
-                          fontSize: screenWidth * 0.025, // تقريبًا 10
-                          fontWeight: FontWeight.w400,
+                        SizedBox(height: screenHeight * 0.0075), // تقريبًا 6
+                        Text(
+                          category.name,
+                          style: TextStyle(
+                            color: AppColors.textDark,
+                            fontSize: screenWidth * 0.025, // تقريبًا 10
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
