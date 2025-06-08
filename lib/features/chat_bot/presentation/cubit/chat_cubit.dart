@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
@@ -38,7 +40,7 @@ class ChatCubit extends StateNotifier<List<ChatMessageEntity>> {
         );
       }).toList();
     } catch (e) {
-      debugPrint(" Error loading chat history: $e");
+      debugPrint("Error loading chat history: $e");
     }
   }
 
@@ -82,8 +84,24 @@ class ChatCubit extends StateNotifier<List<ChatMessageEntity>> {
         maxToken: 1000,
       );
 
+      final initialStatus = await Connectivity().checkConnectivity();
+      if (initialStatus == ConnectivityResult.none) {
+        final completer = Completer<void>();
+        late StreamSubscription<ConnectivityResult> subscription;
+
+        subscription = Connectivity().onConnectivityChanged.listen((status) async {
+          if (status != ConnectivityResult.none) {
+            await subscription.cancel();
+            completer.complete();
+          }
+        });
+
+        await completer.future;
+      }
+
       final response = await _chatGpt.onChatCompletion(request: request)
-      .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 10));
+
       for (var element in response!.choices) {
         if (element.message != null) {
           final botMessage = ChatMessageEntity(
@@ -104,38 +122,26 @@ class ChatCubit extends StateNotifier<List<ChatMessageEntity>> {
           );
         }
       }
-    } on SocketException catch (e) {
-      debugPrint('Socket Exception: $e');
-      _handleError(NoInternetException(), context, ref);
-    } on HttpException catch (e) {
-      debugPrint('HTTP Exception: $e');
-      if (e.message.contains('timeout') || e.message.contains('timed out')) {
-        _handleError(TimeoutException(), context, ref);
-      } else {
-        _handleError(ServerException(e.message), context, ref);
-      }
-    } on FormatException catch (e) {
-      debugPrint('Format Exception: $e');
-      _handleError(ParseException(), context, ref);
     } catch (e) {
-      debugPrint('Unknown Exception: $e');
-      if (e.toString().contains('SocketException') || 
-          e.toString().contains('Connection failed') ||
-          e.toString().contains('Network is unreachable')) {
+      debugPrint('Exception in _getBotResponse: \n${e.toString()}');
+      if (e is NoInternetException || e.toString().contains('SocketException')) {
         _handleError(NoInternetException(), context, ref);
-      } else if (e.toString().contains('timeout') || e.toString().contains('timed out')) {
+      } else if (e.toString().toLowerCase().contains('invalid') ||
+          e.toString().contains('401') ||
+          e.toString().contains('403')) {
+        _handleError(ServerException('Invalid or expired API token.'), context, ref);
+      } else if (e is TimeoutException || e.toString().toLowerCase().contains('timeout')) {
         _handleError(TimeoutException(), context, ref);
-      } else if (e.toString().contains('connection') || e.toString().contains('connect')) {
-        _handleError(ConnectionException(), context, ref);
       } else {
-        _handleError(UnknownException(e.toString()), context, ref);
+        _handleError(AppException('An unexpected error occurred. Please try again.'), context, ref);
       }
     }
   }
 
   void _handleError(Object e, BuildContext context, WidgetRef ref) {
     ref.read(isTypingProvider.notifier).state = false;
-    final msg = e is AppException ? e.message : "An unexpected error occurred. Please try again.";
+    final msg = e is AppException ? e.message : "An unexpected error occurred.";
+    debugPrint('Show error to user: $msg');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),

@@ -4,6 +4,7 @@ import '../../../orders/data/models/order_model.dart';
 import '../../../orders/domain/entities/order_product.dart';
 import '../../data/datasources/confirm_order_remote_data_source.dart';
 import '../../../../core/widgets/place.dart';
+import '../../../../core/utils/app_exception.dart';
 
 class ConfirmOrderCubit {
   final TextEditingController nameController = TextEditingController();
@@ -14,12 +15,12 @@ class ConfirmOrderCubit {
   bool validateOrderInputs(BuildContext context) {
     final name = nameController.text.trim();
     if (name.isEmpty) {
-      showValidationDialog(context, 'Please enter your name.');
+      showValidationDialog(context, 'Please enter customer name');
       return false;
     }
 
     if (selectedLocation == null) {
-      showValidationDialog(context, 'Please select your location.');
+      showValidationDialog(context, 'Please select delivery location');
       return false;
     }
 
@@ -38,6 +39,33 @@ class ConfirmOrderCubit {
             child: const Text('OK'),
           ),
         ],
+      ),
+    );
+  }
+
+  void showErrorSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(
+          label: 'OK',
+          textColor: Colors.white,
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        ),
+      ),
+    );
+  }
+
+  void showSuccessSnackBar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Order sent successfully!'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 3),
       ),
     );
   }
@@ -100,26 +128,34 @@ class ConfirmOrderCubit {
 
     isLoading = true;
 
-    final products = cartProducts.map((item) => {
-      'title': item['title'] ?? 'Untitled',
-      'price': item['price'] ?? 0,
-      'quantity': item['quantity'] ?? 1,
-      'imageUrl': item['imageUrl'],
-    }).toList();
+    try {
+      final products = cartProducts.map((item) => {
+        'title': item['title'] ?? 'Untitled',
+        'price': item['price'] ?? 0,
+        'quantity': item['quantity'] ?? 1,
+        'imageUrl': item['imageUrl'],
+      }).toList();
 
-    await ConfirmOrderRemoteDataSource.sendOrderToFirebase(
-      customerName: nameController.text.trim(),
-      location: selectedLocation!.address,
-      latitude: selectedLocation!.latitude,
-      longitude: selectedLocation!.longitude,
-      products: products,
-    );
+      await ConfirmOrderRemoteDataSource.sendOrderToFirebase(
+        customerName: nameController.text.trim(),
+        location: selectedLocation!.address,
+        latitude: selectedLocation!.latitude,
+        longitude: selectedLocation!.longitude,
+        products: products,
+      );
 
-    if (Navigator.canPop(context)) Navigator.of(context).pop();
-    isLoading = false;
+      if (Navigator.canPop(context)) Navigator.of(context).pop();
+      isLoading = false;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Order sent successfully!')),
-    );
+      showSuccessSnackBar(context);
+    } on AppException catch (e) {
+      if (Navigator.canPop(context)) Navigator.of(context).pop();
+      isLoading = false;
+      showErrorSnackBar(context, e.message);
+    } catch (e) {
+      if (Navigator.canPop(context)) Navigator.of(context).pop();
+      isLoading = false;
+      showErrorSnackBar(context, 'An unexpected error occurred. Please try again');
+    }
   }
 }
