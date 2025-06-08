@@ -1,8 +1,5 @@
-import 'dart:io';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/utils/app_exception.dart';
 import '../../../orders/data/models/order_model.dart';
 import '../../../orders/domain/entities/order_product.dart';
 import '../../data/datasources/confirm_order_remote_data_source.dart';
@@ -101,37 +98,28 @@ class ConfirmOrderCubit {
       ),
     );
 
-    try {
-      isLoading = true;
+    isLoading = true;
 
-      final connectivityResult = await Connectivity().checkConnectivity();
-      if (connectivityResult == ConnectivityResult.none) {
-        throw SocketException('No internet connection');
-      }
+    final products = cartProducts.map((item) => {
+      'title': item['title'] ?? 'Untitled',
+      'price': item['price'] ?? 0,
+      'quantity': item['quantity'] ?? 1,
+      'imageUrl': item['imageUrl'],
+    }).toList();
 
-      final products = cartProducts.map((item) => {
-        'title': item['title'] ?? 'Untitled',
-        'price': item['price'] ?? 0,
-        'quantity': item['quantity'] ?? 1,
-        'imageUrl': item['imageUrl'],
-      }).toList();
+    await ConfirmOrderRemoteDataSource.sendOrderToFirebase(
+      customerName: nameController.text.trim(),
+      location: selectedLocation!.address,
+      latitude: selectedLocation!.latitude,
+      longitude: selectedLocation!.longitude,
+      products: products,
+    );
 
-      await ConfirmOrderRemoteDataSource.sendOrderToFirebase(
-        customerName: nameController.text.trim(),
-        location: selectedLocation!.address,
-        latitude: selectedLocation!.latitude,
-        longitude: selectedLocation!.longitude,
-        products: products,
-      );
+    if (Navigator.canPop(context)) Navigator.of(context).pop();
+    isLoading = false;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Order sent successfully!')),
-      );
-    } catch (e) {
-      AppExceptionHandler.handle(context: context, error: e);
-    } finally {
-      if (Navigator.canPop(context)) Navigator.of(context).pop();
-      isLoading = false;
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Order sent successfully!')),
+    );
   }
 }

@@ -1,59 +1,52 @@
+
 class UserAccessControl {
   static bool ManageEmployee(String role) {
     return role == 'admin';
   }
 
   static bool ProductsScreenState(String role) {
-    return role == 'admin' ||
-        role == 'warehouse employee' ||
-        role == 'sales representative';
+    return role == 'admin' || role == 'warehouseEmployee' || role == 'salesRepresentative';
   }
 
   static bool ProductManagementScreen(String role) {
-    return role == 'admin' || role == 'warehouse employee';
+    return role == 'admin' || role == 'warehouseEmployee';
   }
 
   static bool OrderProductsScreen(String role) {
-    return role == 'admin' || role == 'warehouse employee';
+    return role == 'admin' || role == 'warehouseEmployee';
   }
 
   static bool OrderDetailsScreen(String role) {
-    return role == 'admin' || role == 'warehouse employee';
+    return role == 'admin' || role == 'warehouseEmployee';
   }
 
   static bool CartScreen(String role) {
-    return role == 'admin' || role == 'sales representative';
+    return role == 'admin' || role == 'salesRepresentative';
   }
 
   static bool HomeScreen(String role) {
-    return role == 'admin' ||
-        role == 'warehouseEmployee' ||
-        role == 'salesRepresentative';
+    return role == 'admin' || role == 'warehouseEmployee' || role == 'salesRepresentative';
   }
 
   static bool ConfirmOrder(String role) {
-    return role == 'admin' || role == 'sales representative';
+    return role == 'admin' || role == 'salesRepresentative';
   }
 
   static bool ProductView(String role) {
-    return role == 'admin' ||
-        role == 'warehouse employee' ||
-        role == 'sales representative';
+    return role == 'admin' || role == 'warehouseEmployee' || role == 'salesRepresentative';
   }
 
   static bool ListOfOrdersScreen(String role) {
-    return role == 'admin' ||
-        role == 'warehouse employee' ||
-        role == 'sales representative';
+    return role == 'admin' || role == 'warehouseEmployee' || role == 'salesRepresentative';
   }
 
   static String getHomeRouteForRole(String role) {
     switch (role) {
       case 'admin':
         return '/manage';
-      case 'sales representative':
+      case 'salesRepresentative':
         return '/productScreen';
-      case 'warehouse employee':
+      case 'warehouseEmployee':
         return '/ProductsScreen';
       default:
         return '/productScreen';

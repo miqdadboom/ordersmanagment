@@ -60,7 +60,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             child: DashChat(
               currentUser: user,
               onSend: (message) =>
-                  chatCubit.sendMessage(ref, widget.conversationId, message.text),
+                  chatCubit.sendMessage(ref, widget.conversationId, message.text, context),
               messages: messages,
               typingUsers: isTyping ? [bot] : [],
               messageOptions: MessageOptions(

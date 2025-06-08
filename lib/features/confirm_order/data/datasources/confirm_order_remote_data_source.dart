@@ -15,6 +15,14 @@ class ConfirmOrderRemoteDataSource {
       final currentUser = FirebaseAuth.instance.currentUser!;
       final userId = currentUser.uid;
 
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      
+      final userRole = userDoc.data()?['role'] ?? 'user';
+      final userEmail = userDoc.data()?['email'] ?? 'user';
+
       await FirebaseFirestore.instance.collection('orders').add({
         'createdBy': userId,
         'customerName': customerName,
@@ -23,6 +31,8 @@ class ConfirmOrderRemoteDataSource {
         'longitude': longitude,
         'timestamp': DateTime.now().toIso8601String(),
         'products': products,
+        'userRole': userRole,
+        'userEmail': userEmail,
       });
 
       await FirebaseFirestore.instance.collection('notifications').add({

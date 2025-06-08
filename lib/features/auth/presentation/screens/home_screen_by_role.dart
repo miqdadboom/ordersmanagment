@@ -20,9 +20,9 @@ class HomeScreenByRole extends StatelessWidget {
 
     if (role == 'admin') {
       bottomBar = const BottomNavigationManager();
-    } else if (role == 'sales representative') {
+    } else if (role == 'salesRepresentative') {
       bottomBar = const BottomNavigationSalesRepresentative();
-    } else if (role == 'warehouse employee') {
+    } else if (role == 'warehouseEmployee') {
       bottomBar = const BottomNavigationWarehouseManager();
     } else {
       return const Scaffold(body: Center(child: Text("Unknown role")));

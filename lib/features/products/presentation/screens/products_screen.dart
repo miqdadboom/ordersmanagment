@@ -133,9 +133,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
     switch (_role) {
       case 'admin':
         return const BottomNavigationManager();
-      case 'sales representative':
+      case 'salesRepresentative':
         return const BottomNavigationSalesRepresentative();
-      case 'warehouse employee':
+      case 'warehouseEmployee':
         return const BottomNavigationWarehouseManager();
       default:
         return const SizedBox.shrink();
