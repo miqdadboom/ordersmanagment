@@ -47,9 +47,9 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
   Widget? _buildBottomNavigationBar() {
     if (_role == 'admin') {
       return const BottomNavigationManager();
-    } else if (_role == 'sales representative') {
+    } else if (_role == 'salesRepresentative') {
       return const BottomNavigationSalesRepresentative();
-    } else if (_role == 'warehouse employee') {
+    } else if (_role == 'warehouseEmployee') {
       return const BottomNavigationWarehouseManager();
     } else {
       return null;

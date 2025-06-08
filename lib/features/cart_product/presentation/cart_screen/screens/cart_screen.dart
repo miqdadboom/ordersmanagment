@@ -45,7 +45,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget? _buildBottomNavigationBar() {
     if (_role == 'admin') {
       return const BottomNavigationManager();
-    } else if (_role == 'sales representative') {
+    } else if (_role == 'salesRepresentative') {
       return const BottomNavigationSalesRepresentative();
     } else {
       return null; // No bottom bar for unauthorized roles
