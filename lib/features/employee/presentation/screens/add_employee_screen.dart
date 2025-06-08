@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/app_text_styles.dart';
 import '../../data/datasources/firebase_employee_service.dart';
 import '../../data/models/EmployeeModel.dart';
 import '../../data/repositories/employee_repository_impl.dart';
@@ -23,11 +24,14 @@ class _AddEmployeeState extends State<AddEmployee> {
   final _addressController = TextEditingController();
   final _distributionController = TextEditingController();
   String? _selectedRole;
-  final Color primaryColor = AppColors.primary;
+  bool _isLoading = false;
 
+  final Color primaryColor = AppColors.primary;
   final _repo = EmployeeRepositoryImpl(FirebaseEmployeeService());
 
   Future<void> _submitForm(BuildContext context) async {
+    if (_isLoading) return;
+
     if (_formKey.currentState!.validate() && _selectedRole != null) {
       final confirm = await _showConfirmationDialog(context, 'Confirm', 'Are you sure?');
       if (!confirm) return;
@@ -43,26 +47,37 @@ class _AddEmployeeState extends State<AddEmployee> {
       );
 
       try {
+        setState(() => _isLoading = true);
+
         await _repo.addEmployee(employee, _passwordController.text.trim());
+
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(
-            content: Text("Employee added successfully"),
+          SnackBar(
+            content: Text(
+              "Employee added successfully",
+              style: AppTextStyles.bodyLight(context),
+            ),
             backgroundColor: AppColors.success,
           ),
         );
         _clearFields();
       } catch (e) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Error: $e"),
+            content: Text("Error: $e", style: AppTextStyles.bodyLight(context)),
             backgroundColor: AppColors.error,
           ),
         );
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
       }
     } else if (_selectedRole == null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please select a role"),
+        SnackBar(
+          content: Text("Please select a role", style: AppTextStyles.bodyLight(context)),
           backgroundColor: AppColors.error,
         ),
       );
@@ -83,11 +98,17 @@ class _AddEmployeeState extends State<AddEmployee> {
     return (await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
+        title: Text(title, style: AppTextStyles.dialogTitle(context)),
+        content: Text(content, style: AppTextStyles.bodySuggestion(context)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
-          ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text('Confirm')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('Cancel', style: AppTextStyles.dialogCancelButton(context)),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text('Confirm', style: AppTextStyles.dialogButton(context)),
+          ),
         ],
       ),
     )) ?? false;
@@ -96,7 +117,7 @@ class _AddEmployeeState extends State<AddEmployee> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EmployeeAppBar(primaryColor: primaryColor),
+      appBar: EmployeeAppBar(primaryColor: primaryColor, title: ''),
       backgroundColor: AppColors.background,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -113,9 +134,12 @@ class _AddEmployeeState extends State<AddEmployee> {
                 EmployeeTextField(controller: _addressController, hintText: "Address", icon: Icons.location_on, validatorMessage: "Please enter address", primaryColor: primaryColor),
                 EmployeeTextField(controller: _distributionController, hintText: "Distribution Line", icon: Icons.alt_route, validatorMessage: "Please enter distribution", primaryColor: primaryColor),
                 const SizedBox(height: 16),
-                _buildRoleDropdown(),
+                _buildRoleDropdown(context),
                 const SizedBox(height: 55),
-                SaveButton(onPressed: () => _submitForm(context), color: primaryColor),
+                SaveButton(
+                  onPressed: _isLoading ? null : () => _submitForm(context),
+                  color: primaryColor,
+                ),
               ],
             ),
           ),
@@ -124,23 +148,26 @@ class _AddEmployeeState extends State<AddEmployee> {
     );
   }
 
-  Widget _buildRoleDropdown() {
-    final items = const [
-      DropdownMenuItem(value: 'salesRepresentative', child: Text('Sales Representative')),
-      DropdownMenuItem(value: 'warehouseEmployee', child: Text('Warehouse Employee')),
-    ];
-
+  Widget _buildRoleDropdown(BuildContext context) {
     return DropdownButtonFormField<String>(
       value: _selectedRole,
       decoration: InputDecoration(
         labelText: 'Select Role',
+        labelStyle: AppTextStyles.bodySuggestion(context),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      items: items,
+      items: [
+        DropdownMenuItem(
+          value: 'salesRepresentative',
+          child: Text('Sales Representative', style: AppTextStyles.bodySuggestion(context)),
+        ),
+        DropdownMenuItem(
+          value: 'warehouseEmployee',
+          child: Text('Warehouse Employee', style: AppTextStyles.bodySuggestion(context)),
+        ),
+      ],
       onChanged: (value) {
-        setState(() {
-          _selectedRole = value;
-        });
+        setState(() => _selectedRole = value);
       },
       validator: (value) => value == null ? 'Please select a role' : null,
     );

@@ -107,7 +107,7 @@ class _ProductCardHomeState extends State<ProductCardHome> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: screenHeight * 0.005),
+                      SizedBox(height: screenHeight * 0.0001),
                       Text(
                         widget.product.brand,
                         style: TextStyle(

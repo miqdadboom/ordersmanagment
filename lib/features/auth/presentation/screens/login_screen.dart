@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/user_role_access.dart';
 import '../../../../core/utils/user_access_control.dart';
 import '../widgets/login_form.dart';
@@ -24,28 +25,19 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
         child: Column(
-          children: const [
-            SizedBox(height: 90),
+          children: [
+            const SizedBox(height: 90),
             Text(
               "Login",
-              style: TextStyle(
-                color: AppColors.textLight,
-                fontSize: 45,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTextStyles.chatButton(context),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Text(
               "Welcome Back",
-              style: TextStyle(
-                color: AppColors.textLight,
-                fontSize: 25,
-              ),
+              style: AppTextStyles.bodyLight(context),
             ),
-            SizedBox(height: 50),
-            Expanded(
-              child: _LoginFormContainer(),
-            ),
+            const SizedBox(height: 50),
+            const Expanded(child: _LoginFormContainer()),
           ],
         ),
       ),

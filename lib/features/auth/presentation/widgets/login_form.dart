@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/utils/user_access_control.dart';
 import '../screens/home_screen_by_role.dart';
 import 'InputField .dart';
 import 'LoginButton.dart';
@@ -19,18 +18,19 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _handleLogin() async {
+  Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final credential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-              email: _emailController.text.trim(),
-              password: _passwordController.text.trim(),
-            );
+        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
 
         final uid = credential.user!.uid;
-        final snapshot =
-            await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        final snapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .get();
 
         if (!snapshot.exists) {
           throw Exception('No role data found for this user');
@@ -38,14 +38,14 @@ class _LoginFormState extends State<LoginForm> {
 
         final role = snapshot.data()!['role'];
 
-        if (!mounted) return; // ✅ تأكد أن ال context ما زال فعال
+        if (!mounted) return;
 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => HomeScreenByRole(role: role)),
         );
       } on FirebaseAuthException catch (e) {
-        if (!mounted) return; // ✅ أضف هذا السطر هنا
+        if (!mounted) return;
 
         String message = 'Login failed.';
         if (e.code == 'user-not-found') {
@@ -58,14 +58,13 @@ class _LoginFormState extends State<LoginForm> {
           SnackBar(content: Text(message), backgroundColor: Colors.red),
         );
       } catch (e) {
-        if (!mounted) return; // ✅ وأضفه هنا أيضًا
-
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
         );
       }
     } else {
-      if (!mounted) return; // ✅ تحقق قبل استخدام context
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill all fields'),
@@ -73,6 +72,13 @@ class _LoginFormState extends State<LoginForm> {
         ),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -104,7 +110,7 @@ class _LoginFormState extends State<LoginForm> {
           LoginButton(
             onPressed: _handleLogin,
             backgroundColor: AppColors.primary,
-            textColor: AppColors.buttonText,
+            textColor: AppColors.textLight,
           ),
         ],
       ),

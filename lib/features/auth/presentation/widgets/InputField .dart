@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_text_styles.dart';
 
-class InputField extends StatelessWidget {
+class InputField extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
   final IconData icon;
@@ -23,13 +24,26 @@ class InputField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<InputField> createState() => _InputFieldState();
+}
+
+class _InputFieldState extends State<InputField> {
+  late bool _obscure;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscure = widget.obscureText;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        style: TextStyle(color: textColor),
+        controller: widget.controller,
+        obscureText: _obscure,
+        style: AppTextStyles.bodySuggestion(context).copyWith(color: widget.textColor),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter the field';
@@ -37,23 +51,38 @@ class InputField extends StatelessWidget {
           return null;
         },
         decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: iconColor),
-          hintText: hint,
-          hintStyle: TextStyle(color: textColor.withOpacity(0.6)),
+          prefixIcon: Icon(widget.icon, color: widget.iconColor),
+          hintText: widget.hint,
+          hintStyle: AppTextStyles.bodySuggestion(context).copyWith(
+            color: widget.textColor.withOpacity(0.6),
+          ),
           filled: true,
-          fillColor: fillColor,
+          fillColor: widget.fillColor,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(color: borderColor, width: 1.5),
+            borderSide: BorderSide(color: widget.borderColor, width: 1.5),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(color: borderColor, width: 1.5),
+            borderSide: BorderSide(color: widget.borderColor, width: 1.5),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(color: borderColor, width: 2),
+            borderSide: BorderSide(color: widget.borderColor, width: 2),
           ),
+          suffixIcon: widget.obscureText
+              ? IconButton(
+            icon: Icon(
+              _obscure ? Icons.visibility_off : Icons.visibility,
+              color: widget.iconColor,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscure = !_obscure;
+              });
+            },
+          )
+              : null,
         ),
       ),
     );

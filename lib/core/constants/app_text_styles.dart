@@ -111,5 +111,10 @@ class AppTextStyles {
           size: 0.07, weight: FontWeight.bold, color: AppColors.textDark);
 
 
+  static TextStyle screenTitle(BuildContext context) =>
+      _base(MediaQuery.of(context).size.width,
+          size: 0.06,
+          weight: FontWeight.bold,
+          color: AppColors.textDark);
 
 }

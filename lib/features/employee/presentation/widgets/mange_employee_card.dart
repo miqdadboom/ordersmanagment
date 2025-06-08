@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 import '../screens/edit_employee_screen.dart';
+import '../../data/models/EmployeeModel.dart';
 
 class EmployeeCardWidget extends StatelessWidget {
-  final Map<String, String> employee;
+  final EmployeeModel employee;
 
-  const EmployeeCardWidget({
-    super.key,
-    required this.employee,
-  });
+  const EmployeeCardWidget({super.key, required this.employee});
+
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri uri = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+
+  void _sendEmail(String email) async {
+    final Uri uri = Uri(scheme: 'mailto', path: email);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,37 +33,41 @@ class EmployeeCardWidget extends StatelessWidget {
       ),
       child: ListTile(
         onTap: () {
-          Navigator.pushNamed(context, '/edit');
-
+          if (employee.id != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => EditEmployee(userId: employee.id!),
+              ),
+            );
+          }
         },
         leading: CircleAvatar(
           backgroundColor: Colors.black12,
           child: Icon(Icons.person, color: AppColors.primary),
         ),
         title: Text(
-          employee["name"] ?? "",
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          employee.name,
+          style: AppTextStyles.productCardTitle(context),
         ),
         subtitle: Text(
-          employee["job"] ?? "",
-          style: const TextStyle(color: Colors.grey),
+          employee.role,
+          style: AppTextStyles.productCardBrand(context),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            GestureDetector(
-              onTap: () {
-
-              },
-              child: Icon(Icons.call, color: AppColors.primary),
-            ),
+            if (employee.phone.isNotEmpty)
+              InkWell(
+                onTap: () => _makePhoneCall(employee.phone),
+                child: Icon(Icons.call, color: AppColors.primary),
+              ),
             const SizedBox(width: 20),
-            GestureDetector(
-              onTap: () {
-
-              },
-              child: Icon(Icons.email, color: AppColors.primary),
-            ),
+            if (employee.email.isNotEmpty)
+              InkWell(
+                onTap: () => _sendEmail(employee.email),
+                child: Icon(Icons.email, color: AppColors.primary),
+              ),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 
 class SearchBarWidget extends StatelessWidget {
   final TextEditingController controller;
@@ -13,17 +14,28 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return TextField(
       controller: controller,
+      onChanged: onChanged,
+      style: AppTextStyles.bodySuggestion(context),
       decoration: InputDecoration(
         hintText: "Search by Name or Job",
-        prefixIcon: const Icon(Icons.search),
-        border: OutlineInputBorder(
+        hintStyle: AppTextStyles.bodySuggestion(context).copyWith(color: Colors.grey),
+        prefixIcon: const Icon(Icons.search, color: AppColors.primary),
+        filled: true,
+        fillColor: AppColors.background,
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.primary.withOpacity(0.4)),
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
+        ),
       ),
-      onChanged: onChanged,
     );
   }
 }

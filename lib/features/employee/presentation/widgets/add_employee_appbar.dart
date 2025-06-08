@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 
 class EmployeeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color primaryColor;
+  final String title;
 
-  const EmployeeAppBar({super.key, required this.primaryColor});
+  const EmployeeAppBar({
+    super.key,
+    required this.primaryColor,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +24,10 @@ class EmployeeAppBar extends StatelessWidget implements PreferredSizeWidget {
           Navigator.pop(context);
         },
       ),
-      flexibleSpace: Padding(
-        padding: const EdgeInsets.only(bottom: 1),
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Text(
-            "Create Employee Account",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: primaryColor,
-            ),
-          ),
-        ),
+      centerTitle: true,
+      title: Text(
+        title,
+        style: AppTextStyles.dialogTitle(context).copyWith(color: primaryColor),
       ),
     );
   }

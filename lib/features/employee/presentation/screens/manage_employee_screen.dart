@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/app_text_styles.dart';
 import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
 import '../../../../core/user_role_access.dart';
 import '../../../../core/widgets/bottom_navigation_manager.dart';
@@ -24,6 +25,8 @@ class _ManageEmployeeState extends State<ManageEmployee> {
   String _searchQuery = '';
   String? _role;
   bool _loading = true;
+  String _sortBy = 'name';
+  bool _ascending = true;
 
   final _repo = EmployeeRepositoryImpl(FirebaseEmployeeService());
 
@@ -43,7 +46,32 @@ class _ManageEmployeeState extends State<ManageEmployee> {
   }
 
   void _sortEmployees(String value) {
-    // Add sorting logic here if needed
+    setState(() {
+      if (_sortBy == value) {
+        _ascending = !_ascending;
+      } else {
+        _sortBy = value;
+        _ascending = true;
+      }
+    });
+  }
+
+  List<EmployeeModel> _applySearchAndSort(List<EmployeeModel> employees) {
+    final filtered = employees.where((employee) {
+      final name = employee.name.toLowerCase();
+      final job = employee.role.toLowerCase();
+      return name.contains(_searchQuery) || job.contains(_searchQuery);
+    }).toList();
+
+    filtered.sort((a, b) {
+      final aValue = _sortBy == 'name' ? a.name : a.role;
+      final bValue = _sortBy == 'name' ? b.name : b.role;
+      return _ascending
+          ? aValue.toLowerCase().compareTo(bValue.toLowerCase())
+          : bValue.toLowerCase().compareTo(aValue.toLowerCase());
+    });
+
+    return filtered;
   }
 
   Widget? _buildBottomNavigationBar() {
@@ -62,8 +90,13 @@ class _ManageEmployeeState extends State<ManageEmployee> {
     }
 
     if (!UserAccessControl.ManageEmployee(_role!)) {
-      return const Scaffold(
-        body: Center(child: Text('You are not authorized to view this page.')),
+      return Scaffold(
+        body: Center(
+          child: Text(
+            'You are not authorized to view this page.',
+            style: AppTextStyles.bodySuggestion(context),
+          ),
+        ),
       );
     }
 
@@ -73,11 +106,7 @@ class _ManageEmployeeState extends State<ManageEmployee> {
         automaticallyImplyLeading: false,
         title: Text(
           "Company Employee",
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textLight,
-          ),
+          style: AppTextStyles.headerConversation(context),
         ),
         centerTitle: true,
       ),
@@ -109,16 +138,25 @@ class _ManageEmployeeState extends State<ManageEmployee> {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  final employees = snapshot.data ?? [];
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'Error: ${snapshot.error}',
+                        style: AppTextStyles.bodySuggestion(context),
+                      ),
+                    );
+                  }
 
-                  final filtered = employees.where((employee) {
-                    final name = employee.name.toLowerCase();
-                    final job = employee.role.toLowerCase();
-                    return name.contains(_searchQuery) || job.contains(_searchQuery);
-                  }).toList();
+                  final employees = snapshot.data ?? [];
+                  final filtered = _applySearchAndSort(employees);
 
                   if (filtered.isEmpty) {
-                    return const Center(child: Text("No employees found"));
+                    return Center(
+                      child: Text(
+                        "No employees found",
+                        style: AppTextStyles.bodySuggestion(context),
+                      ),
+                    );
                   }
 
                   return ListView.builder(
@@ -128,8 +166,14 @@ class _ManageEmployeeState extends State<ManageEmployee> {
                       return Card(
                         margin: const EdgeInsets.only(bottom: 10),
                         child: ListTile(
-                          title: Text(employee.name),
-                          subtitle: Text(employee.role),
+                          title: Text(
+                            employee.name,
+                            style: AppTextStyles.bodySuggestion(context),
+                          ),
+                          subtitle: Text(
+                            employee.role,
+                            style: AppTextStyles.caption(context),
+                          ),
                           trailing: const Icon(Icons.edit, color: AppColors.primary),
                           onTap: () {
                             Navigator.push(
@@ -150,7 +194,10 @@ class _ManageEmployeeState extends State<ManageEmployee> {
         ),
       ),
       bottomNavigationBar: SafeArea(
-        child: SizedBox(height: 60, child: _buildBottomNavigationBar() ?? const SizedBox()),
+        child: SizedBox(
+          height: 60,
+          child: _buildBottomNavigationBar() ?? const SizedBox(),
+        ),
       ),
     );
   }
