@@ -40,6 +40,7 @@ class ConfirmOrderRemoteDataSource {
         'body': 'A new order has arrived from $customerName ',
         'timestamp': DateTime.now().toIso8601String(),
         'isRead': false,
+        'userEmail': userEmail,
       });
     } on FirebaseException catch (e) {
       throw Exception('Firebase error: ${e.message}');
