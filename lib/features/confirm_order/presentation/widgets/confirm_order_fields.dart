@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/widgets/build_text_field.dart';
 import '../../../../../core/widgets/location_input.dart';
+import '../../../../../core/widgets/place.dart'; // تأكد من استيراد PlaceLocation
 
 class ConfirmOrderFields extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController notesController;
-  final Function(dynamic) onLocationSelected;
+  final void Function(PlaceLocation) onLocationSelected;
 
   const ConfirmOrderFields({
     super.key,

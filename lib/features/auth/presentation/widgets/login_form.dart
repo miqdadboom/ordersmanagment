@@ -20,7 +20,6 @@ class _LoginFormState extends State<LoginForm> {
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       try {
-        // تسجيل الدخول
         final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
@@ -28,7 +27,6 @@ class _LoginFormState extends State<LoginForm> {
 
         final uid = credential.user!.uid;
 
-        // قراءة الدور من Firestore
         final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
         if (!snapshot.exists) {
@@ -37,13 +35,14 @@ class _LoginFormState extends State<LoginForm> {
 
         final role = snapshot.data()!['role'];
 
-        // التوجيه حسب الدور
+
         if (role == 'admin') {
-          Navigator.pushReplacementNamed(context, '/manage');
-        } else if (role == 'employee') {
-          Navigator.pushReplacementNamed(context, '/employeeHome');
-        } else if (role == 'storekeeper') {
-          Navigator.pushReplacementNamed(context, '/storeHome');
+          Navigator.pushReplacementNamed(context, '/productScreen');
+        } else if (role == 'sales representative') {
+          Navigator.pushReplacementNamed(context, '/productScreen');
+
+        } else if (role == 'warehouse employee') {
+          Navigator.pushReplacementNamed(context, '/productScreen');
         } else {
           throw Exception('Unknown role');
         }
@@ -96,7 +95,11 @@ class _LoginFormState extends State<LoginForm> {
             textColor: AppColors.textDark,
           ),
           const SizedBox(height: 35),
-          LoginButton(),
+          LoginButton(
+            onPressed: _handleLogin,
+            backgroundColor: AppColors.primary,
+            textColor: AppColors.buttonText,
+          ),
         ],
       ),
     );

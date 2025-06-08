@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({Key? key}) : super(key: key);
+  final VoidCallback onPressed;
+
+  const LoginButton({Key? key, required this.onPressed, required Color backgroundColor, required Color textColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/productScreen');
-      },
+      onTap: onPressed,
       child: Container(
         height: 66,
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.horizontal(
+          borderRadius: BorderRadius.horizontal(
             left: Radius.circular(30),
             right: Radius.circular(30),
           ),
@@ -22,7 +22,7 @@ class LoginButton extends StatelessWidget {
             BoxShadow(
               color: AppColors.primary.withOpacity(0.4),
               blurRadius: 20,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),

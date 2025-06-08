@@ -6,6 +6,7 @@ class OrderProduct {
   final int quantity;
   final bool passed;
   final String? imageUrl;
+  final String customerName;
 
   const OrderProduct({
     required this.id,
@@ -14,5 +15,6 @@ class OrderProduct {
     required this.quantity,
     required this.passed,
     this.imageUrl,
+    required this.customerName,
   });
 }

@@ -25,7 +25,7 @@ class OrderDataSourceImpl implements OrderDataSource {
             description: "Description A",
             quantity: 2,
             passed: true,
-            imageUrl: null,
+            imageUrl: null, customerName: '',
           ),
         ],
       ),

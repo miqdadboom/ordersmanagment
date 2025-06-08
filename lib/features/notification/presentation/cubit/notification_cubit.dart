@@ -54,11 +54,15 @@ class NotificationCubit extends Cubit<NotificationState> {
     emit(NotificationLoading());
     try {
       final notifications = await getNotifications();
+      print('Loaded notifications: $notifications'); // ✅ تأكد أنها وصلت
       emit(NotificationLoaded(notifications));
-    } catch (e) {
+    } catch (e, s) {
+      print('Fetch Error: $e');
+      print('Stack: $s');
       emit(NotificationError(e.toString()));
     }
   }
+
   Future<void> loadNotificationDetail(String id) async {
     emit(NotificationLoading());
     try {

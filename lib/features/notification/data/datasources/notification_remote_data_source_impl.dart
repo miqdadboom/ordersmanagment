@@ -1,49 +1,68 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/app_notification.dart';
 import 'notification_remote_data_source.dart';
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
-  // Store mock notifications in memory
-  final List<AppNotification> _mockNotifications = [
-    AppNotification(
-      id: '101',
-      title: 'New Message from Server',
-      description: 'This is a mock notification from the server',
-      senderName: 'Server',
-      timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
-      isRead: false,
-    ),
-    AppNotification(
-      id: '102',
-      title: 'Server Update Available',
-      description: ' New features are waiting for you, New features are waiting for you, New features are waiting for you, New features are waiting for you',
-      senderName: 'System',
-      timestamp: DateTime.now().subtract(const Duration(hours: 1)),
-      isRead: true,
-    ),
-  ];
+  final _collection = FirebaseFirestore.instance.collection('notifications');
 
   @override
   Future<List<AppNotification>> fetchNotifications() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return _mockNotifications;
+    final snapshot = await _collection.orderBy('timestamp', descending: true).get();
+    print('Firebase fetch notifications count: ${snapshot.docs.length}');
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      return AppNotification(
+        id: doc.id,
+        title: data['title'] ?? '',
+        description: data['body'] ?? '',
+        senderName: 'System',
+        timestamp: DateTime.tryParse(data['timestamp'] ?? '') ?? DateTime.now(),
+        isRead: data['isRead'] ?? false,
+      );
+    }).toList();
   }
 
   @override
   Future<AppNotification> fetchNotificationById(String id) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    // Find the notification with matching ID
-    return _mockNotifications.firstWhere(
-          (notification) => notification.id == id,
-      orElse: () => throw Exception('Notification not found'),
+    final doc = await _collection.doc(id).get();
+    final data = doc.data();
+    if (data == null) throw Exception('Notification not found');
+
+    return AppNotification(
+      id: doc.id,
+      title: data['title'] ?? '',
+      description: data['body'] ?? '',
+      senderName: 'System',
+      timestamp: DateTime.tryParse(data['timestamp'] ?? '') ?? DateTime.now(),
+      isRead: data['isRead'] ?? false,
     );
   }
 
   @override
   Future<void> markNotificationAsRead(String id) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    // In a real app, you would update the server here
-    debugPrint('Notification $id marked as read on server (mock)');
+    try {
+      await _collection.doc(id).update({'isRead': true});
+      debugPrint('✅ Notification $id marked as read in Firestore');
+    } catch (e) {
+      debugPrint('⚠️ Failed to mark notification as read in Firestore: $e');
+    }
   }
+
+  @override
+  Future<void> sendNotification({
+    required String title,
+    required String body,
+    required bool isRead,
+  }) async {
+    await _collection.add({
+      'title': title,
+      'body': body,
+      'isRead': isRead,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
 }
