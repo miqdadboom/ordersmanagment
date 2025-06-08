@@ -4,7 +4,9 @@ class UserAccessControl {
   }
 
   static bool ProductsScreenState(String role) {
-    return role == 'admin' || role == 'warehouse employee' || role == 'sales representative';
+    return role == 'admin' ||
+        role == 'warehouse employee' ||
+        role == 'sales representative';
   }
 
   static bool ProductManagementScreen(String role) {
@@ -24,7 +26,9 @@ class UserAccessControl {
   }
 
   static bool HomeScreen(String role) {
-    return role == 'admin' || role == 'warehouse employee' || role == 'sales representative';
+    return role == 'admin' ||
+        role == 'warehouseEmployee' ||
+        role == 'salesRepresentative';
   }
 
   static bool ConfirmOrder(String role) {
@@ -32,11 +36,15 @@ class UserAccessControl {
   }
 
   static bool ProductView(String role) {
-    return role == 'admin' || role == 'warehouse employee' || role == 'sales representative';
+    return role == 'admin' ||
+        role == 'warehouse employee' ||
+        role == 'sales representative';
   }
 
   static bool ListOfOrdersScreen(String role) {
-    return role == 'admin' || role == 'warehouse employee' || role == 'sales representative';
+    return role == 'admin' ||
+        role == 'warehouse employee' ||
+        role == 'sales representative';
   }
 
   static String getHomeRouteForRole(String role) {
