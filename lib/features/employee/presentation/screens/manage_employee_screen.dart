@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/constants/app_text_styles.dart';
 import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
 import '../../../../core/user_role_access.dart';
+import '../../../../core/utils/app_exception.dart';
 import '../../../../core/widgets/bottom_navigation_manager.dart';
 import '../../data/models/EmployeeModel.dart';
 import '../../data/repositories/employee_repository_impl.dart';
@@ -139,9 +141,23 @@ class _ManageEmployeeState extends State<ManageEmployee> {
                   }
 
                   if (snapshot.hasError) {
+                    String message;
+                    final error = snapshot.error;
+
+                    if (error is FirebaseException &&
+                        error.code == 'network-request-failed') {
+                      message = NoInternetException().message;
+                    } else if (error is FirebaseException) {
+                      message = ServerException(error.message ?? "Firebase error").message;
+                    } else if (error is AppException) {
+                      message = error.message;
+                    } else {
+                      message = UnknownException(error.toString()).message;
+                    }
+
                     return Center(
                       child: Text(
-                        'Error: ${snapshot.error}',
+                        message,
                         style: AppTextStyles.bodySuggestion(context),
                       ),
                     );

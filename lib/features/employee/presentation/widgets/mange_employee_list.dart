@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_text_styles.dart';
+import '../../../../core/constants/app_size_box.dart'; // ✅ استيراد AppSizedBox
 import '../../data/models/EmployeeModel.dart';
 import 'mange_employee_card.dart';
 
@@ -24,7 +25,7 @@ class EmployeeListWidget extends StatelessWidget {
 
     return ListView.separated(
       itemCount: employees.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 8),
+      separatorBuilder: (context, index) => AppSizedBox.height(context, 0.01), // بدل const SizedBox(height: 8)
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),

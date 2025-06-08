@@ -1,27 +1,32 @@
-import 'dart:io';
+// core/utils/app_exception.dart
+class AppException implements Exception {
+  final String message;
+  AppException(this.message);
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+  @override
+  String toString() => message;
+}
 
-class AppExceptionHandler {
-  static void handle({
-    required BuildContext context,
-    required Object error,
-  }) {
-    String message = 'Unexpected error occurred.';
+class NoInternetException extends AppException {
+  NoInternetException() : super('No internet connection. Please check your connection and try again.');
+}
 
-    if (error is SocketException) {
-      message = 'No internet connection. Please check your network.';
-    } else if (error is FirebaseException) {
-      message = 'Firebase error: ${error.message}';
-    } else if (error is HttpException) {
-      message = 'HTTP error: ${error.message}';
-    } else if (error is FormatException) {
-      message = 'Invalid response format.';
-    }
+class ServerException extends AppException {
+  ServerException(String msg) : super('Server error: $msg');
+}
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
+class ParseException extends AppException {
+  ParseException() : super('Data format error. Please try again.');
+}
+
+class UnknownException extends AppException {
+  UnknownException(String msg) : super('Unexpected error: $msg');
+}
+
+class TimeoutException extends AppException {
+  TimeoutException() : super('Connection timeout. Please try again.');
+}
+
+class ConnectionException extends AppException {
+  ConnectionException() : super('Failed to connect to server. Please check your connection and try again.');
 }

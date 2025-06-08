@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
+import '../../../../core/utils/app_exception.dart';
 import '../../data/models/EmployeeModel.dart';
 import '../../data/repositories/employee_repository_impl.dart';
 import '../../data/datasources/firebase_employee_service.dart';
 import '../widgets/edit_employee_textfield.dart';
-import '../widgets/add_save_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EditEmployeeForm extends StatefulWidget {
   final String userId;
@@ -54,11 +55,17 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
         );
         Navigator.pop(context);
       }
-    } catch (e) {
+    } on FirebaseException catch (e) {
+      final message = e.code == 'network-request-failed'
+          ? NoInternetException().message
+          : ServerException(e.message ?? 'Server error').message;
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error loading employee: \$e")),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      Navigator.pop(context);
+    } catch (e) {
+      final message = UnknownException(e.toString()).message;
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
       Navigator.pop(context);
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -88,13 +95,19 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
             backgroundColor: AppColors.success,
           ),
         );
-      } catch (e) {
+      } on FirebaseException catch (e) {
+        final message = e.code == 'network-request-failed'
+            ? NoInternetException().message
+            : ServerException(e.message ?? 'Server error').message;
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Update failed: \$e"),
-            backgroundColor: AppColors.error,
-          ),
+          SnackBar(content: Text(message), backgroundColor: AppColors.error),
+        );
+      } catch (e) {
+        final message = UnknownException(e.toString()).message;
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message), backgroundColor: AppColors.error),
         );
       } finally {
         if (mounted) setState(() => _isSaving = false);
@@ -133,13 +146,19 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
             backgroundColor: AppColors.success,
           ),
         );
-      } catch (e) {
+      } on FirebaseException catch (e) {
+        final message = e.code == 'network-request-failed'
+            ? NoInternetException().message
+            : ServerException(e.message ?? 'Server error').message;
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Delete failed: \$e"),
-            backgroundColor: AppColors.error,
-          ),
+          SnackBar(content: Text(message), backgroundColor: AppColors.error),
+        );
+      } catch (e) {
+        final message = UnknownException(e.toString()).message;
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message), backgroundColor: AppColors.error),
         );
       }
     }
@@ -157,20 +176,8 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
       decoration: InputDecoration(
         labelText: 'Select Role',
         labelStyle: AppTextStyles.bodySuggestion(context),
-        filled: true,
-        fillColor: AppColors.background,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.primary.withOpacity(0.4)),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide(color: AppColors.primary, width: 2),
-        ),
       ),
-      dropdownColor: AppColors.background,
       items: const [
         DropdownMenuItem(
           value: 'admin',
@@ -185,21 +192,9 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
           child: Text('Warehouse Employee'),
         ),
       ],
-      onChanged: (value) {
-        if (mounted) setState(() => _selectedRole = value);
-      },
+      onChanged: (value) => setState(() => _selectedRole = value),
       validator: (value) => value == null ? 'Please select a role' : null,
     );
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _addressController.dispose();
-    _distributionController.dispose();
-    super.dispose();
   }
 
   @override
@@ -211,78 +206,103 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Text(
-                "Edit Employee",
-                style: AppTextStyles.dialogTitle(context),
-              ),
-            ),
-            const SizedBox(height: 20),
             EditEmployeeTextField(
               controller: _nameController,
               label: "Name",
               icon: Icons.person,
-              validatorMessage: 'Please enter the name',
+              validatorMessage: "Please enter name",
             ),
             EditEmployeeTextField(
               controller: _emailController,
               label: "Email",
               icon: Icons.email,
-              validatorMessage: 'Please enter the email',
+              validatorMessage: "Please enter email",
             ),
             EditEmployeeTextField(
               controller: _phoneController,
               label: "Phone",
               icon: Icons.phone,
-              validatorMessage: 'Please enter the phone number',
+              validatorMessage: "Please enter phone",
             ),
             EditEmployeeTextField(
               controller: _addressController,
               label: "Address",
               icon: Icons.location_on,
-              validatorMessage: 'Please enter the address',
+              validatorMessage: "Please enter address",
             ),
             EditEmployeeTextField(
               controller: _distributionController,
               label: "Distribution Line",
-              icon: Icons.route,
-              validatorMessage: 'Please enter the distribution line',
+              icon: Icons.alt_route,
+              validatorMessage: "Please enter distribution line",
             ),
             _buildRoleDropdown(),
             const SizedBox(height: 30),
-            SaveButton(
-              onPressed: _isSaving
-                  ? null
-                  : () {
-                FocusScope.of(context).unfocus();
-                _formKey.currentState!.validate()
-                    ? _updateEmployee()
-                    : null;
-              },
-              isLoading: _isSaving,
-              color: AppColors.primary,
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _deleteEmployee,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  backgroundColor: AppColors.iconDelete,
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _isSaving ? null : _updateEmployee,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-                child: Text(
-                  "Delete",
-                  style: AppTextStyles.dialogDeleteButton(context),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _isSaving ? null : _deleteEmployee,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.iconDelete,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text(
+                        "Delete",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    _distributionController.dispose();
+    super.dispose();
   }
 }

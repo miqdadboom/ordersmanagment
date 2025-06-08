@@ -22,46 +22,46 @@ class EditEmployeeTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: TextFormField(
-        controller: controller,
-        obscureText: isPassword,
-        keyboardType: keyboardType,
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return validatorMessage;
-          }
-          return null;
-        },
-        style: AppTextStyles.bodySuggestion(context),
-        decoration: InputDecoration(
-          hintText: label,
-          hintStyle: AppTextStyles.caption(context),
-          prefixIcon: Icon(icon, color: AppColors.primary),
-          filled: true,
-          fillColor: AppColors.background,
-          contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.primary.withOpacity(0.4)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.primary, width: 2),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.red.shade400, width: 1.5),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.red.shade600, width: 2),
+    return Column(
+      children: [
+        TextFormField(
+          controller: controller,
+          obscureText: isPassword,
+          keyboardType: keyboardType,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return validatorMessage;
+            }
+            return null;
+          },
+          style: AppTextStyles.bodySuggestion(context),
+          decoration: InputDecoration(
+            hintText: label,
+            hintStyle: AppTextStyles.caption(context),
+            prefixIcon: Icon(icon, color: AppColors.primary),
+            filled: true,
+            fillColor: AppColors.background,
+            contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.primary.withOpacity(0.4)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.primary, width: 2),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.red.shade400, width: 1.5),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.red.shade600, width: 2),
+            ),
           ),
         ),
-      ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }

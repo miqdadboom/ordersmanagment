@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
+import '../../../../core/constants/app_size_box.dart';
 import '../screens/edit_employee_screen.dart';
 import '../../data/models/EmployeeModel.dart';
 
@@ -10,17 +11,39 @@ class EmployeeCardWidget extends StatelessWidget {
 
   const EmployeeCardWidget({super.key, required this.employee});
 
-  void _makePhoneCall(String phoneNumber) async {
-    final Uri uri = Uri(scheme: 'tel', path: phoneNumber);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+  void _makePhoneCall(BuildContext context, String phoneNumber) async {
+    try {
+      final Uri uri = Uri(scheme: 'tel', path: phoneNumber);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      } else {
+        throw Exception("Cannot launch dialer");
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to make a call: $e'),
+          backgroundColor: AppColors.error,
+        ),
+      );
     }
   }
 
-  void _sendEmail(String email) async {
-    final Uri uri = Uri(scheme: 'mailto', path: email);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+  void _sendEmail(BuildContext context, String email) async {
+    try {
+      final Uri uri = Uri(scheme: 'mailto', path: email);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      } else {
+        throw Exception("Cannot open email app");
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to send email: $e'),
+          backgroundColor: AppColors.error,
+        ),
+      );
     }
   }
 
@@ -59,13 +82,13 @@ class EmployeeCardWidget extends StatelessWidget {
           children: [
             if (employee.phone.isNotEmpty)
               InkWell(
-                onTap: () => _makePhoneCall(employee.phone),
+                onTap: () => _makePhoneCall(context, employee.phone),
                 child: Icon(Icons.call, color: AppColors.primary),
               ),
-            const SizedBox(width: 20),
+            AppSizedBox.width(context, 0.05), // const SizedBox(width: 20)
             if (employee.email.isNotEmpty)
               InkWell(
-                onTap: () => _sendEmail(employee.email),
+                onTap: () => _sendEmail(context, employee.email),
                 child: Icon(Icons.email, color: AppColors.primary),
               ),
           ],

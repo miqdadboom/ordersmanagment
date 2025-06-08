@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_text_styles.dart';
 
-class LoginButton extends StatefulWidget {
-  final Future<void> Function() onPressed;
+class LoginButton extends StatelessWidget {
+  final VoidCallback onPressed;
   final Color backgroundColor;
   final Color textColor;
 
@@ -15,38 +13,9 @@ class LoginButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<LoginButton> createState() => _LoginButtonState();
-}
-
-class _LoginButtonState extends State<LoginButton> {
-  bool _isLoading = false;
-
-  Future<void> _handleTap() async {
-    if (_isLoading) return;
-
-    setState(() => _isLoading = true);
-
-    try {
-      await widget.onPressed();
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Unexpected error: $e"),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _handleTap,
+      onTap: onPressed,
       child: Container(
         height: 66,
         decoration: BoxDecoration(
@@ -54,22 +23,22 @@ class _LoginButtonState extends State<LoginButton> {
             left: Radius.circular(30),
             right: Radius.circular(30),
           ),
-          color: _isLoading ? Colors.grey : widget.backgroundColor,
+          color: backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: widget.backgroundColor.withOpacity(0.4),
+              color: backgroundColor.withOpacity(0.4),
               blurRadius: 20,
               offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Center(
-          child: _isLoading
-              ? const CircularProgressIndicator(color: Colors.white)
-              : Text(
+          child: Text(
             "Login",
-            style: AppTextStyles.button(context).copyWith(
-              color: widget.textColor,
+            style: TextStyle(
+              color: textColor,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
               letterSpacing: 1.2,
             ),
           ),

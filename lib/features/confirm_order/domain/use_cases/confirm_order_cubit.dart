@@ -128,7 +128,7 @@ class ConfirmOrderCubit {
         const SnackBar(content: Text('Order sent successfully!')),
       );
     } catch (e) {
-      AppExceptionHandler.handle(context: context, error: e);
+      //AppExceptionHandler.handle(context: context, error: e);
     } finally {
       if (Navigator.canPop(context)) Navigator.of(context).pop();
       isLoading = false;

@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../screens/home_screen_by_role.dart';
+import '../../../../core/constants/app_size_box.dart';
+import '../../../../core/utils/app_exception.dart';
 import 'InputField .dart';
 import 'LoginButton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future<void> _handleLogin() async {
+  void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       try {
         final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -27,44 +28,45 @@ class _LoginFormState extends State<LoginForm> {
         );
 
         final uid = credential.user!.uid;
-        final snapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .get();
+
+        final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
         if (!snapshot.exists) {
-          throw Exception('No role data found for this user');
+          throw ServerException('No role data found for this user');
         }
 
         final role = snapshot.data()!['role'];
 
-        if (!mounted) return;
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => HomeScreenByRole(role: role)),
-        );
+        if (role == 'admin' ||
+            role == 'sales representative' ||
+            role == 'warehouse employee') {
+          Navigator.pushReplacementNamed(context, '/ProductsScreen');
+        } else {
+          throw ServerException('Unknown role');
+        }
       } on FirebaseAuthException catch (e) {
-        if (!mounted) return;
-
-        String message = 'Login failed.';
-        if (e.code == 'user-not-found') {
-          message = 'No user found for that email.';
-        } else if (e.code == 'wrong-password') {
-          message = 'Wrong password provided.';
+        String message;
+        if (e.code == 'network-request-failed') {
+          message = NoInternetException().message;
+        } else if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+          message = ServerException('Invalid email or password').message;
+        } else {
+          message = UnknownException(e.message ?? 'Unknown Firebase error').message;
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message), backgroundColor: Colors.red),
         );
-      } catch (e) {
-        if (!mounted) return;
+      } on AppException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+          SnackBar(content: Text(e.message), backgroundColor: Colors.red),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Unexpected error: $e'), backgroundColor: Colors.red),
         );
       }
     } else {
-      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill all fields'),
@@ -72,13 +74,6 @@ class _LoginFormState extends State<LoginForm> {
         ),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 
   @override
@@ -106,11 +101,11 @@ class _LoginFormState extends State<LoginForm> {
             iconColor: AppColors.primary,
             textColor: AppColors.textDark,
           ),
-          const SizedBox(height: 35),
+          AppSizedBox.height(context, 0.044), // const SizedBox(height: 35)
           LoginButton(
             onPressed: _handleLogin,
             backgroundColor: AppColors.primary,
-            textColor: AppColors.textLight,
+            textColor: AppColors.buttonText,
           ),
         ],
       ),

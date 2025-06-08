@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/constants/app_text_styles.dart';
+import '../../../../core/utils/app_exception.dart';
 import '../../data/datasources/firebase_employee_service.dart';
 import '../../data/models/EmployeeModel.dart';
 import '../../data/repositories/employee_repository_impl.dart';
@@ -62,11 +65,33 @@ class _AddEmployeeState extends State<AddEmployee> {
           ),
         );
         _clearFields();
+      } on FirebaseException catch (e) {
+        if (!mounted) return;
+        String message;
+        if (e.code == 'network-request-failed') {
+          message = NoInternetException().message;
+        } else {
+          message = ServerException(e.message ?? "Server error").message;
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message, style: AppTextStyles.bodyLight(context)),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      } on AppException catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.message, style: AppTextStyles.bodyLight(context)),
+            backgroundColor: AppColors.error,
+          ),
+        );
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Error: $e", style: AppTextStyles.bodyLight(context)),
+            content: Text("Unexpected error: $e", style: AppTextStyles.bodyLight(context)),
             backgroundColor: AppColors.error,
           ),
         );
@@ -111,7 +136,8 @@ class _AddEmployeeState extends State<AddEmployee> {
           ),
         ],
       ),
-    )) ?? false;
+    )) ??
+        false;
   }
 
   @override

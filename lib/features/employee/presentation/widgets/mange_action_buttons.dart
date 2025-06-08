@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
+import '../../../../core/constants/app_size_box.dart'; // ✅ إضافة AppSizedBox
 
 class ActionButtonsWidget extends StatelessWidget {
   final VoidCallback onAddPressed;
@@ -31,7 +32,7 @@ class ActionButtonsWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        AppSizedBox.width(context, 0.025), // بدل SizedBox(width: 10)
 
         // زر PopupMenuButton للفرز
         Expanded(
@@ -71,7 +72,7 @@ class ActionButtonsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Sort", style: buttonTextStyle),
-                  const SizedBox(width: 6),
+                  AppSizedBox.width(context, 0.015), // بدل SizedBox(width: 6)
                   const Icon(Icons.arrow_drop_down, color: Colors.white),
                 ],
               ),

@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
+import '../../../../core/constants/app_size_box.dart';
 import '../../../../core/user_role_access.dart';
+import '../../../../core/utils/app_exception.dart';
 import '../../../../core/utils/user_access_control.dart';
 import '../widgets/login_form.dart';
 
@@ -26,17 +28,17 @@ class LoginScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const SizedBox(height: 90),
+            AppSizedBox.height(context, 0.11), // const SizedBox(height: 90)
             Text(
               "Login",
               style: AppTextStyles.chatButton(context),
             ),
-            const SizedBox(height: 40),
+            AppSizedBox.height(context, 0.05), // const SizedBox(height: 40)
             Text(
               "Welcome Back",
               style: AppTextStyles.bodyLight(context),
             ),
-            const SizedBox(height: 50),
+            AppSizedBox.height(context, 0.061), // const SizedBox(height: 50)
             const Expanded(child: _LoginFormContainer()),
           ],
         ),
@@ -63,9 +65,27 @@ class _LoginFormContainer extends StatelessWidget {
         String route = UserAccessControl.getHomeRouteForRole(role);
         Navigator.pushReplacementNamed(context, route);
       }
+    } on FirebaseAuthException catch (e) {
+      String message;
+
+      if (e.code == 'network-request-failed') {
+        message = NoInternetException().message;
+      } else if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        message = ServerException('Invalid email or password').message;
+      } else {
+        message = UnknownException(e.message ?? 'Unknown Firebase error').message;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message), backgroundColor: Colors.red),
+      );
+    } on AppException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message), backgroundColor: Colors.red),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed: $e')),
+        SnackBar(content: Text('Unexpected error: $e'), backgroundColor: Colors.red),
       );
     }
   }
