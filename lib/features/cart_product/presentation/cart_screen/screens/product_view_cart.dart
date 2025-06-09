@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/user_role_access.dart';
 import '../../../../../core/utils/user_access_control.dart';
-import '../../../../products/presentation/cubit/product_quantity_cubit.dart';
+import '../../../../homepage/presentation/cubit/product_quantity_cubit.dart';
 import '../../../../products/presentation/widgets/product_view/product_description.dart';
 import '../../../../products/presentation/widgets/product_view/product_text_details.dart';
 import '../../../data/models/product_cart_entity.dart';
