@@ -55,14 +55,14 @@ class _MakeupTypeDialogState extends State<MakeupTypeDialog> {
       title: Text(
         'Select Makeup Types',
         style: TextStyle(
-          fontSize: screenWidth * 0.05, // ~20
+          fontSize: screenWidth * 0.05, 
           fontWeight: FontWeight.bold,
         ),
       ),
       content: SingleChildScrollView(
         child: Wrap(
-          spacing: screenWidth * 0.02, // ~8
-          runSpacing: screenHeight * 0.01, // ~8
+          spacing: screenWidth * 0.02, 
+          runSpacing: screenHeight * 0.01, 
           children:
               widget.makeupTypes.map((type) {
                 final isSelected = tempSelectedTypes.contains(type);
@@ -70,7 +70,7 @@ class _MakeupTypeDialogState extends State<MakeupTypeDialog> {
                   label: Text(
                     type,
                     style: TextStyle(
-                      fontSize: screenWidth * 0.035, // ~14
+                      fontSize: screenWidth * 0.035, 
                       color:
                           isSelected ? AppColors.textLight : AppColors.textDark,
                     ),
@@ -89,7 +89,7 @@ class _MakeupTypeDialogState extends State<MakeupTypeDialog> {
           child: Text(
             'Close',
             style: TextStyle(
-              fontSize: screenWidth * 0.04, // ~16
+              fontSize: screenWidth * 0.04, 
               fontWeight: FontWeight.w500,
             ),
           ),

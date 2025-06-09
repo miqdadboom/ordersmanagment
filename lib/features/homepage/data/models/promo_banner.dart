@@ -17,7 +17,6 @@ class PromoBannerModel extends PromoBanner {
        );
 
   factory PromoBannerModel.fromMap(Map<String, dynamic> map, String id) {
-    // Fallback for old banners: use caption if title/description are missing
     final title = map['title'] ?? map['caption'] ?? '';
     final description = map['description'] ?? '';
     return PromoBannerModel(

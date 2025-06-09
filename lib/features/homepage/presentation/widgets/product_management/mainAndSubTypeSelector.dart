@@ -36,7 +36,7 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
           "Main Type",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: screenWidth * 0.04, // ~16
+            fontSize: screenWidth * 0.04, 
           ),
         ),
         AppSizedBox.height(context, 0.01),
@@ -93,10 +93,10 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
       hintText: hint,
       hintStyle: TextStyle(
         color: AppColors.primary,
-        fontSize: screenWidth * 0.035, // ~14
+        fontSize: screenWidth * 0.035,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(screenWidth * 0.03), // ~12
+        borderRadius: BorderRadius.circular(screenWidth * 0.03), 
         borderSide: const BorderSide(color: AppColors.primary),
       ),
       focusedBorder: OutlineInputBorder(

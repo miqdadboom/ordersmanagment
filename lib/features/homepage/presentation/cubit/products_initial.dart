@@ -1,4 +1,3 @@
-// lib/products/presentation/cubit/products_cubit.dart
 import '../../domain/entities/product_entity.dart';
 
 abstract class ProductsState {}

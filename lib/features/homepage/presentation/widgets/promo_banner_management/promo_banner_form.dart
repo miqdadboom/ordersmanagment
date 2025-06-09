@@ -100,7 +100,7 @@ class PromoBannerForm extends StatelessWidget {
                   actions: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF39A28B), // App primary color
+                        backgroundColor: Color(0xFF39A28B),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

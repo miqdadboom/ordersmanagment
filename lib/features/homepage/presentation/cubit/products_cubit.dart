@@ -1,4 +1,3 @@
-// lib/products/presentation/cubit/products_cubit.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/product_entity.dart';
 import '../../domain/repositories/products_repository.dart';

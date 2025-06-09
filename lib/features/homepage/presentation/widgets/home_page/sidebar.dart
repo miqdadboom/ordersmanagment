@@ -16,15 +16,15 @@ class AppSidebar extends StatelessWidget {
           Container(
             color: AppColors.primary,
             padding: EdgeInsets.only(
-              left: screenWidth * 0.04, // ~16
+              left: screenWidth * 0.04, 
               right: screenWidth * 0.04,
-              top: screenHeight * 0.09, // ~70
-              bottom: screenHeight * 0.025, // ~20
+              top: screenHeight * 0.09, 
+              bottom: screenHeight * 0.025, 
             ),
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: screenWidth * 0.075, // ~30
+                  radius: screenWidth * 0.075, 
                   backgroundImage: const NetworkImage(
                     'https://i.pravatar.cc/150?img=3',
                   ),
@@ -35,7 +35,7 @@ class AppSidebar extends StatelessWidget {
                     'Ahmad istatieh',
                     style: TextStyle(
                       color: AppColors.background,
-                      fontSize: screenWidth * 0.055, // ~22
+                      fontSize: screenWidth * 0.055, 
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -126,7 +126,7 @@ class AppSidebar extends StatelessWidget {
 
           Padding(
             padding: EdgeInsets.only(
-              bottom: screenHeight * 0.06, // ~50
+              bottom: screenHeight * 0.06, 
               left: screenWidth * 0.02,
               right: screenWidth * 0.02,
             ),
@@ -164,13 +164,13 @@ class AppSidebar extends StatelessWidget {
                               backgroundColor: AppColors.logOutField,
                               foregroundColor: AppColors.logOutText,
                               padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth * 0.06, // ~24
-                                vertical: screenHeight * 0.015, // ~12
+                                horizontal: screenWidth * 0.06, 
+                                vertical: screenHeight * 0.015, 
                               ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
                                   screenWidth * 0.02,
-                                ), // ~8
+                                ), 
                               ),
                             ),
                             onPressed: () {
@@ -192,7 +192,7 @@ class AppSidebar extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
                                   screenWidth * 0.02,
-                                ), // ~8
+                                ), 
                               ),
                             ),
                             onPressed: () => Navigator.of(context).pop(),

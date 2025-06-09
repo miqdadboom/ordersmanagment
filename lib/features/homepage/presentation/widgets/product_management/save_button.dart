@@ -16,11 +16,11 @@ class SaveButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
         padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.15, // ~50 if width ≈ 375
+          horizontal: screenWidth * 0.15,
           vertical: 16,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(screenWidth * 0.03), // ~12
+          borderRadius: BorderRadius.circular(screenWidth * 0.03),
         ),
       ),
       child: Row(

@@ -25,13 +25,13 @@ class CustomTextField extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01), // ~8
+      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01), 
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
         style: TextStyle(
           color: AppColors.textDark,
-          fontSize: screenWidth * 0.04, // ~16
+          fontSize: screenWidth * 0.04, 
         ),
         validator:
             validator ??
@@ -40,7 +40,7 @@ class CustomTextField extends StatelessWidget {
           prefixIcon: Icon(
             icon,
             color: AppColors.primary,
-            size: screenWidth * 0.06, // ~24
+            size: screenWidth * 0.06, 
           ),
           hintText: hintText,
           hintStyle: TextStyle(
@@ -48,7 +48,7 @@ class CustomTextField extends StatelessWidget {
             fontSize: screenWidth * 0.04,
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(screenWidth * 0.03), // ~12
+            borderRadius: BorderRadius.circular(screenWidth * 0.03),
             borderSide: const BorderSide(color: AppColors.primary),
           ),
           focusedBorder: OutlineInputBorder(

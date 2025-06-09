@@ -22,10 +22,10 @@ class ImagePickerWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: screenHeight * 0.15, // ~150
+        height: screenHeight * 0.15,
         decoration: BoxDecoration(
           color: AppColors.background,
-          borderRadius: BorderRadius.circular(screenWidth * 0.03), // ~12
+          borderRadius: BorderRadius.circular(screenWidth * 0.03), 
           border: Border.all(color: AppColors.primary, width: 2),
         ),
         child:
@@ -44,7 +44,7 @@ class ImagePickerWidget extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.image,
-                      size: screenWidth * 0.12, // ~50
+                      size: screenWidth * 0.12, 
                       color: AppColors.primary,
                     ),
                     AppSizedBox.height(context, 0.012),
@@ -52,7 +52,7 @@ class ImagePickerWidget extends StatelessWidget {
                       "Tap to add image",
                       style: TextStyle(
                         color: AppColors.primary,
-                        fontSize: screenWidth * 0.04, // ~16
+                        fontSize: screenWidth * 0.04, 
                       ),
                     ),
                   ],

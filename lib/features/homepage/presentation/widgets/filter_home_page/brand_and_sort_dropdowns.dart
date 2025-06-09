@@ -25,7 +25,7 @@ class BrandAndSortDropdowns extends StatelessWidget {
 
     final dropdownTextStyle = TextStyle(
       color: AppColors.primary,
-      fontSize: screenWidth * 0.035, // ~14
+      fontSize: screenWidth * 0.035, 
       fontWeight: FontWeight.w500,
     );
 
@@ -33,14 +33,14 @@ class BrandAndSortDropdowns extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            height: screenHeight * 0.05, // ~40
+            height: screenHeight * 0.05, 
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth * 0.03,
-            ), // ~12
+            ), 
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.primary),
-              borderRadius: BorderRadius.circular(screenWidth * 0.025), // ~10
+              borderRadius: BorderRadius.circular(screenWidth * 0.025), 
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
@@ -78,7 +78,7 @@ class BrandAndSortDropdowns extends StatelessWidget {
                   Icons.arrow_drop_down,
                   color: AppColors.primary,
                   size: screenWidth * 0.06,
-                ), // ~24
+                ), 
                 dropdownColor: Colors.white,
               ),
             ),
@@ -89,7 +89,7 @@ class BrandAndSortDropdowns extends StatelessWidget {
 
         Expanded(
           child: Container(
-            height: screenHeight * 0.05, // ~40
+            height: screenHeight * 0.05, 
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
             decoration: BoxDecoration(

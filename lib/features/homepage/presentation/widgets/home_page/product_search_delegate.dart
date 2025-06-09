@@ -108,12 +108,12 @@ class ProductSearchDelegate extends SearchDelegate {
         return ListTile(
           title: Text(
             product['name'],
-            style: TextStyle(fontSize: screenWidth * 0.045), // ~18
+            style: TextStyle(fontSize: screenWidth * 0.045), 
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
             product['brand'],
-            style: TextStyle(fontSize: screenWidth * 0.035), // ~14
+            style: TextStyle(fontSize: screenWidth * 0.035), 
             overflow: TextOverflow.ellipsis,
           ),
           onTap: () {

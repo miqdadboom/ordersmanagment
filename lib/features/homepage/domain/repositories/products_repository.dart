@@ -1,4 +1,3 @@
-// lib/products/domain/repositories/products_repository.dart
 import '../entities/product_entity.dart';
 
 abstract class ProductsRepository {

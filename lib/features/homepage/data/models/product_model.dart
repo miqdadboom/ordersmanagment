@@ -1,5 +1,4 @@
 import '../../domain/entities/product_entity.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductModel extends ProductEntity {
   ProductModel({

@@ -81,32 +81,6 @@ class PromoBannerSlider extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Positioned(
-                    bottom: screenHeight * 0.03,
-                    right: screenWidth * 0.06,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/products');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.045,
-                          vertical: screenHeight * 0.012,
-                        ),
-                        elevation: 2,
-                        textStyle: TextStyle(
-                          fontSize: screenWidth * 0.038,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      child: const Text('Shop Now'),
-                    ),
-                  ),
                 ],
               );
             },

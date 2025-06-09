@@ -65,7 +65,6 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
     try {
       String imageUrl = widget.imageUrl;
       if (_newImageFile != null) {
-        // رفع الصورة الجديدة إلى Firebase Storage
         final fileName = DateTime.now().millisecondsSinceEpoch.toString();
         final storageRef = FirebaseStorage.instance.ref().child(
           'category_images/$fileName.jpg',

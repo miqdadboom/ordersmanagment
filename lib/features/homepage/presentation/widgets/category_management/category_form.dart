@@ -56,22 +56,12 @@ class _CategoryFormState extends State<CategoryForm> {
       final firestoreTypes =
           snapshot.docs
               .map((doc) => doc.data()['name']?.toString() ?? '')
-              .where((name) => name.isNotEmpty && name != 'Other')
+              .where((name) => name.isNotEmpty)
               .toSet();
-
-      final prefs = await SharedPreferences.getInstance();
-      final customTypes = prefs.getStringList('custom_category_types') ?? [];
 
       setState(() {
         _types = [
-          ...{
-            'Makeup',
-            'Skincare',
-            'Fragrance',
-            ...firestoreTypes,
-            ...customTypes,
-          },
-          'Other',
+          ...{'Makeup', 'Skincare', 'Fragrance', ...firestoreTypes},
         ];
         _filteredTypes = List.from(_types);
       });
@@ -205,7 +195,7 @@ class _CategoryFormState extends State<CategoryForm> {
               : _selectedType!;
 
       final category = Category(
-        id: const Uuid().v4(),
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: categoryName,
         imageUrl: imageUrl,
         subtypes: _subtypes,
@@ -278,6 +268,11 @@ class _CategoryFormState extends State<CategoryForm> {
                         value == null || value.isEmpty
                             ? 'Please select a type'
                             : null,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedType = value;
+                  });
+                },
               );
             },
           ),

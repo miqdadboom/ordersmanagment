@@ -52,7 +52,6 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
       selectedSubType = widget.productData!['subType'];
     }
 
-    // جلب الأنواع من Firestore
     _loadTypesFromFirestore();
   }
 
@@ -78,7 +77,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
         fontSize: screenWidth * 0.04,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(screenWidth * 0.03), // ~12
+        borderRadius: BorderRadius.circular(screenWidth * 0.03), 
         borderSide: const BorderSide(color: AppColors.primary),
       ),
       focusedBorder: OutlineInputBorder(
@@ -198,8 +197,8 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: screenWidth * 0.04, // ~16
-        vertical: screenHeight * 0.005, // ~8
+        horizontal: screenWidth * 0.04, 
+        vertical: screenHeight * 0.005, 
       ),
       child: Form(
         key: _formKey,

@@ -43,7 +43,6 @@ class CategoryCard extends StatelessWidget {
             imageUrl: imageUrl,
             subtypes: subtypes,
             onUpdated: () {
-              // يمكن تحديث القائمة أو إعادة تحميلها هنا إذا لزم
             },
           ),
     );

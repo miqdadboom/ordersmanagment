@@ -29,7 +29,7 @@ class MakeupTypeFilter extends StatelessWidget {
               'Type of Makeup',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: screenWidth * 0.04, // ~16
+                fontSize: screenWidth * 0.04, 
               ),
             ),
             const Spacer(),
@@ -39,14 +39,14 @@ class MakeupTypeFilter extends StatelessWidget {
                 'view all',
                 style: TextStyle(
                   color: AppColors.textDark,
-                  fontSize: screenWidth * 0.035, // ~14
+                  fontSize: screenWidth * 0.035, 
                 ),
               ),
             ),
           ],
         ),
         SizedBox(
-          height: screenHeight * 0.05, // ~40
+          height: screenHeight * 0.05, 
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -54,7 +54,7 @@ class MakeupTypeFilter extends StatelessWidget {
                   makeupTypes.map((type) {
                     final isSelected = selectedTypes.contains(type);
                     return Padding(
-                      padding: EdgeInsets.only(right: screenWidth * 0.02), // ~8
+                      padding: EdgeInsets.only(right: screenWidth * 0.02),
                       child: FilterChip(
                         label: Text(
                           type,
@@ -73,7 +73,7 @@ class MakeupTypeFilter extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                             screenWidth * 0.05,
-                          ), // ~20
+                          ), 
                           side: BorderSide(
                             color:
                                 isSelected
@@ -82,10 +82,10 @@ class MakeupTypeFilter extends StatelessWidget {
                             width: 1,
                           ),
                         ),
-                        elevation: 1.5, // Slightly smaller than 2
+                        elevation: 1.5, 
                         padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.03, // ~12
-                          vertical: screenHeight * 0.005, // ~4
+                          horizontal: screenWidth * 0.03, 
+                          vertical: screenHeight * 0.005, 
                         ),
                       ),
                     );

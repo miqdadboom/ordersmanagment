@@ -37,7 +37,6 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
   List<String> availableBrands = ['All Brands'];
   String searchQuery = '';
 
-  // pagination
   final ScrollController _scrollController = ScrollController();
   DocumentSnapshot? lastDocument;
   bool isLoadingMore = false;
@@ -78,7 +77,6 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
       final fetched = await widget.productRepository.getProductsByCategory(
         widget.categoryName,
       );
-      // pagination: جلب أول دفعة فقط
       final paginated = fetched.take(pageSize).toList();
       setState(() {
         allProducts = fetched;
@@ -89,7 +87,7 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
         isLoading = false;
         if (paginated.isNotEmpty) {
           lastDocument =
-              null; // لا يوجد دعم startAfter في getProductsByCategory الحالي
+              null;
         }
         if (paginated.length < pageSize) {
           hasMore = false;
@@ -112,7 +110,6 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
     setState(() {
       isLoadingMore = true;
     });
-    // pagination: جلب الدفعة التالية من allProducts
     final nextProducts =
         allProducts.skip(products.length).take(pageSize).toList();
     setState(() {

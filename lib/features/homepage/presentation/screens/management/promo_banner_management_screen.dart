@@ -1,4 +1,3 @@
-// main screen: promo_banner_management_screen.dart
 import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/homepage/data/firebase/promo_banner_repository.dart';
 import 'package:final_tasks_front_end/features/homepage/data/models/promo_banner.dart';

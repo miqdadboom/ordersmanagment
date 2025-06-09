@@ -23,14 +23,14 @@ class CategorySection extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(screenWidth * 0.04), // تقريبًا 16
+          padding: EdgeInsets.all(screenWidth * 0.04), 
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Category',
                 style: TextStyle(
-                  fontSize: screenWidth * 0.06, // تقريبًا 24
+                  fontSize: screenWidth * 0.06, 
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -40,7 +40,7 @@ class CategorySection extends StatelessWidget {
                 child: Text(
                   'View All',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.035, // تقريبًا 14
+                    fontSize: screenWidth * 0.035, 
                     color: AppColors.viewAll,
                   ),
                 ),
@@ -51,7 +51,7 @@ class CategorySection extends StatelessWidget {
         SizedBox(
           height:
               MediaQuery.of(context).size.height *
-              0.12, // تقريبًا 100 على شاشة 800
+              0.12, 
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
@@ -60,13 +60,13 @@ class CategorySection extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: screenWidth * 0.02,
-                ), // تقريبًا 8
+                ), 
                 child: GestureDetector(
                   onTap: () => onCategoryTap(index),
                   child: Column(
                     children: [
                       Container(
-                        width: screenWidth * 0.2, // تقريبًا 80 على شاشة 400
+                        width: screenWidth * 0.2, 
                         height: screenWidth * 0.2,
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
@@ -82,7 +82,7 @@ class CategorySection extends StatelessWidget {
                         category.name,
                         style: TextStyle(
                           color: AppColors.textDark,
-                          fontSize: screenWidth * 0.025, // تقريبًا 10
+                          fontSize: screenWidth * 0.025, 
                           fontWeight: FontWeight.w400,
                         ),
                       ),
