@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
@@ -30,7 +31,7 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: screenHeight * 0.015), // ~12
+        AppSizedBox.height(context, 0.015),
         Text(
           "Main Type",
           style: TextStyle(
@@ -38,7 +39,7 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
             fontSize: screenWidth * 0.04, // ~16
           ),
         ),
-        SizedBox(height: screenHeight * 0.01), // ~8
+        AppSizedBox.height(context, 0.01),
         DropdownButtonFormField<String>(
           value: selectedMainType,
           decoration: _buildDropdownDecoration("Select main type", screenWidth),
@@ -55,7 +56,7 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
           },
         ),
 
-        SizedBox(height: screenHeight * 0.02), // ~16
+        AppSizedBox.height(context, 0.02),
         Text(
           "Sub Type",
           style: TextStyle(
@@ -63,7 +64,7 @@ class _MainAndSubTypeSelectorState extends State<MainAndSubTypeSelector> {
             fontSize: screenWidth * 0.04,
           ),
         ),
-        SizedBox(height: screenHeight * 0.01),
+        AppSizedBox.height(context, 0.01),
         DropdownButtonFormField<String>(
           value: selectedSubType,
           decoration: _buildDropdownDecoration("Select sub type", screenWidth),

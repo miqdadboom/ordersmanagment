@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../../../features/homepage/data/firebase/category_repository.dart';
@@ -139,7 +140,7 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                             )),
               ),
             ),
-            const SizedBox(height: 16),
+            AppSizedBox.height(context, 0.02),
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
@@ -148,7 +149,7 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                 prefixIcon: Icon(Icons.title),
               ),
             ),
-            const SizedBox(height: 12),
+            AppSizedBox.height(context, 0.015),
             TextField(
               controller: _subtypeController,
               decoration: InputDecoration(
@@ -180,7 +181,7 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text(
                                     'You can only have 10 subtypes.',
                                     style: TextStyle(
@@ -189,13 +190,13 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: 12),
+                                  AppSizedBox.height(context, 0.015),
                                   Text(
                                     'Please delete at least one subtype to add a new one.',
                                     style: TextStyle(fontSize: 16),
                                     textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: 8),
+                                  AppSizedBox.height(context, 0.01),
                                   Text.rich(
                                     TextSpan(
                                       children: [
@@ -238,7 +239,7 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            AppSizedBox.height(context, 0.01),
             if (_subtypes.isNotEmpty)
               Wrap(
                 spacing: 8,

@@ -1,6 +1,6 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
-import 'package:final_tasks_front_end/features/homepage/domain/entities/products_entity.dart';
+import 'package:final_tasks_front_end/features/homepage/domain/entities/product_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/app_text_styles.dart';
@@ -13,7 +13,8 @@ class ProductCardCart extends StatefulWidget {
   final Function(double) onTotalChange;
   final VoidCallback onRemove;
   final TextEditingController quantityController;
-  final Function(int oldQuantity, int newQuantity, double price) onQuantityChanged;
+  final Function(int oldQuantity, int newQuantity, double price)
+  onQuantityChanged;
 
   const ProductCardCart({
     super.key,
@@ -47,11 +48,12 @@ class _ProductCardCartState extends State<ProductCardCart> {
     });
 
     final cubit = context.read<CartCubit>();
-    final index = cubit.state.indexWhere((p) => p['title'] == widget.product.title);
+    final index = cubit.state.indexWhere(
+      (p) => p['title'] == widget.product.title,
+    );
     if (index != -1) {
       cubit.updateQuantity(index, newQuantity);
     }
-
   }
 
   void decrement() {
@@ -65,35 +67,44 @@ class _ProductCardCartState extends State<ProductCardCart> {
       });
 
       final cubit = context.read<CartCubit>();
-      final index = cubit.state.indexWhere((p) => p['title'] == widget.product.title);
+      final index = cubit.state.indexWhere(
+        (p) => p['title'] == widget.product.title,
+      );
       if (index != -1) {
         cubit.updateQuantity(index, newQuantity);
       }
-
     }
   }
-
 
   void _showDeleteConfirmation(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirm Product Deletion'),
-        content: const Text('Are you sure you want to remove this product from the cart?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: AppTextStyles.dialogCancelButton(context)),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Confirm Product Deletion'),
+            content: const Text(
+              'Are you sure you want to remove this product from the cart?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Cancel',
+                  style: AppTextStyles.dialogCancelButton(context),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  widget.onRemove();
+                },
+                child: Text(
+                  'Delete',
+                  style: AppTextStyles.dialogDeleteButton(context),
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              widget.onRemove();
-            },
-            child: Text('Delete', style: AppTextStyles.dialogDeleteButton(context)),
-          ),
-        ],
-      ),
     );
   }
 
@@ -138,7 +149,7 @@ class _ProductCardCartState extends State<ProductCardCart> {
                     children: [
                       Text(
                         widget.product.title,
-                        style:  AppTextStyles.productCardTitle(context),
+                        style: AppTextStyles.productCardTitle(context),
                       ),
                       AppSizedBox.height(context, 0.005),
 
@@ -157,14 +168,17 @@ class _ProductCardCartState extends State<ProductCardCart> {
             right: 0,
             child: GestureDetector(
               onTap: () => _showDeleteConfirmation(context),
-              child:  Icon(Icons.close, color: AppColors.icon),
+              child: Icon(Icons.close, color: AppColors.icon),
             ),
           ),
           Positioned(
             bottom: MediaQuery.of(context).size.height * 0.01,
             right: MediaQuery.of(context).size.width * 0.02,
             child: QuantityController(
-              model: QuantityModel(quantity: quantity, price: widget.product.price),
+              model: QuantityModel(
+                quantity: quantity,
+                price: widget.product.price,
+              ),
               quantityController: widget.quantityController,
               onDecrement: decrement,
               onIncrement: increment,

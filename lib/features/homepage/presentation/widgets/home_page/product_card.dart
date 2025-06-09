@@ -1,6 +1,7 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
-import 'package:final_tasks_front_end/features/homepage/domain/entities/products_entity.dart';
+import 'package:final_tasks_front_end/features/homepage/domain/entities/product_entity.dart';
 
 class ProductCardHome extends StatefulWidget {
   final ProductEntity product;
@@ -76,7 +77,7 @@ class _ProductCardHomeState extends State<ProductCardHome> {
                               size: screenWidth * 0.1,
                               color: AppColors.imageNotSupported,
                             ),
-                            SizedBox(height: screenHeight * 0.01),
+                            AppSizedBox.height(context, 0.01),
                             Text(
                               'No Image',
                               style: TextStyle(color: AppColors.noImageText),
@@ -107,7 +108,7 @@ class _ProductCardHomeState extends State<ProductCardHome> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: screenHeight * 0.005),
+                      AppSizedBox.height(context, 0.005),
                       Text(
                         widget.product.brand,
                         style: TextStyle(
@@ -117,7 +118,7 @@ class _ProductCardHomeState extends State<ProductCardHome> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: screenHeight * 0.01),
+                      AppSizedBox.height(context, 0.01),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

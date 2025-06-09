@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 
 class ImagePickerWidget extends StatelessWidget {
@@ -46,7 +47,7 @@ class ImagePickerWidget extends StatelessWidget {
                       size: screenWidth * 0.12, // ~50
                       color: AppColors.primary,
                     ),
-                    SizedBox(height: screenHeight * 0.012), // ~10
+                    AppSizedBox.height(context, 0.012),
                     Text(
                       "Tap to add image",
                       style: TextStyle(

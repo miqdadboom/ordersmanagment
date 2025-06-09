@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/widgets/category_management/category_form.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/widgets/category_management/category_list.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,18 @@ class CategoryManagementScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Category Management'),
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [CategoryForm(), SizedBox(height: 32), CategoryList()],
+          children: [
+            const CategoryForm(),
+            AppSizedBox.height(
+              context,
+              0.04,
+            ), // 4% من ارتفاع الشاشة تقريبًا ~32px
+            const CategoryList(),
+          ],
         ),
       ),
     );

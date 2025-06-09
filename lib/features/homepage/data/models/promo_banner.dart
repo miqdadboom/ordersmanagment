@@ -1,25 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../domain/entities/promo_banner.dart';
 
-class PromoBanner {
-  final String id;
-  final String title;
-  final String description;
-  final String imageUrl;
-  final DateTime createdAt;
+class PromoBannerModel extends PromoBanner {
+  PromoBannerModel({
+    required String id,
+    required String title,
+    required String description,
+    required String imageUrl,
+    required DateTime createdAt,
+  }) : super(
+         id: id,
+         title: title,
+         description: description,
+         imageUrl: imageUrl,
+         createdAt: createdAt,
+       );
 
-  PromoBanner({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.imageUrl,
-    required this.createdAt,
-  });
-
-  factory PromoBanner.fromMap(Map<String, dynamic> map, String id) {
+  factory PromoBannerModel.fromMap(Map<String, dynamic> map, String id) {
     // Fallback for old banners: use caption if title/description are missing
     final title = map['title'] ?? map['caption'] ?? '';
     final description = map['description'] ?? '';
-    return PromoBanner(
+    return PromoBannerModel(
       id: id,
       title: title,
       description: description,

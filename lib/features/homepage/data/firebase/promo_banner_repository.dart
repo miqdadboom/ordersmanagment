@@ -30,14 +30,14 @@ class PromoBannerRepository {
     });
   }
 
-  Stream<List<PromoBanner>> getBanners() {
+  Stream<List<PromoBannerModel>> getBanners() {
     return _firestore
         .collection(_collection)
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) {
           return snapshot.docs
-              .map((doc) => PromoBanner.fromMap(doc.data(), doc.id))
+              .map((doc) => PromoBannerModel.fromMap(doc.data(), doc.id))
               .toList();
         });
   }

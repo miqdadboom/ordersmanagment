@@ -1,4 +1,5 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/homepage/domain/entities/category.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,9 @@ class CategorySection extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: screenHeight * 0.12, // تقريبًا 100 على شاشة 800
+          height:
+              MediaQuery.of(context).size.height *
+              0.12, // تقريبًا 100 على شاشة 800
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
@@ -74,7 +77,7 @@ class CategorySection extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.0075), // تقريبًا 6
+                      AppSizedBox.height(context, 0.0075),
                       Text(
                         category.name,
                         style: TextStyle(

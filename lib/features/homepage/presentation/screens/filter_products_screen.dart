@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/features/homepage/data/firebase/product_repository.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/widgets/filter_home_page/brand_and_sort_dropdowns.dart';
@@ -221,13 +222,19 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.cloud_off, color: Colors.red, size: 48),
-                const SizedBox(height: 16),
+                AppSizedBox.height(
+                  context,
+                  16 / MediaQuery.of(context).size.height,
+                ),
                 const Text(
                   'Failed to load data. Please check your connection or try again later.',
                   style: TextStyle(color: Colors.red, fontSize: 18),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
+                AppSizedBox.height(
+                  context,
+                  24 / MediaQuery.of(context).size.height,
+                ),
                 ElevatedButton.icon(
                   onPressed:
                       isLoading
@@ -240,10 +247,14 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                           },
                   icon:
                       isLoading
-                          ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
+                          ? SizedBox(
+                            width:
+                                MediaQuery.of(context).size.width *
+                                (20 / MediaQuery.of(context).size.width),
+                            height:
+                                MediaQuery.of(context).size.height *
+                                (20 / MediaQuery.of(context).size.height),
+                            child: const CircularProgressIndicator(
                               strokeWidth: 2,
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 Colors.white,
@@ -256,11 +267,18 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                     children: [
                       const Text('Retry'),
                       if (isLoading) ...[
-                        const SizedBox(width: 8),
-                        const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
+                        AppSizedBox.width(
+                          context,
+                          8 / MediaQuery.of(context).size.width,
+                        ),
+                        SizedBox(
+                          width:
+                              MediaQuery.of(context).size.width *
+                              (16 / MediaQuery.of(context).size.width),
+                          height:
+                              MediaQuery.of(context).size.height *
+                              (16 / MediaQuery.of(context).size.height),
+                          child: const CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
                               Colors.white,
@@ -312,14 +330,14 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                               });
                             },
                           ),
-                          SizedBox(height: screenHeight * 0.025),
+                          AppSizedBox.height(context, 0.025),
                           MakeupTypeFilter(
                             makeupTypes: makeupTypes,
                             selectedTypes: selectedTypes,
                             onTypeSelected: toggleType,
                             onViewAllPressed: () => showAllTypesDialog(context),
                           ),
-                          SizedBox(height: screenHeight * 0.02),
+                          AppSizedBox.height(context, 0.02),
                           BrandAndSortDropdowns(
                             availableBrands: availableBrands,
                             selectedBrand: selectedBrand,
@@ -337,7 +355,7 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                               });
                             },
                           ),
-                          SizedBox(height: screenHeight * 0.025),
+                          AppSizedBox.height(context, 0.025),
                           Text(
                             'Found ${products.length} Results',
                             style: TextStyle(
@@ -345,7 +363,7 @@ class _FilterProductsScreenState extends State<FilterProductsScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: screenHeight * 0.015),
+                          AppSizedBox.height(context, 0.015),
                           products.isEmpty
                               ? const Center(
                                 child: Padding(

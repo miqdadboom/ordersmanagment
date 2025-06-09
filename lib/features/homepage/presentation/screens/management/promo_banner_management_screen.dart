@@ -1,4 +1,5 @@
 // main screen: promo_banner_management_screen.dart
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/homepage/data/firebase/promo_banner_repository.dart';
 import 'package:final_tasks_front_end/features/homepage/data/models/promo_banner.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/widgets/promo_banner_management/confirm_delete_dialog.dart';
@@ -25,7 +26,7 @@ class _PromoBannerManagementScreenState
   final PromoBannerRepository _repository = PromoBannerRepository();
   File? _imageFile;
   bool _isLoading = false;
-  PromoBanner? _editingBanner;
+  PromoBannerModel? _editingBanner;
 
   void _resetForm() {
     setState(() {
@@ -36,7 +37,7 @@ class _PromoBannerManagementScreenState
     });
   }
 
-  void _editBanner(PromoBanner banner) {
+  void _editBanner(PromoBannerModel banner) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -45,7 +46,7 @@ class _PromoBannerManagementScreenState
     );
   }
 
-  Future<void> _deleteBanner(PromoBanner banner) async {
+  Future<void> _deleteBanner(PromoBannerModel banner) async {
     final confirmed = await showConfirmDeleteDialog(context);
     if (confirmed == true) {
       try {
@@ -60,7 +61,7 @@ class _PromoBannerManagementScreenState
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to delete banner: \$e'),
+            content: Text('Failed to delete banner: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -98,7 +99,7 @@ class _PromoBannerManagementScreenState
               onReset: _resetForm,
               onLoadingChanged: (val) => setState(() => _isLoading = val),
             ),
-            const SizedBox(height: 32),
+            AppSizedBox.height(context, 0.04), // 4% تقريبًا من ارتفاع الشاشة
             PromoBannerList(onEdit: _editBanner, onDelete: _deleteBanner),
           ],
         ),

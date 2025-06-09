@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
@@ -84,7 +85,7 @@ class BrandAndSortDropdowns extends StatelessWidget {
           ),
         ),
 
-        SizedBox(width: screenWidth * 0.02), // ~8
+        AppSizedBox.width(context, 0.02),
 
         Expanded(
           child: Container(

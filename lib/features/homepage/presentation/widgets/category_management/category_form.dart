@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/widgets/product_management/image_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -88,9 +89,33 @@ class _CategoryFormState extends State<CategoryForm> {
   }
 
   Future<void> _saveCategory() async {
-    if (!_formKey.currentState!.validate()) return;
-    if (_selectedType == null) return;
-    if (_imageFile == null) return;
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all required fields correctly'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    if (_selectedType == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a category type'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    if (_imageFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select an image'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
     setState(() => _isLoading = true);
 
@@ -151,7 +176,7 @@ class _CategoryFormState extends State<CategoryForm> {
                 actions: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF39A28B), // App primary color
+                      backgroundColor: Color(0xFF39A28B),
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -188,7 +213,20 @@ class _CategoryFormState extends State<CategoryForm> {
 
       await _categoryRepository.addCategory(category);
       _resetForm();
-    } catch (_) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Category added successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error adding category: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     } finally {
       setState(() => _isLoading = false);
     }
@@ -244,7 +282,7 @@ class _CategoryFormState extends State<CategoryForm> {
             },
           ),
           if (_selectedType == 'Other') ...[
-            const SizedBox(height: 12),
+            AppSizedBox.height(context, 0.015),
             TextFormField(
               controller: _customTypeController,
               decoration: const InputDecoration(labelText: 'Custom Type'),
@@ -255,9 +293,9 @@ class _CategoryFormState extends State<CategoryForm> {
                           : null,
             ),
           ],
-          const SizedBox(height: 16),
+          AppSizedBox.height(context, 0.02),
           ImagePickerWidget(image: _imageFile, onTap: _pickImage),
-          const SizedBox(height: 16),
+          AppSizedBox.height(context, 0.02),
           TextFormField(
             controller: _subtypeController,
             decoration: InputDecoration(
@@ -283,8 +321,8 @@ class _CategoryFormState extends State<CategoryForm> {
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
-                                  Text(
+                                children: [
+                                  const Text(
                                     'You can only have 10 subtypes.',
                                     style: TextStyle(
                                       color: Colors.red,
@@ -292,14 +330,14 @@ class _CategoryFormState extends State<CategoryForm> {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: 12),
-                                  Text(
+                                  AppSizedBox.height(context, 0.015),
+                                  const Text(
                                     'Please delete at least one subtype to add a new one.',
                                     style: TextStyle(fontSize: 16),
                                     textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: 8),
-                                  Text.rich(
+                                  AppSizedBox.height(context, 0.01),
+                                  const Text.rich(
                                     TextSpan(
                                       children: [
                                         TextSpan(
@@ -363,7 +401,7 @@ class _CategoryFormState extends State<CategoryForm> {
                       )
                       .toList(),
             ),
-          const SizedBox(height: 20),
+          AppSizedBox.height(context, 0.025),
           ElevatedButton(
             onPressed: _isLoading ? null : _saveCategory,
             style: ElevatedButton.styleFrom(
@@ -385,7 +423,7 @@ class _CategoryFormState extends State<CategoryForm> {
               children: [
                 const Text('Save Category'),
                 if (_isLoading) ...[
-                  const SizedBox(width: 12),
+                  AppSizedBox.width(context, 0.03),
                   const SizedBox(
                     width: 22,
                     height: 22,

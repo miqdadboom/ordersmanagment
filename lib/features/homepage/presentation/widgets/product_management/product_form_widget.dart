@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/homepage/data/firebase/category_repository.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/cubit/product_management_cubit.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/cubit/product_management_state.dart';
@@ -157,45 +158,23 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
           await FirebaseFirestore.instance
               .collection('products')
               .add(productData);
-          // Dialog نجاح واضح
-          await showDialog(
-            context: context,
-            builder:
-                (context) => AlertDialog(
-                  title: const Text(
-                    'Success',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  content: const Text('Product added successfully!'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop(); // العودة للصفحة السابقة
-                      },
-                      child: const Text('Back to Home'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Add Another Product'),
-                    ),
-                  ],
-                ),
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Product added successfully!'),
+              backgroundColor: Colors.green,
+            ),
           );
-        }
-
-        if (widget.productData == null) {
-          cubit.clearFields();
-          _nameController.clear();
-          _brandController.clear();
-          _priceController.clear();
-          _descriptionController.clear();
-          setState(() {
-            selectedMainType = null;
-            selectedSubType = null;
-          });
+          if (widget.productData == null) {
+            cubit.clearFields();
+            _nameController.clear();
+            _brandController.clear();
+            _priceController.clear();
+            _descriptionController.clear();
+            setState(() {
+              selectedMainType = null;
+              selectedSubType = null;
+            });
+          }
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -227,7 +206,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: screenHeight * 0.04), // ~30
+              AppSizedBox.height(context, 0.04),
               CustomTextField(
                 controller: _nameController,
                 hintText: "Product Name",
@@ -264,7 +243,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                 icon: Icons.description,
                 validatorMessage: 'Description is required',
               ),
-              SizedBox(height: screenHeight * 0.01),
+              AppSizedBox.height(context, 0.01),
               DropdownButtonFormField<String>(
                 value: selectedMainType,
                 style: TextStyle(
@@ -294,7 +273,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                   });
                 },
               ),
-              SizedBox(height: screenHeight * 0.02),
+              AppSizedBox.height(context, 0.02),
               DropdownButtonFormField<String>(
                 value: selectedSubType,
                 style: TextStyle(
@@ -325,7 +304,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                   });
                 },
               ),
-              SizedBox(height: screenHeight * 0.02),
+              AppSizedBox.height(context, 0.02),
               BlocBuilder<ProductManagementCubit, ProductManagementState>(
                 builder: (context, state) {
                   return ImagePickerWidget(
@@ -336,7 +315,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
                   );
                 },
               ),
-              SizedBox(height: screenHeight * 0.032), // ~40
+              AppSizedBox.height(context, 0.032),
               SaveButton(onPressed: saveProduct, loading: _isLoading),
             ],
           ),

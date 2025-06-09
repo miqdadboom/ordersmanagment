@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:final_tasks_front_end/features/homepage/domain/entities/products_entity.dart';
+import 'package:final_tasks_front_end/features/homepage/domain/entities/product_entity.dart';
 import '../../../homepage/presentation/widgets/home_page/product_card.dart';
 
 class ProductGrid extends StatelessWidget {
@@ -44,11 +44,14 @@ class ProductGrid extends StatelessWidget {
             final productMap = products[index];
 
             final productEntity = ProductEntity(
+              id: productMap['documentId'] ?? '',
+              name: productMap['name'] ?? '',
               imageUrl: productMap['image'] ?? '',
-              title: productMap['name'] ?? '',
-              brand: productMap['brand'] ?? '',
               price: double.tryParse(productMap['price'].toString()) ?? 0.0,
               description: productMap['description'] ?? '',
+              categoryId: productMap['categoryId'] ?? '',
+              title: productMap['name'] ?? '',
+              brand: productMap['brand'] ?? '',
               quantity: productMap['quantity'] ?? 1,
             );
 

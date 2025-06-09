@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'promo_banner_card.dart';
 
 class PromoBannerList extends StatelessWidget {
-  final Function(PromoBanner) onEdit;
-  final Function(PromoBanner) onDelete;
+  final Function(PromoBannerModel) onEdit;
+  final Function(PromoBannerModel) onDelete;
 
   const PromoBannerList({
     super.key,
@@ -15,7 +15,7 @@ class PromoBannerList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<PromoBanner>>(
+    return StreamBuilder<List<PromoBannerModel>>(
       stream: PromoBannerRepository().getBanners(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {

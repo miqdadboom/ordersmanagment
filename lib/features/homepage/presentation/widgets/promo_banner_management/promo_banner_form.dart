@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/homepage/data/firebase/promo_banner_repository.dart';
 import 'package:final_tasks_front_end/features/homepage/data/models/promo_banner.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/widgets/product_management/custom_text_field.dart';
@@ -12,7 +13,7 @@ class PromoBannerForm extends StatelessWidget {
   final TextEditingController descriptionController;
   final File? imageFile;
   final bool isLoading;
-  final PromoBanner? editingBanner;
+  final PromoBannerModel? editingBanner;
   final Function(File file) onImagePicked;
   final VoidCallback onReset;
   final Function(bool) onLoadingChanged;
@@ -151,7 +152,7 @@ class PromoBannerForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ImagePickerWidget(image: imageFile, onTap: pickImage),
-          const SizedBox(height: 24),
+          AppSizedBox.height(context, 0.03),
           CustomTextField(
             controller: titleController,
             hintText: 'Banner Title',
@@ -164,7 +165,7 @@ class PromoBannerForm extends StatelessWidget {
             icon: Icons.description,
             validatorMessage: 'Please enter a description',
           ),
-          const SizedBox(height: 32),
+          AppSizedBox.height(context, 0.04),
           ElevatedButton(
             onPressed: isLoading ? null : saveBanner,
             style: ElevatedButton.styleFrom(

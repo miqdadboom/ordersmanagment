@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import '../../../data/models/promo_banner.dart';
@@ -10,7 +11,7 @@ class PromoBannerSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    return StreamBuilder<List<PromoBanner>>(
+    return StreamBuilder<List<PromoBannerModel>>(
       stream: PromoBannerRepository().getBanners(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -59,7 +60,7 @@ class PromoBannerSlider extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        AppSizedBox.height(context, 0.01),
                         Text(
                           banner.description,
                           style: TextStyle(

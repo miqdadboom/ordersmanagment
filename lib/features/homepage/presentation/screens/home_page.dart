@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/core/widgets/bottom_navigation_manager.dart';
 import 'package:final_tasks_front_end/core/widgets/bottom_navigation_sales_representative.dart';
 import 'package:final_tasks_front_end/core/widgets/bottom_navigation_warehouse_manager.dart';
@@ -257,13 +258,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.cloud_off, color: Colors.red, size: 48),
-                const SizedBox(height: 16),
+                AppSizedBox.height(context, 0.02),
                 const Text(
                   'Failed to load data. Please check your connection or try again later.',
                   style: TextStyle(color: Colors.red, fontSize: 18),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
+                AppSizedBox.height(context, 0.03),
                 ElevatedButton.icon(
                   onPressed:
                       isLoading
@@ -292,7 +293,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     children: [
                       const Text('Retry'),
                       if (isLoading) ...[
-                        const SizedBox(width: 8),
+                        AppSizedBox.width(context, 0.02),
                         const SizedBox(
                           width: 16,
                           height: 16,
@@ -389,7 +390,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       child: Column(
                         children: [
                           _buildSectionHeader(screenWidth),
-                          SizedBox(height: screenHeight * 0.02),
+                          AppSizedBox.height(context, 0.02),
                           PaginatedProductList(
                             products: products,
                             scrollController: _scrollController,

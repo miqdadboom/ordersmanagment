@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'edit_category_dialog.dart';
@@ -87,7 +88,7 @@ class CategoryCard extends StatelessWidget {
                       ),
                     ),
           ),
-          const SizedBox(width: 14),
+          AppSizedBox.width(context, 0.035),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +100,7 @@ class CategoryCard extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-                const SizedBox(height: 4),
+                AppSizedBox.height(context, 0.005),
                 Text(
                   subtypes.join(', '),
                   style: const TextStyle(fontSize: 14, color: Colors.black54),

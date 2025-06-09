@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/homepage/data/firebase/promo_banner_repository.dart';
 import 'package:final_tasks_front_end/features/homepage/data/models/promo_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditPromoBannerDialog extends StatefulWidget {
-  final PromoBanner banner;
+  final PromoBannerModel banner;
   final VoidCallback onUpdated;
 
   const EditPromoBannerDialog({
@@ -98,20 +99,34 @@ class _EditPromoBannerDialogState extends State<EditPromoBannerDialog> {
               onTap: _pickImage,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: _newImageFile != null
-                    ? Image.file(_newImageFile!, width: 80, height: 80, fit: BoxFit.cover)
-                    : (widget.banner.imageUrl.isNotEmpty
-                        ? Image.network(widget.banner.imageUrl,
-                            width: 80, height: 80, fit: BoxFit.cover)
-                        : Container(
-                            width: 80,
-                            height: 80,
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.image, color: Colors.grey, size: 36),
-                          )),
+                child:
+                    _newImageFile != null
+                        ? Image.file(
+                          _newImageFile!,
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        )
+                        : (widget.banner.imageUrl.isNotEmpty
+                            ? Image.network(
+                              widget.banner.imageUrl,
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            )
+                            : Container(
+                              width: 80,
+                              height: 80,
+                              color: Colors.grey[200],
+                              child: const Icon(
+                                Icons.image,
+                                color: Colors.grey,
+                                size: 36,
+                              ),
+                            )),
               ),
             ),
-            const SizedBox(height: 16),
+            AppSizedBox.height(context, 0.02),
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(
@@ -120,7 +135,7 @@ class _EditPromoBannerDialogState extends State<EditPromoBannerDialog> {
                 prefixIcon: Icon(Icons.title),
               ),
             ),
-            const SizedBox(height: 12),
+            AppSizedBox.height(context, 0.015),
             TextField(
               controller: _descriptionController,
               decoration: const InputDecoration(
@@ -136,13 +151,14 @@ class _EditPromoBannerDialogState extends State<EditPromoBannerDialog> {
       actions: [
         ElevatedButton(
           onPressed: _isLoading ? null : _saveEdit,
-          child: _isLoading
-              ? const SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: CircularProgressIndicator(strokeWidth: 2.2),
-                )
-              : const Text('Save'),
+          child:
+              _isLoading
+                  ? const SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(strokeWidth: 2.2),
+                  )
+                  : const Text('Save'),
         ),
         OutlinedButton(
           onPressed: _isLoading ? null : () => Navigator.of(context).pop(),

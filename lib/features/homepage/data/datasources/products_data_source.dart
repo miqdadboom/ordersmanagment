@@ -18,10 +18,13 @@ class ProductsApiDataSource implements ProductsDataSource {
       ProductEntity(
         id: '1',
         name: 'Product 1',
+        imageUrl: '',
+        price: 10.0,
         description: 'Description for product 1',
+        categoryId: 'cat1',
+        title: 'Product 1',
+        brand: 'BrandX',
         quantity: 10,
-        status: 'available',
-        imageUrl: null,
       ),
       // Add more mock products as needed
     ];

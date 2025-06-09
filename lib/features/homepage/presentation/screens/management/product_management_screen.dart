@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/features/homepage/data/firebase/product_repository.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/cubit/product_management_cubit.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,12 @@ class ProductManagementScreen extends StatelessWidget {
       create: (context) => ProductManagementCubit(productRepository),
       child: Scaffold(
         appBar: CustomAppBar(title: 'Add Product', showBackButton: true),
-        body: Column(children: [const Expanded(child: ProductFormWidget())]),
+        body: Column(
+          children: [
+            AppSizedBox.height(context, 0.02), // مسافة عمودية صغيرة (~16px)
+            const Expanded(child: ProductFormWidget()),
+          ],
+        ),
       ),
     );
   }

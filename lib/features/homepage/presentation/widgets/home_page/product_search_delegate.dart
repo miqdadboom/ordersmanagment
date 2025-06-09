@@ -1,7 +1,7 @@
 import 'package:final_tasks_front_end/features/products/presentation/screens/product_view.dart';
 import 'package:final_tasks_front_end/features/homepage/presentation/widgets/home_page/product_card.dart';
 import 'package:flutter/material.dart';
-import 'package:final_tasks_front_end/features/homepage/domain/entities/products_entity.dart';
+import 'package:final_tasks_front_end/features/homepage/domain/entities/product_entity.dart';
 
 class ProductSearchDelegate extends SearchDelegate {
   final List<Map<String, dynamic>> allProducts;
@@ -56,11 +56,14 @@ class ProductSearchDelegate extends SearchDelegate {
         final product = results[index];
 
         final entity = ProductEntity(
+          id: product['documentId'] ?? '',
+          name: product['name'] ?? '',
           imageUrl: product['image'] ?? '',
-          title: product['name'] ?? '',
-          brand: product['brand'] ?? '',
           price: double.tryParse(product['price'].toString()) ?? 0.0,
           description: product['description'] ?? '',
+          categoryId: product['categoryId'] ?? '',
+          title: product['name'] ?? '',
+          brand: product['brand'] ?? '',
           quantity: product['quantity'] ?? 1,
         );
 

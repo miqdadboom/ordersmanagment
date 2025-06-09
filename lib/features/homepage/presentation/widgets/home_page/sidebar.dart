@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 
@@ -28,7 +29,7 @@ class AppSidebar extends StatelessWidget {
                     'https://i.pravatar.cc/150?img=3',
                   ),
                 ),
-                SizedBox(width: screenWidth * 0.04), // ~16
+                AppSizedBox.width(context, 0.04),
                 Expanded(
                   child: Text(
                     'Ahmad istatieh',
@@ -119,23 +120,6 @@ class AppSidebar extends StatelessWidget {
                     );
                   },
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.settings,
-                    color: AppColors.icon,
-                    size: screenWidth * 0.06,
-                  ),
-                  title: Text(
-                    'Settings',
-                    style: TextStyle(
-                      color: AppColors.icon,
-                      fontSize: screenWidth * 0.045,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
               ],
             ),
           ),
@@ -194,7 +178,7 @@ class AppSidebar extends StatelessWidget {
                             },
                             child: const Text('Log out'),
                           ),
-                          SizedBox(width: screenWidth * 0.03), // ~12
+                          AppSizedBox.width(context, 0.03),
                           OutlinedButton(
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.cancel,
