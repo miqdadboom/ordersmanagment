@@ -12,7 +12,25 @@ class BottomNavigationManager extends StatefulWidget {
 class _BottomNavigationManager extends State<BottomNavigationManager> {
   int _currentIndex = 0;
 
-
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final currentRoute = ModalRoute.of(context)?.settings.name;
+    switch (currentRoute) {
+      case '/ProductsScreen':
+        _currentIndex = 0;
+        break;
+      case '/listOrder':
+        _currentIndex = 1;
+        break;
+      case '/cartScreen':
+        _currentIndex = 2;
+        break;
+      case '/manage':
+        _currentIndex = 3;
+        break;
+    }
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -49,14 +67,8 @@ class _BottomNavigationManager extends State<BottomNavigationManager> {
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.view_list), label: "Order"),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart),
-          label: "Cart",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.group),
-          label: "Employee",
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+        BottomNavigationBarItem(icon: Icon(Icons.group), label: "Employee"),
       ],
     );
   }

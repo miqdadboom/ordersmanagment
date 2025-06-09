@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
+import '../../../../core/constants/app_size_box.dart'; // ✅ إضافة AppSizedBox
 
 class ActionButtonsWidget extends StatelessWidget {
   final VoidCallback onAddPressed;
@@ -13,49 +15,63 @@ class ActionButtonsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttonTextStyle = AppTextStyles.button(context);
+
     return Row(
       children: [
         Expanded(
           child: ElevatedButton.icon(
-            icon: const Icon(Icons.person_add),
-            label: const Text("Add Employee", style: TextStyle(color: Colors.white)),
             onPressed: onAddPressed,
+            icon: const Icon(Icons.person_add, color: Colors.white),
+            label: Text("Add Employee", style: buttonTextStyle),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(vertical: 14),
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        AppSizedBox.width(context, 0.025),
+
         Expanded(
-          child: ElevatedButton(
-            onPressed: () {}, // to enable button visuals
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+          child: Container(
+            height: 48,
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(12),
             ),
             child: PopupMenuButton<String>(
               onSelected: onSortSelected,
               color: Colors.white,
-              itemBuilder: (context) => const [
-                PopupMenuItem(value: 'name_asc', child: Text('Name A-Z')),
-                PopupMenuItem(value: 'name_desc', child: Text('Name Z-A')),
-                PopupMenuItem(value: 'job_asc', child: Text('Job A-Z')),
-                PopupMenuItem(value: 'job_desc', child: Text('Job Z-A')),
-                PopupMenuItem(value: 'reset', child: Text('Reset to Original')),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'name_asc',
+                  child: Text('Name A-Z', style: AppTextStyles.bodySuggestion(context)),
+                ),
+                PopupMenuItem(
+                  value: 'name_desc',
+                  child: Text('Name Z-A', style: AppTextStyles.bodySuggestion(context)),
+                ),
+                PopupMenuItem(
+                  value: 'job_asc',
+                  child: Text('Job A-Z', style: AppTextStyles.bodySuggestion(context)),
+                ),
+                PopupMenuItem(
+                  value: 'job_desc',
+                  child: Text('Job Z-A', style: AppTextStyles.bodySuggestion(context)),
+                ),
+                PopupMenuItem(
+                  value: 'reset',
+                  child: Text('Reset to Original', style: AppTextStyles.bodySuggestion(context)),
+                ),
               ],
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text("Sort", style: TextStyle(color: Colors.white, fontSize: 18)),
-                  SizedBox(width: 10),
-                  Icon(Icons.arrow_drop_down, color: Colors.white),
+                children: [
+                  Text("Sort", style: buttonTextStyle),
+                  AppSizedBox.width(context, 0.015),
+                  const Icon(Icons.arrow_drop_down, color: Colors.white),
                 ],
               ),
             ),

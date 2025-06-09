@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_tasks_front_end/features/products/data/firebase/product_repository.dart';
-import 'package:final_tasks_front_end/features/products/presentation/cubit/product_management_cubit.dart';
+import 'package:final_tasks_front_end/features/homepage/data/firebase/product_repository.dart';
+import 'package:final_tasks_front_end/features/homepage/presentation/cubit/product_management_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
-import 'package:final_tasks_front_end/features/products/presentation/widgets/product_management/product_form_widget.dart';
+import 'package:final_tasks_front_end/features/homepage/presentation/widgets/product_management/product_form_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditProductScreen extends StatefulWidget {

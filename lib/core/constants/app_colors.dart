@@ -5,7 +5,6 @@ class AppColors {
   static const primary = Color(0xFF39A28B);
   static const secondary = Color(0xFF96D3DC); // Primary color (cards)
   static const background = Color(0xFFF7F7F7); // Background color
-  static const tabBar = Color(0xFFFFFFFF); // Tab bar color
   static const backgroundChat = Color(0x00000000);
 
   // Text and strokes

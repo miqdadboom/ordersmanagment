@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_text_styles.dart';
+import '../../../../core/constants/app_size_box.dart';
+import '../../data/models/EmployeeModel.dart';
 import 'mange_employee_card.dart';
 
 class EmployeeListWidget extends StatelessWidget {
-  final List<Map<String, String>> employees;
+  final List<EmployeeModel> employees;
 
   const EmployeeListWidget({
     super.key,
@@ -12,21 +15,21 @@ class EmployeeListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (employees.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           "No employees found.",
-          style: TextStyle(fontSize: 18, color: Colors.grey),
+          style: AppTextStyles.bodySuggestion(context).copyWith(color: Colors.grey),
         ),
       );
     }
 
-    return ListView.builder(
+    return ListView.separated(
       itemCount: employees.length,
+      separatorBuilder: (context, index) => AppSizedBox.height(context, 0.01),
       itemBuilder: (context, index) {
-        final employee = employees[index];
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: EmployeeCardWidget(employee: employee),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: EmployeeCardWidget(employee: employees[index]),
         );
       },
     );

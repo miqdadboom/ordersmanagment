@@ -1,3 +1,4 @@
+import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../widgets/edit_employee_form.dart';
@@ -11,11 +12,7 @@ class EditEmployee extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        toolbarHeight: 0,
-      ),
+      appBar: CustomAppBar(title: "Edit Employee"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: EditEmployeeForm(userId: userId),

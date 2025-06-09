@@ -2,11 +2,23 @@ import 'package:final_tasks_front_end/core/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../domain/use_cases/confirm_order_cubit.dart';
 
 class ConfirmOrderActions extends StatelessWidget {
-  final VoidCallback onSend;
+  final BuildContext screenContext;
+  final ConfirmOrderCubit controller;
+  final List<Map<String, dynamic>> cartProducts;
+  final VoidCallback clearForm;
+  final VoidCallback onOrderSubmitted;
 
-  const ConfirmOrderActions({super.key, required this.onSend});
+  const ConfirmOrderActions({
+    super.key,
+    required this.screenContext,
+    required this.controller,
+    required this.cartProducts,
+    required this.clearForm,
+    required this.onOrderSubmitted,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +35,15 @@ class ConfirmOrderActions extends StatelessWidget {
         _buildActionButton(
           context: context,
           label: "Send Order",
-          onPressed: onSend,
+          onPressed: () async {
+            await controller.sendOrderToFirebase(
+              context: screenContext,
+              cartProducts: cartProducts,
+            );
+
+            onOrderSubmitted();
+            clearForm();
+          },
         ),
       ],
     );
@@ -49,7 +69,7 @@ class ConfirmOrderActions extends StatelessWidget {
             : const SizedBox.shrink(),
         label: Text(
           label,
-          style:  AppTextStyles.actionButtonText(context),
+          style: AppTextStyles.actionButtonText(context),
         ),
         style: TextButton.styleFrom(
           padding: EdgeInsets.symmetric(

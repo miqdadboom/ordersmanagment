@@ -15,6 +15,26 @@ class _BottomNavigationSalesRepresentativeState
     extends State<BottomNavigationSalesRepresentative> {
   int _currentIndex = 0;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final currentRoute = ModalRoute.of(context)?.settings.name;
+    switch (currentRoute) {
+      case '/ProductsScreen':
+        _currentIndex = 0;
+        break;
+      case '/listOrder':
+        _currentIndex = 1;
+        break;
+      case '/cartScreen':
+        _currentIndex = 2;
+        break;
+      case '/notificationList':
+        _currentIndex = 3;
+        break;
+    }
+  }
+
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -22,15 +42,16 @@ class _BottomNavigationSalesRepresentativeState
 
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/ProductsScreen');
+        Navigator.pushReplacementNamed(context, '/ProductsScreen');
         break;
       case 1:
-        Navigator.pushNamed(context, '/listOrder');
+        Navigator.pushReplacementNamed(context, '/listOrder');
+        break;
       case 2:
-        Navigator.pushNamed(context, '/cartScreen');
+        Navigator.pushReplacementNamed(context, '/cartScreen');
         break;
       case 3:
-        Navigator.pushNamed(context, '/notificationList');
+        Navigator.pushReplacementNamed(context, '/notificationList');
         break;
       default:
         break;

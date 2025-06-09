@@ -7,7 +7,7 @@ import 'product_routes.dart';
 import 'employee_routes.dart';
 import 'chat_routes.dart';
 import 'notification_routes.dart';
-
+import 'category_routes.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   ...authRoutes,
@@ -18,4 +18,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   ...notificationRoutes,
   ...mapRoutes,
   ...bottomBarRoutes,
+  ...categoryRoutes,
 };

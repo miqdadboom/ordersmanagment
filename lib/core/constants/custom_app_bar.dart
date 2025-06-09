@@ -21,13 +21,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.primary,
       elevation: 0,
       automaticallyImplyLeading: false,
-      leading: customLeading ??
+      leading:
+          customLeading ??
           (showBackButton
               ? IconButton(
-            icon: const Icon(Icons.arrow_back),
-            color: AppColors.textLight,
-            onPressed: () => Navigator.of(context).pop(),
-          )
+                icon: const Icon(Icons.arrow_back),
+                color: AppColors.textLight,
+                onPressed: () => Navigator.of(context).pop(),
+              )
               : null),
       centerTitle: true,
       title: Text(
@@ -37,6 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           fontWeight: FontWeight.bold,
           fontSize: 24,
         ),
+        textAlign: TextAlign.center,
       ),
       actions: actions,
     );

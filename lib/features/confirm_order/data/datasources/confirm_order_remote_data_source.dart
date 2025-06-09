@@ -33,10 +33,10 @@ class ConfirmOrderRemoteDataSource {
       final userId = currentUser.uid;
 
       final userDoc =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(userId)
-              .get();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
 
       if (!userDoc.exists) {
         throw ServerException('User data not found');
@@ -54,8 +54,8 @@ class ConfirmOrderRemoteDataSource {
       final completer = Completer<void>();
 
       subscription = Connectivity().onConnectivityChanged.listen((
-        status,
-      ) async {
+          status,
+          ) async {
         if (status != ConnectivityResult.none) {
           try {
             await FirebaseFirestore.instance.collection('orders').add({
