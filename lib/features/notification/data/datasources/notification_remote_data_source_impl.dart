@@ -8,20 +8,52 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   final _collection = FirebaseFirestore.instance.collection('notifications');
 
   @override
-  Future<List<AppNotification>> fetchNotifications() async {
-    final snapshot = await _collection.orderBy('timestamp', descending: true).get();
-
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return AppNotification(
-        id: doc.id,
-        title: data['title'] ?? '',
-        description: data['body'] ?? '',
-        senderName: 'System',
-        timestamp: DateTime.tryParse(data['timestamp'] ?? '') ?? DateTime.now(),
-        isRead: data['isRead'] ?? false,
-      );
-    }).toList();
+  Future<List<AppNotification>> fetchNotifications({
+    required String role,
+    required String userId,
+  }) async {
+    Query query = _collection.orderBy('timestamp', descending: true);
+    List<AppNotification> notifications;
+    if (role == 'salesRepresentative') {
+      query = query.where('sendTo', isEqualTo: userId);
+      final snapshot = await query.get();
+      notifications =
+          snapshot.docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            return AppNotification(
+              id: doc.id,
+              title: data['title'] ?? '',
+              description: data['body'] ?? '',
+              senderName: data['senderName'] ?? 'System',
+              timestamp: _parseTimestamp(data['timestamp']),
+              isRead: data['isRead'] ?? false,
+            );
+          }).toList();
+    } else {
+      // admin and warehouseEmployee: fetch all, filter in Dart for warehouseEmployee
+      final snapshot = await query.get();
+      var docs = snapshot.docs;
+      if (role == 'warehouseEmployee') {
+        docs =
+            docs.where((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              return data['createdBy'] != userId;
+            }).toList();
+      }
+      notifications =
+          docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            return AppNotification(
+              id: doc.id,
+              title: data['title'] ?? '',
+              description: data['body'] ?? '',
+              senderName: data['senderName'] ?? 'System',
+              timestamp: _parseTimestamp(data['timestamp']),
+              isRead: data['isRead'] ?? false,
+            );
+          }).toList();
+    }
+    return notifications;
   }
 
   @override
@@ -34,8 +66,8 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       id: doc.id,
       title: data['title'] ?? '',
       description: data['body'] ?? '',
-      senderName: 'System',
-      timestamp: DateTime.tryParse(data['timestamp'] ?? '') ?? DateTime.now(),
+      senderName: data['senderName'] ?? 'System',
+      timestamp: _parseTimestamp(data['timestamp']),
       isRead: data['isRead'] ?? false,
     );
   }
@@ -47,6 +79,16 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       debugPrint('✅ Notification $id marked as read in Firestore');
     } catch (e) {
       debugPrint('⚠️ Failed to mark notification as read in Firestore: $e');
+    }
+  }
+
+  DateTime _parseTimestamp(dynamic value) {
+    if (value is Timestamp) {
+      return value.toDate();
+    } else if (value is String) {
+      return DateTime.tryParse(value) ?? DateTime.now();
+    } else {
+      return DateTime.now();
     }
   }
 }

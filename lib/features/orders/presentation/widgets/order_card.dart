@@ -8,11 +8,7 @@ class OrderCard extends StatelessWidget {
   final OrderEntity order;
   final VoidCallback onTap;
 
-  const OrderCard({
-    super.key,
-    required this.order,
-    required this.onTap,
-  });
+  const OrderCard({super.key, required this.order, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +41,17 @@ class OrderCard extends StatelessWidget {
                 bottom: 90,
                 child: Container(
                   color: Colors.grey[200],
-                  child: order.productImage != null
-                      ? Image.network(
-                    order.productImage!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
-                    const Center(child: Icon(Icons.broken_image, size: 60)),
-                  )
-                      : const Center(child: Icon(Icons.image, size: 100)),
+                  child:
+                      order.productImage != null
+                          ? Image.network(
+                            order.productImage!,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) => const Center(
+                                  child: Icon(Icons.broken_image, size: 60),
+                                ),
+                          )
+                          : const Center(child: Icon(Icons.image, size: 100)),
                 ),
               ),
               Positioned(
@@ -75,23 +74,29 @@ class OrderCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       GestureDetector(
                         onTap: () {
-                          if (order.latitude != null && order.longitude != null) {
+                          if (order.latitude != null &&
+                              order.longitude != null) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => MapScreen(
-                                  location: PlaceLocation(
-                                    latitude: order.latitude!,
-                                    longitude: order.longitude!,
-                                    address: order.customerAddress,
-                                  ),
-                                  isSelecting: false,
-                                ),
+                                builder:
+                                    (_) => MapScreen(
+                                      location: PlaceLocation(
+                                        latitude: order.latitude!,
+                                        longitude: order.longitude!,
+                                        address: order.customerAddress,
+                                      ),
+                                      isSelecting: false,
+                                    ),
                               ),
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Location not available for this order.')),
+                              const SnackBar(
+                                content: Text(
+                                  'Location not available for this order.',
+                                ),
+                              ),
                             );
                           }
                         },
@@ -113,7 +118,7 @@ class OrderCard extends StatelessWidget {
               Positioned(
                 right: 16,
                 bottom: 45,
-                child: _buildEnhancedStatusChip(order.status),
+                child: _buildStatusChip(order.status),
               ),
               Positioned(
                 right: 16,
@@ -148,39 +153,44 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEnhancedStatusChip(String status) {
-    final (Color bgColor, Color textColor, String label) = switch (status.toLowerCase()) {
-      'unfinished' => (const Color(0xFFF0F7D4), const Color(0xFF5E7C16), 'In Progress'),
-      'failed' => (const Color(0xFFFDE8E8), const Color(0xFFD32F2F), 'Failed'),
-      'pass' => (const Color(0xFFE8F5E9), const Color(0xFF2E7D32), 'Completed'),
-      _ => (Colors.grey[200]!, Colors.grey[800]!, status),
-    };
+  Widget _buildStatusChip(String status) {
+    Color color;
+    IconData icon;
+    switch (status) {
+      case 'Passed':
+        color = Colors.green;
+        icon = Icons.check_circle_outline;
+        break;
+      case 'Failed':
+        color = Colors.orange;
+        icon = Icons.error_outline;
+        break;
+      case 'Pending':
+      default:
+        color = Colors.grey;
+        icon = Icons.access_time;
+        break;
+    }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: textColor.withOpacity(0.2)),
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(_getStatusIcon(status), color: textColor, size: 14),
-          const SizedBox(width: 6),
-          Text(label, style: TextStyle(color: textColor, fontSize: 12, fontWeight: FontWeight.w600)),
+          Icon(icon, color: color, size: 16),
+          const SizedBox(width: 4),
+          Text(
+            status,
+            style: TextStyle(color: color, fontWeight: FontWeight.bold),
+          ),
         ],
       ),
     );
-  }
-
-  IconData _getStatusIcon(String status) {
-    return switch (status.toLowerCase()) {
-      'unfinished' => Icons.access_time,
-      'failed' => Icons.error_outline,
-      'pass' => Icons.check_circle_outline,
-      _ => Icons.info_outline,
-    };
   }
 
   Widget _buildProgressDot({required bool active}) {

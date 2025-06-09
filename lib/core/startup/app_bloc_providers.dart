@@ -19,7 +19,7 @@ Widget buildBlocProviders({required Widget child}) {
   final orderRepository = OrderRepositoryImpl(dataSource: orderDataSource);
 
   final remoteDataSource = NotificationRemoteDataSourceImpl();
-  final localDataSource = NotificationLocalDataSourceImpl(useMockData: true);
+  final localDataSource = NotificationLocalDataSourceImpl(useMockData: false);
   final notificationRepository = NotificationRepositoryImpl(
     remoteDataSource: remoteDataSource,
     localDataSource: localDataSource,
@@ -27,13 +27,20 @@ Widget buildBlocProviders({required Widget child}) {
 
   return MultiBlocProvider(
     providers: [
-      BlocProvider(create: (_) => OrdersCubit(orderRepository)), // ✅ بدون loadOrderByRole هنا
       BlocProvider(
-        create: (_) => NotificationCubit(
-          getNotifications: GetNotifications(notificationRepository),
-          getNotificationDetail: GetNotificationDetail(notificationRepository),
-          markNotificationAsRead: MarkNotificationAsRead(notificationRepository),
-        )..loadNotifications(),
+        create: (_) => OrdersCubit(orderRepository),
+      ),
+      BlocProvider(
+        create:
+            (_) => NotificationCubit(
+              getNotifications: GetNotifications(notificationRepository),
+              getNotificationDetail: GetNotificationDetail(
+                notificationRepository,
+              ),
+              markNotificationAsRead: MarkNotificationAsRead(
+                notificationRepository,
+              ),
+            ),
       ),
     ],
     child: child,

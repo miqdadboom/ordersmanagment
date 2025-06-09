@@ -6,7 +6,10 @@ class GetNotifications {
 
   GetNotifications(this.repository);
 
-  Future<List<AppNotification>> call() async {
-    return await repository.getNotifications();
+  Future<List<AppNotification>> call({
+    required String role,
+    required String userId,
+  }) async {
+    return await repository.getNotifications(role: role, userId: userId);
   }
 }

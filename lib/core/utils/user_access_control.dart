@@ -1,11 +1,12 @@
-
 class UserAccessControl {
   static bool ManageEmployee(String role) {
     return role == 'admin';
   }
 
   static bool ProductsScreenState(String role) {
-    return role == 'admin' || role == 'warehouseEmployee' || role == 'salesRepresentative';
+    return role == 'admin' ||
+        role == 'warehouseEmployee' ||
+        role == 'salesRepresentative';
   }
 
   static bool ProductManagementScreen(String role) {
@@ -13,7 +14,9 @@ class UserAccessControl {
   }
 
   static bool OrderProductsScreen(String role) {
-    return role == 'admin' || role == 'warehouseEmployee';
+    return role == 'admin' ||
+        role == 'warehouseEmployee' ||
+        role == 'salesRepresentative';
   }
 
   static bool OrderDetailsScreen(String role) {
@@ -25,19 +28,27 @@ class UserAccessControl {
   }
 
   static bool HomeScreen(String role) {
-    return role == 'admin' || role == 'warehouseEmployee' || role == 'salesRepresentative';
+    return role == 'admin' ||
+        role == 'warehouseEmployee' ||
+        role == 'salesRepresentative';
   }
 
   static bool ConfirmOrder(String role) {
-    return role == 'admin' || role == 'salesRepresentative';
+    return role == 'admin' ||
+        role == 'salesRepresentative' ||
+        role == 'warehouseEmployee';
   }
 
   static bool ProductView(String role) {
-    return role == 'admin' || role == 'warehouseEmployee' || role == 'salesRepresentative';
+    return role == 'admin' ||
+        role == 'warehouseEmployee' ||
+        role == 'salesRepresentative';
   }
 
   static bool ListOfOrdersScreen(String role) {
-    return role == 'admin' || role == 'warehouseEmployee' || role == 'salesRepresentative';
+    return role == 'admin' ||
+        role == 'warehouseEmployee' ||
+        role == 'salesRepresentative';
   }
 
   static String getHomeRouteForRole(String role) {
@@ -50,6 +61,23 @@ class UserAccessControl {
         return '/ProductsScreen';
       default:
         return '/productScreen';
+    }
+  }
+
+  static String normalizeRole(String? role) {
+    switch (role) {
+      case 'salesRepresentative':
+        return 'salesRepresentative';
+      case 'warehouseEmployee':
+        return 'warehouseEmployee';
+      case 'admin':
+        return 'admin';
+      case 'warehouse_manager':
+        return 'warehouseEmployee';
+      case 'sales_representative':
+        return 'salesRepresentative';
+      default:
+        return role ?? '';
     }
   }
 }

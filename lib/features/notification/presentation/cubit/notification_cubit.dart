@@ -16,28 +16,31 @@ class NotificationInitial extends NotificationState {
 
 class NotificationLoading extends NotificationState {
   const NotificationLoading({List<AppNotification> notifications = const []})
-      : super(notifications: notifications);
+    : super(notifications: notifications);
 }
 
 class NotificationLoaded extends NotificationState {
   const NotificationLoaded(List<AppNotification> notifications)
-      : super(notifications: notifications);
+    : super(notifications: notifications);
 }
 
 class NotificationDetailState extends NotificationState {
   final AppNotification notification;
 
-  const NotificationDetailState(this.notification, {List<AppNotification> notifications = const []})
-      : super(notifications: notifications);
+  const NotificationDetailState(
+    this.notification, {
+    List<AppNotification> notifications = const [],
+  }) : super(notifications: notifications);
 }
 
 class NotificationError extends NotificationState {
   final String message;
 
-  const NotificationError(this.message, {List<AppNotification> notifications = const []})
-      : super(notifications: notifications);
+  const NotificationError(
+    this.message, {
+    List<AppNotification> notifications = const [],
+  }) : super(notifications: notifications);
 }
-
 
 class NotificationCubit extends Cubit<NotificationState> {
   final GetNotifications getNotifications;
@@ -50,15 +53,19 @@ class NotificationCubit extends Cubit<NotificationState> {
     required this.markNotificationAsRead,
   }) : super(NotificationInitial());
 
-  Future<void> loadNotifications() async {
+  Future<void> loadNotifications({
+    required String role,
+    required String userId,
+  }) async {
     emit(NotificationLoading());
     try {
-      final notifications = await getNotifications();
+      final notifications = await getNotifications(role: role, userId: userId);
       emit(NotificationLoaded(notifications));
     } catch (e) {
       emit(NotificationError(e.toString()));
     }
   }
+
   Future<void> loadNotificationDetail(String id) async {
     emit(NotificationLoading());
     try {
@@ -78,19 +85,20 @@ class NotificationCubit extends Cubit<NotificationState> {
       await markNotificationAsRead(id);
       if (state is NotificationLoaded) {
         final currentState = state as NotificationLoaded;
-        final updatedNotifications = currentState.notifications.map((n) {
-          if (n.id == id) {
-            return AppNotification(
-              id: n.id,
-              title: n.title,
-              description: n.description,
-              senderName: n.senderName,
-              timestamp: n.timestamp,
-              isRead: true,
-            );
-          }
-          return n;
-        }).toList();
+        final updatedNotifications =
+            currentState.notifications.map((n) {
+              if (n.id == id) {
+                return AppNotification(
+                  id: n.id,
+                  title: n.title,
+                  description: n.description,
+                  senderName: n.senderName,
+                  timestamp: n.timestamp,
+                  isRead: true,
+                );
+              }
+              return n;
+            }).toList();
         emit(NotificationLoaded(updatedNotifications));
       }
     } catch (e) {

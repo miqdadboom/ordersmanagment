@@ -26,9 +26,10 @@ class OrderProductCard extends StatelessWidget {
               color: Colors.grey[200],
               borderRadius: BorderRadius.circular(8),
             ),
-            child: product.imageUrl != null
-                ? Image.network(product.imageUrl!, fit: BoxFit.cover)
-                : const Icon(Icons.shopping_bag, size: 40),
+            child:
+                product.imageUrl != null
+                    ? Image.network(product.imageUrl!, fit: BoxFit.cover)
+                    : const Icon(Icons.shopping_bag, size: 40),
           ),
 
           const SizedBox(width: 16),
@@ -48,10 +49,7 @@ class OrderProductCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   product.description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -69,15 +67,24 @@ class OrderProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
-                  color: product.passed ? Colors.green[100] : Colors.red[100],
+                  color:
+                      product.passed == true
+                          ? Colors.green[100]
+                          : Colors.red[100],
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  product.passed ? 'Passed' : 'Failed',
+                  product.passed == true ? 'Passed' : 'Failed',
                   style: TextStyle(
-                    color: product.passed ? Colors.green[800] : Colors.red[800],
+                    color:
+                        product.passed == true
+                            ? Colors.green[800]
+                            : const Color.fromARGB(255, 239, 4, 0),
                     fontWeight: FontWeight.bold,
                   ),
                 ),

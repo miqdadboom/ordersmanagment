@@ -13,20 +13,24 @@ class NotificationRepositoryImpl implements NotificationRepository {
   });
 
   @override
-  Future<List<AppNotification>> getNotifications() async {
-    try {
-      final remoteNotifications = await remoteDataSource.fetchNotifications();
-      await localDataSource.cacheNotifications(remoteNotifications);
-      return remoteNotifications;
-    } catch (_) {
-      return await localDataSource.getNotifications();
-    }
+  Future<List<AppNotification>> getNotifications({
+    required String role,
+    required String userId,
+  }) async {
+    final remoteNotifications = await remoteDataSource.fetchNotifications(
+      role: role,
+      userId: userId,
+    );
+    await localDataSource.cacheNotifications(remoteNotifications);
+    return remoteNotifications;
   }
 
   @override
   Future<AppNotification> getNotificationById(String id) async {
     try {
-      final remoteNotification = await remoteDataSource.fetchNotificationById(id);
+      final remoteNotification = await remoteDataSource.fetchNotificationById(
+        id,
+      );
       return remoteNotification;
     } catch (_) {
       return await localDataSource.getNotificationById(id);

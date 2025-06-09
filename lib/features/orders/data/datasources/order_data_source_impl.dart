@@ -12,6 +12,7 @@ class OrderDataSourceImpl implements OrderDataSource {
       OrderEntity(
         id: "1",
         customerName: "John Doe",
+        customerPhone: "1234567890",
         customerAddress: "123 Main St",
         estimatedTime: "30 mins",
         status: "unfinished",
@@ -19,6 +20,8 @@ class OrderDataSourceImpl implements OrderDataSource {
         latitude: 31.9522,
         longitude: 35.2332,
         createdBy: "sample_sales_user_id",
+        totalAmount: 100.0,
+        createdAt: DateTime.now(),
         products: [
           OrderProduct(
             id: "p1",
@@ -26,7 +29,7 @@ class OrderDataSourceImpl implements OrderDataSource {
             description: "Description A",
             quantity: 2,
             passed: true,
-            imageUrl: null,
+            imageUrl: "",
           ),
         ],
       ),

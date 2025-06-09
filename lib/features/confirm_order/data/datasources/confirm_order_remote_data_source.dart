@@ -1,9 +1,18 @@
+import 'dart:async';
 import 'dart:io';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../../core/utils/app_exception.dart';
 
 class ConfirmOrderRemoteDataSource {
+  static Future<void> checkConnection() async {
+    final result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      throw NoInternetException();
+    }
+  }
+
   static Future<void> sendOrderToFirebase({
     required String customerName,
     required String location,
@@ -12,46 +21,85 @@ class ConfirmOrderRemoteDataSource {
     required List<Map<String, dynamic>> products,
   }) async {
     try {
-      final currentUser = FirebaseAuth.instance.currentUser!;
+      final initialStatus = await Connectivity().checkConnectivity();
+      if (initialStatus == ConnectivityResult.none) {
+        throw NoInternetException();
+      }
+
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser == null) {
+        throw ServerException('Please login first');
+      }
       final userId = currentUser.uid;
 
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
-      
+      final userDoc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .get();
+
+      if (!userDoc.exists) {
+        throw ServerException('User data not found');
+      }
+
       final userRole = userDoc.data()?['role'] ?? 'user';
       final userEmail = userDoc.data()?['email'] ?? 'user';
+      final name = userDoc.data()?['name'] ?? 'user';
 
-      await FirebaseFirestore.instance.collection('orders').add({
-        'createdBy': userId,
-        'customerName': customerName,
-        'location': location,
-        'latitude': latitude,
-        'longitude': longitude,
-        'timestamp': DateTime.now().toIso8601String(),
-        'products': products,
-        'userRole': userRole,
-        'userEmail': userEmail,
+      if (products.isEmpty) {
+        throw ParseException();
+      }
+
+      late StreamSubscription<ConnectivityResult> subscription;
+      final completer = Completer<void>();
+
+      subscription = Connectivity().onConnectivityChanged.listen((
+        status,
+      ) async {
+        if (status != ConnectivityResult.none) {
+          try {
+            await FirebaseFirestore.instance.collection('orders').add({
+              'createdBy': userId,
+              'customerName': customerName,
+              'location': location,
+              'latitude': latitude,
+              'longitude': longitude,
+              'createdAt': FieldValue.serverTimestamp(),
+              'products': products,
+              'userRole': userRole,
+              'userEmail': userEmail,
+            });
+
+            await FirebaseFirestore.instance.collection('notifications').add({
+              'title': 'New Order',
+              'body': 'A new order has been received from $customerName',
+              'timestamp': FieldValue.serverTimestamp(),
+              'isRead': false,
+              'userEmail': userEmail,
+              'sendTo': 'warehouseEmployee',
+              'senderName': name,
+            });
+
+            await subscription.cancel();
+            completer.complete();
+          } catch (e) {
+            await subscription.cancel();
+            completer.completeError(e);
+          }
+        }
       });
 
-      await FirebaseFirestore.instance.collection('notifications').add({
-        'title': 'new order',
-        'body': 'A new order has arrived from $customerName ',
-        'timestamp': DateTime.now().toIso8601String(),
-        'isRead': false,
-        'userEmail': userEmail,
-      });
+      await completer.future;
+    } on FirebaseAuthException catch (e) {
+      throw ServerException('Authentication error: ${e.message}');
     } on FirebaseException catch (e) {
-      throw Exception('Firebase error: ${e.message}');
-    }
-    on SocketException {
-      throw Exception('No internet connection. Please check your network.');
-    }
-    on FormatException {
-      throw Exception('Invalid data format encountered.');
+      throw ServerException('Database error: ${e.message}');
+    } on SocketException {
+      throw NoInternetException();
+    } on FormatException {
+      throw ParseException();
     } catch (e) {
-      throw Exception('Unexpected error occurred: $e');
+      throw UnknownException('An unexpected error occurred: $e');
     }
   }
 }

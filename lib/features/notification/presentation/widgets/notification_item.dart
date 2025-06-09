@@ -7,7 +7,6 @@ class NotificationItem extends StatelessWidget {
   final VoidCallback onTap;
   final bool showDescription; // Add this
 
-
   const NotificationItem({
     super.key,
     required this.notification,
@@ -19,55 +18,71 @@ class NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: const Color(0xFF39A18B),
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(width: 1),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              notification.title,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w400,
-              ),
+      child: Stack(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF39A18B),
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(width: 1),
             ),
-
-
-
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  notification.senderName,
+                  notification.title,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 15,
+                    fontSize: 20,
                     fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
-                Text(
-                  _formatTimeAgo(notification.timestamp),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w300,
-                  ),
+
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      notification.senderName,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    Text(
+                      _formatTimeAgo(notification.timestamp),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          if (!notification.isRead)
+            Positioned(
+              top: 18,
+              right: 38,
+              child: Container(
+                width: 14,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -94,10 +109,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       height: 76,
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(
-          width: 1.2,
-          color: const Color(0xFFA7A7A7),
-        ),
+        border: Border.all(width: 1.2, color: const Color(0xFFA7A7A7)),
       ),
       child: Column(
         children: [
