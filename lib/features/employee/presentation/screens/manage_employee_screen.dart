@@ -1,9 +1,11 @@
+import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/constants/app_text_styles.dart';
 import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
+import '../../../../core/constants/app_size_box.dart';
 import '../../../../core/user_role_access.dart';
 import '../../../../core/utils/app_exception.dart';
 import '../../../../core/widgets/bottom_navigation_manager.dart';
@@ -103,14 +105,9 @@ class _ManageEmployeeState extends State<ManageEmployee> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        automaticallyImplyLeading: false,
-        title: Text(
-          "Company Employee",
-          style: AppTextStyles.headerConversation(context),
-        ),
-        centerTitle: true,
+      appBar: CustomAppBar(
+          title: "Company Employee",
+        showBackButton: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -124,14 +121,14 @@ class _ManageEmployeeState extends State<ManageEmployee> {
                 });
               },
             ),
-            const SizedBox(height: 10),
+            AppSizedBox.height(context, 0.01),
             ActionButtonsWidget(
               onAddPressed: () {
                 Navigator.pushNamed(context, '/add');
               },
               onSortSelected: _sortEmployees,
             ),
-            const SizedBox(height: 15),
+            AppSizedBox.height(context, 0.015),
             Expanded(
               child: StreamBuilder<List<EmployeeModel>>(
                 stream: _repo.firebaseService.getAllEmployeesStream(),
@@ -212,7 +209,7 @@ class _ManageEmployeeState extends State<ManageEmployee> {
       bottomNavigationBar: SafeArea(
         child: SizedBox(
           height: 60,
-          child: _buildBottomNavigationBar() ?? const SizedBox(),
+          child: _buildBottomNavigationBar() ?? AppSizedBox.height(context, 0.0),
         ),
       ),
     );

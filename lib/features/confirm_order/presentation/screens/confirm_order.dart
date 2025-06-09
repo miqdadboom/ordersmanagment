@@ -1,4 +1,5 @@
 import 'package:final_tasks_front_end/features/cart_product/presentation/cart_screen/cubit/cart_cubit.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,6 +46,20 @@ class _ConfirmOrderState extends ConsumerState<ConfirmOrder> {
     );
   }
 
+  void setUpPushNorification() async {
+    final fcm = FirebaseMessaging.instance;
+
+    await fcm.requestPermission();
+
+   await fcm.subscribeToTopic('orders');
+  }
+
+  void initState() {
+    super.initState();
+
+    setUpPushNorification();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -84,13 +99,13 @@ class _ConfirmOrderState extends ConsumerState<ConfirmOrder> {
 
                 const Spacer(),
                 ConfirmOrderActions(
-                  onSend: () async {
-                    await _controller.sendOrderToFirebase(
-                      context: context,
-                      cartProducts: widget.cartProducts,
-                    );
+                  screenContext: context,
+                  controller: _controller,
+                  cartProducts: widget.cartProducts,
+                  onOrderSubmitted: () {
                     _submitOrder(context);
-
+                  },
+                  clearForm: () {
                     final cartCubit = context.read<CartCubit>();
                     cartCubit.clearCart();
 

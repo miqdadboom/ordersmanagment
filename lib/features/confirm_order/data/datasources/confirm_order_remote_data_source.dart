@@ -75,6 +75,7 @@ class ConfirmOrderRemoteDataSource {
                 'timestamp': DateTime.now().toIso8601String(),
                 'isRead': false,
                 'userEmail': userEmail,
+                'sendTo': 'warehouseEmployee',
               });
 
               await subscription.cancel();

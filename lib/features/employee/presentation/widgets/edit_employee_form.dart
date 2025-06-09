@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_size_box.dart';
 import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/app_exception.dart';
 import '../../data/models/EmployeeModel.dart';
@@ -240,7 +241,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
               validatorMessage: "Please enter distribution line",
             ),
             _buildRoleDropdown(),
-            const SizedBox(height: 30),
+            AppSizedBox.height(context, 0.035),
             Row(
               children: [
                 Expanded(
@@ -265,7 +266,7 @@ class _EditEmployeeFormState extends State<EditEmployeeForm> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                AppSizedBox.width(context, 0.03),
                 Expanded(
                   child: SizedBox(
                     height: 50,

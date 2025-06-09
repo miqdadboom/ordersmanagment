@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_size_box.dart';
 import '../../../../core/constants/app_text_styles.dart';
 
 class EditEmployeeTextField extends StatelessWidget {
@@ -60,7 +61,7 @@ class EditEmployeeTextField extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        AppSizedBox.height(context, 0.02),
       ],
     );
   }

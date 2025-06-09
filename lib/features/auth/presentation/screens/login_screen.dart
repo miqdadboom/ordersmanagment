@@ -15,34 +15,80 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            colors: [
-              AppColors.primary,
-              AppColors.primary,
-            ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWideScreen = constraints.maxWidth > 600;
+
+          return Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                colors: [
+                  AppColors.primary,
+                  AppColors.primary,
+                ],
+              ),
+            ),
+            child: isWideScreen
+                ? _buildWideLayout(context)
+                : _buildMobileLayout(context),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildWideLayout(BuildContext context) {
+    return Row(
+      children: [
+        // Left - Branding
+        Expanded(
+          flex: 1,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Login", style: AppTextStyles.screenTitle(context)),
+                const SizedBox(height: 20),
+                Text("Welcome Back", style: AppTextStyles.bodyLight(context)),
+              ],
+            ),
           ),
         ),
-        child: Column(
-          children: [
-            AppSizedBox.height(context, 0.11), // const SizedBox(height: 90)
-            Text(
-              "Login",
-              style: AppTextStyles.chatButton(context),
+        // Right - Login Form
+        Expanded(
+          flex: 1,
+          child: Container(
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(
+                  color: AppColors.boxShadow,
+                  blurRadius: 15,
+                  offset: Offset(0, 5),
+                ),
+              ],
             ),
-            AppSizedBox.height(context, 0.05), // const SizedBox(height: 40)
-            Text(
-              "Welcome Back",
-              style: AppTextStyles.bodyLight(context),
-            ),
-            AppSizedBox.height(context, 0.061), // const SizedBox(height: 50)
-            const Expanded(child: _LoginFormContainer()),
-          ],
+            child: const _LoginFormContainer(),
+          ),
         ),
-      ),
+      ],
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context) {
+    return Column(
+      children: [
+        AppSizedBox.height(context, 0.11),
+        Text("Login", style: AppTextStyles.screenTitle(context)),
+        AppSizedBox.height(context, 0.05),
+        Text("Welcome Back", style: AppTextStyles.bodyLight(context)),
+        AppSizedBox.height(context, 0.061),
+        const Expanded(child: _LoginFormContainer()),
+      ],
     );
   }
 }
@@ -92,23 +138,32 @@ class _LoginFormContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 100),
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(55),
-          topRight: Radius.circular(55),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.boxShadow,
-            blurRadius: 15,
-            offset: Offset(0, -5),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWideScreen = constraints.maxWidth > 600;
+
+        return Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: isWideScreen ? 40 : 20,
+            vertical: isWideScreen ? 40 : 50,
           ),
-        ],
-      ),
-      child: const LoginForm(),
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(isWideScreen ? 20 : 55),
+              topRight: Radius.circular(isWideScreen ? 20 : 55),
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: AppColors.boxShadow,
+                blurRadius: 15,
+                offset: Offset(0, -5),
+              ),
+            ],
+          ),
+          child: const LoginForm(),
+        );
+      },
     );
   }
 }

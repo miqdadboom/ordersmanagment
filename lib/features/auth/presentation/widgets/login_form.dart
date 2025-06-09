@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_size_box.dart';
 import '../../../../core/utils/app_exception.dart';
 import 'InputField .dart';
 import 'LoginButton.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -38,8 +38,8 @@ class _LoginFormState extends State<LoginForm> {
         final role = snapshot.data()!['role'];
 
         if (role == 'admin' ||
-            role == 'sales representative' ||
-            role == 'warehouse employee') {
+            role == 'salesRepresentative' ||
+            role == 'warehouseEmployee') {
           Navigator.pushReplacementNamed(context, '/ProductsScreen');
         } else {
           throw ServerException('Unknown role');
@@ -78,37 +78,71 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          InputField(
-            controller: _emailController,
-            hint: "Email or phone number",
-            icon: Icons.email_outlined,
-            borderColor: AppColors.primary,
-            fillColor: AppColors.background,
-            iconColor: AppColors.primary,
-            textColor: AppColors.textDark,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWideScreen = constraints.maxWidth > 600;
+
+        return Form(
+          key: _formKey,
+          child: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: isWideScreen ? 40 : 20,
+                vertical: isWideScreen ? 40 : 20,
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: isWideScreen ? 400 : double.infinity,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (isWideScreen)
+                      const Text(
+                        "Login to Your Account",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textDark,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    if (isWideScreen) const SizedBox(height: 30),
+                    InputField(
+                      controller: _emailController,
+                      hint: "Email or phone number",
+                      icon: Icons.email_outlined,
+                      borderColor: AppColors.primary,
+                      fillColor: AppColors.background,
+                      iconColor: AppColors.primary,
+                      textColor: AppColors.textDark,
+                    ),
+                    InputField(
+                      controller: _passwordController,
+                      hint: "Password",
+                      icon: Icons.lock_outline,
+                      obscureText: true,
+                      borderColor: AppColors.primary,
+                      fillColor: AppColors.background,
+                      iconColor: AppColors.primary,
+                      textColor: AppColors.textDark,
+                    ),
+                    AppSizedBox.height(context, 0.01),
+                    SizedBox(
+                      width: isWideScreen ? 200 : double.infinity,
+                      child: LoginButton(
+                        onPressed: _handleLogin,
+                        backgroundColor: AppColors.primary,
+                        textColor: AppColors.buttonText,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-          InputField(
-            controller: _passwordController,
-            hint: "Password",
-            icon: Icons.lock_outline,
-            obscureText: true,
-            borderColor: AppColors.primary,
-            fillColor: AppColors.background,
-            iconColor: AppColors.primary,
-            textColor: AppColors.textDark,
-          ),
-          AppSizedBox.height(context, 0.044), // const SizedBox(height: 35)
-          LoginButton(
-            onPressed: _handleLogin,
-            backgroundColor: AppColors.primary,
-            textColor: AppColors.buttonText,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

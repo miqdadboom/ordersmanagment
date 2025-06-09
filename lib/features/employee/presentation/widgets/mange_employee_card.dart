@@ -85,7 +85,7 @@ class EmployeeCardWidget extends StatelessWidget {
                 onTap: () => _makePhoneCall(context, employee.phone),
                 child: Icon(Icons.call, color: AppColors.primary),
               ),
-            AppSizedBox.width(context, 0.05), // const SizedBox(width: 20)
+            AppSizedBox.width(context, 0.05),
             if (employee.email.isNotEmpty)
               InkWell(
                 onTap: () => _sendEmail(context, employee.email),

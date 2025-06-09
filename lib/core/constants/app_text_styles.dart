@@ -39,7 +39,7 @@ class AppTextStyles {
 
   static TextStyle bodyLight(BuildContext context) =>
       _base(MediaQuery.of(context).size.width,
-          size: 0.04, weight: FontWeight.w400, color: AppColors.textLight);
+          size: 0.06, weight: FontWeight.w400, color: AppColors.textLight);
 
   static TextStyle button(BuildContext context) =>
       _base(MediaQuery.of(context).size.width,
@@ -113,8 +113,8 @@ class AppTextStyles {
 
   static TextStyle screenTitle(BuildContext context) =>
       _base(MediaQuery.of(context).size.width,
-          size: 0.06,
+          size: 0.16,
           weight: FontWeight.bold,
-          color: AppColors.textDark);
+          color: AppColors.textLight);
 
 }

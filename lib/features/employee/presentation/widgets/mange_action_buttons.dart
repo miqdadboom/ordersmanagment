@@ -19,7 +19,6 @@ class ActionButtonsWidget extends StatelessWidget {
 
     return Row(
       children: [
-        // زر الإضافة
         Expanded(
           child: ElevatedButton.icon(
             onPressed: onAddPressed,
@@ -32,9 +31,8 @@ class ActionButtonsWidget extends StatelessWidget {
             ),
           ),
         ),
-        AppSizedBox.width(context, 0.025), // بدل SizedBox(width: 10)
+        AppSizedBox.width(context, 0.025),
 
-        // زر PopupMenuButton للفرز
         Expanded(
           child: Container(
             height: 48,
@@ -72,7 +70,7 @@ class ActionButtonsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Sort", style: buttonTextStyle),
-                  AppSizedBox.width(context, 0.015), // بدل SizedBox(width: 6)
+                  AppSizedBox.width(context, 0.015),
                   const Icon(Icons.arrow_drop_down, color: Colors.white),
                 ],
               ),
