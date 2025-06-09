@@ -10,7 +10,7 @@ class UserAccessControl {
   }
 
   static bool ProductManagementScreen(String role) {
-    return role == 'admin' || role == 'warehouseEmployee';
+    return role == 'admin' || role == 'warehouseEmployee' || role == 'salesRepresentative';
   }
 
   static bool OrderProductsScreen(String role) {
@@ -20,11 +20,15 @@ class UserAccessControl {
   }
 
   static bool OrderDetailsScreen(String role) {
-    return role == 'admin' || role == 'warehouseEmployee';
+    return role == 'admin' ||
+        role == 'warehouseEmployee' ||
+        role == 'salesRepresentative';
   }
 
   static bool CartScreen(String role) {
-    return role == 'admin' || role == 'salesRepresentative';
+    return role == 'admin' ||
+        role == 'warehouseEmployee' ||
+        role == 'salesRepresentative';
   }
 
   static bool HomeScreen(String role) {

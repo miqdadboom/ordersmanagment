@@ -62,11 +62,11 @@ class _ProductViewState extends State<ProductView> {
     try {
       await FirebaseFirestore.instance
           .collection('products')
-          .doc(widget.documentId) // ✅ استخدم الـ ID مباشرة
+          .doc(widget.documentId)
           .delete();
 
       if (context.mounted) {
-        Navigator.of(context).pop(); // ✅ ارجع للخلف بعد الحذف
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Product deleted successfully")),
         );
@@ -107,7 +107,7 @@ class _ProductViewState extends State<ProductView> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pop(true); // ✅ يتم الحذف
+                  Navigator.of(context).pop(true);
                 },
                 child: const Text('Delete'),
               ),
@@ -124,7 +124,7 @@ class _ProductViewState extends State<ProductView> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onPressed: () => Navigator.of(context).pop(false), // ❌ إلغاء
+                onPressed: () => Navigator.of(context).pop(false),
                 child: const Text('Cancel'),
               ),
             ],
@@ -158,6 +158,7 @@ class _ProductViewState extends State<ProductView> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
+            color: AppColors.textLight,
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
           ),
@@ -165,7 +166,7 @@ class _ProductViewState extends State<ProductView> {
           title: Text(
             'Product View',
             style: TextStyle(
-              color: AppColors.textDark,
+              color: AppColors.textLight,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),

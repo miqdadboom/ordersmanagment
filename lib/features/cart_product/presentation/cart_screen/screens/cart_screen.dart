@@ -1,6 +1,5 @@
-import 'package:final_tasks_front_end/core/constants/app_colors.dart';
-import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
 import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
+import 'package:final_tasks_front_end/core/widgets/bottom_navigation_warehouse_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/user_role_access.dart';
@@ -45,10 +44,13 @@ class _CartScreenState extends State<CartScreen> {
   Widget? _buildBottomNavigationBar() {
     if (_role == 'admin') {
       return const BottomNavigationManager();
-    } else if (_role == 'salesRepresentative') {
+    } else if (_role == 'warehouseEmployee') {
+      return const BottomNavigationWarehouseManager();
+    }
+    else if (_role == 'salesRepresentative') {
       return const BottomNavigationSalesRepresentative();
     } else {
-      return null; // No bottom bar for unauthorized roles
+      return null;
     }
   }
 
@@ -79,10 +81,12 @@ class _CartScreenState extends State<CartScreen> {
       ],
       child: Scaffold(
         appBar: CustomAppBar(
-            title: 'Shopping Cart',
+          title: 'Shopping Cart',
           showBackButton: false,
         ),
+        body: const SafeArea(child: CartProductList()),
         bottomNavigationBar: SafeArea(
+          minimum: const EdgeInsets.only(bottom: 8),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -111,16 +115,12 @@ class _CartScreenState extends State<CartScreen> {
                   );
                 },
               ),
-               Divider(height: 1),
+              const Divider(height: 1),
               if (_buildBottomNavigationBar() != null)
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.075,
-                  child: _buildBottomNavigationBar()!,
-                ),
+                _buildBottomNavigationBar()!,
             ],
           ),
         ),
-        body: const SafeArea(child: CartProductList()),
       ),
     );
   }

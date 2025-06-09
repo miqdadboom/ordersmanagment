@@ -71,7 +71,6 @@ class NotificationLocalDataSourceImpl implements NotificationLocalDataSource {
   Future<void> markAsRead(String notificationId) async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Update in the notifications list
     final notifications = await getNotifications();
     final updatedNotifications = notifications.map((notification) {
       if (notification.id == notificationId) {
@@ -82,7 +81,6 @@ class NotificationLocalDataSourceImpl implements NotificationLocalDataSource {
 
     await cacheNotifications(updatedNotifications);
 
-    // Update individual cached notification
     final notificationJson = prefs.getString('$_cachedNotificationPrefix$notificationId');
     if (notificationJson != null) {
       final notification = NotificationModel.fromJson(jsonDecode(notificationJson));
@@ -104,7 +102,6 @@ class NotificationLocalDataSourceImpl implements NotificationLocalDataSource {
         .toList();
     await prefs.setStringList(_cachedNotificationsKey, notificationsJson);
 
-    // Cache each notification individually for faster lookup
     for (final notification in notifications) {
       await prefs.setString(
         '$_cachedNotificationPrefix${notification.id}',
@@ -117,7 +114,6 @@ class NotificationLocalDataSourceImpl implements NotificationLocalDataSource {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_cachedNotificationsKey);
 
-    // Remove all individual cached notifications
     final keys = prefs.getKeys();
     for (final key in keys) {
       if (key.startsWith(_cachedNotificationPrefix)) {

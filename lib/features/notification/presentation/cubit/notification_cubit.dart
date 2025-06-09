@@ -73,7 +73,6 @@ class NotificationCubit extends Cubit<NotificationState> {
       emit(NotificationDetailState(notification));
     } catch (e) {
       emit(NotificationError('Failed to load notification details'));
-      // Re-emit the previous state so the list remains visible
       if (state is NotificationLoaded) {
         emit(state as NotificationLoaded);
       }

@@ -48,7 +48,6 @@ class OrderEntity {
           );
         }).toList();
 
-    // Calculate order status based on products
     String calculateOrderStatus() {
       if (products.isEmpty) return 'Pending';
 

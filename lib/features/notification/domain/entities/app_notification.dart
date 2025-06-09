@@ -15,7 +15,6 @@ class AppNotification {
     required this.isRead,
   });
 
-  // Add this copyWith method
   AppNotification copyWith({
     String? id,
     String? title,
@@ -34,7 +33,6 @@ class AppNotification {
     );
   }
 
-  // Optional: Add equality comparison and toString
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

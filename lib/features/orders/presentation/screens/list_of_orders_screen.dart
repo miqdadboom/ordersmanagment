@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -115,15 +116,7 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        centerTitle: true,
-        title: const Text(
-          'Orders',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        automaticallyImplyLeading: false,
-      ),
+      appBar: CustomAppBar(title: "Order",showBackButton: false,),
       body: Column(
         children: [
           buildSearchBar(
@@ -192,7 +185,6 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
                         createdBy: data['createdBy'] ?? '',
                       );
                     }).toList();
-                // Apply role-based filtering
                 final userId = FirebaseAuth.instance.currentUser!.uid;
                 final normalizedRole = UserAccessControl.normalizeRole(_role);
                 List<OrderEntity> filteredOrders;
@@ -205,7 +197,6 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
                           .where((order) => order.createdBy == userId)
                           .toList();
                 }
-                // Save allOrders for search/filter
                 _allOrders = filteredOrders;
                 _applyFilters();
                 if (_filteredOrders.isEmpty) {
@@ -331,9 +322,7 @@ class _ListOfOrdersScreenState extends State<ListOfOrdersScreen> {
     bool? newStatus,
     String orderId,
   ) async {
-    // ... your existing code to update the product's status in Firestore ...
 
-    // After updating the product's status:
     await _updateOrderStatusIfNeeded(orderId);
   }
 

@@ -30,7 +30,6 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
             );
           }).toList();
     } else {
-      // admin and warehouseEmployee: fetch all, filter in Dart for warehouseEmployee
       final snapshot = await query.get();
       var docs = snapshot.docs;
       if (role == 'warehouseEmployee') {
@@ -76,9 +75,9 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   Future<void> markNotificationAsRead(String id) async {
     try {
       await _collection.doc(id).update({'isRead': true});
-      debugPrint('✅ Notification $id marked as read in Firestore');
+      debugPrint(' Notification $id marked as read in Firestore');
     } catch (e) {
-      debugPrint('⚠️ Failed to mark notification as read in Firestore: $e');
+      debugPrint(' Failed to mark notification as read in Firestore: $e');
     }
   }
 

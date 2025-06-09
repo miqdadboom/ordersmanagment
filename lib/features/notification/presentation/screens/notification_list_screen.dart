@@ -1,4 +1,5 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
+import 'package:final_tasks_front_end/core/constants/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/bottom_navigation_warehouse_manager.dart';
@@ -50,20 +51,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Notifications',
-          style: TextStyle(
-            color: AppColors.textDark,
-            fontSize: 24,
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(title: "Notifications", showBackButton: false,),
       body: BlocConsumer<NotificationCubit, NotificationState>(
         listener: (context, state) {
           if (state is NotificationError) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../features/orders/presentation/screens/list_of_orders_screen.dart';
-import '../../../features/products/presentation/screens/order_products_screen.dart';
+import '../../features/orders/presentation/screens/order_products_screen.dart';
 import '../../../features/orders/data/models/order_model.dart';
 import '../../../features/products/presentation/screens/order_details_screen.dart';
 import '../../../features/orders/domain/entities/order_product.dart'

@@ -13,7 +13,7 @@ class OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, // ✅ Use the passed onTap callback
+      onTap: onTap,
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: AnimatedContainer(

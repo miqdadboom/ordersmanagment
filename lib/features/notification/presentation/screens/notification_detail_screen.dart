@@ -18,7 +18,6 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
   @override
   void initState() {
     super.initState();
-    // Load notification details when screen initializes
     context.read<NotificationCubit>().loadNotificationDetail(widget.notificationId);
   }
 
@@ -32,8 +31,8 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
           builder: (context, state) {
             return Text(
               state is NotificationDetailState ? state.notification.title : 'Notification',
-              style: const TextStyle(
-                color: Colors.black,
+              style:  TextStyle(
+                color: AppColors.textLight,
                 fontSize: 20,
                 fontFamily: 'Roboto',
                 fontWeight: FontWeight.w500,
@@ -43,7 +42,7 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon:  Icon(Icons.arrow_back, color: AppColors.textLight),
           onPressed: () => Navigator.pop(context),
         ),
       ),

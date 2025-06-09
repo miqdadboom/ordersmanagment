@@ -72,7 +72,6 @@ class OrdersCubit extends Cubit<List<OrderEntity>> {
 
       print('Processed ${allOrders.length} orders');
 
-      // Check for warehouseEmployee, admin, or salesRepresentative role
       if (role == 'warehouseEmployee' || role == 'admin') {
         print('Emitting all orders for warehouseEmployee/admin role');
         emit(allOrders);
@@ -116,8 +115,7 @@ class OrdersCubit extends Cubit<List<OrderEntity>> {
       await FirebaseFirestore.instance.collection('orders').doc(orderId).update(
         {'status': 'Prepared'},
       );
-      // Optionally reload orders to reflect the change
-      // You may want to call loadOrderByRole here if you have role/userId available
+
     } catch (e) {
       print('Error confirming order prepared: $e');
     }
@@ -128,7 +126,6 @@ class OrdersCubit extends Cubit<List<OrderEntity>> {
       await FirebaseFirestore.instance.collection('orders').doc(orderId).update(
         {'status': 'Not Prepared'},
       );
-      // Optionally reload orders to reflect the change
     } catch (e) {
       print('Error marking order not prepared: $e');
     }
@@ -195,7 +192,6 @@ class OrdersCubit extends Cubit<List<OrderEntity>> {
     required int newQuantity,
     required String customerName,
   }) async {
-    // Fetch sender's name from users collection
     String? senderName;
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -212,7 +208,6 @@ class OrdersCubit extends Cubit<List<OrderEntity>> {
     } else {
       senderName = 'Sales Representative';
     }
-    // Send a single notification to all warehouse employees
     await FirebaseFirestore.instance.collection('notifications').add({
       'body':
           'Quantity for product "$productName" in order for $customerName was changed to $newQuantity.',
