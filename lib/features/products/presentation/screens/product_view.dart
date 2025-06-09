@@ -8,7 +8,7 @@ import '../../../../core/utils/user_access_control.dart';
 import '../../../cart_product/domain/entities/quantity_model.dart';
 import '../../../cart_product/presentation/cart_screen/cubit/cart_cubit.dart';
 import '../../../cart_product/presentation/cart_screen/widgets/quantity_controller.dart';
-import '../cubit/product_quantity_cubit.dart';
+import '../../../homepage/presentation/cubit/product_quantity_cubit.dart';
 import '../widgets/product_view/add_cart_bar.dart';
 import '../widgets/product_view/product_description.dart';
 import '../widgets/product_view/product_text_details.dart';

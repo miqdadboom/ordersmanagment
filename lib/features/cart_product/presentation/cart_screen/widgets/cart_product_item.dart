@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/cart_cubit.dart';
 import 'product_card_cart.dart';
-import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
+import 'package:final_tasks_front_end/features/homepage/domain/entities/products_entity.dart';
 
 class CartProductItem extends StatelessWidget {
   final int index;

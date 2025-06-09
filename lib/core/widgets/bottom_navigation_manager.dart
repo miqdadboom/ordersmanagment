@@ -12,8 +12,6 @@ class BottomNavigationManager extends StatefulWidget {
 class _BottomNavigationManager extends State<BottomNavigationManager> {
   int _currentIndex = 0;
 
-
-
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -49,14 +47,8 @@ class _BottomNavigationManager extends State<BottomNavigationManager> {
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.view_list), label: "Order"),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart),
-          label: "Cart",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.group),
-          label: "Employee",
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+        BottomNavigationBarItem(icon: Icon(Icons.group), label: "Employee"),
       ],
     );
   }

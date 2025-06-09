@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
-import 'home_page/product_card.dart';
+import 'package:final_tasks_front_end/features/homepage/domain/entities/products_entity.dart';
+import '../../../homepage/presentation/widgets/home_page/product_card.dart';
 
 class ProductGrid extends StatelessWidget {
   final List<Map<String, dynamic>> products;
@@ -80,7 +80,9 @@ class ProductGrid extends StatelessWidget {
                 };
 
                 final userId = FirebaseAuth.instance.currentUser!.uid;
-                final cartRef = FirebaseFirestore.instance.collection('cart').doc(userId);
+                final cartRef = FirebaseFirestore.instance
+                    .collection('cart')
+                    .doc(userId);
 
                 final doc = await cartRef.get();
                 List<dynamic> items = [];
@@ -88,8 +90,9 @@ class ProductGrid extends StatelessWidget {
                   items = doc.data()?['products'] ?? [];
                 }
 
-                final existingIndex =
-                    items.indexWhere((item) => item['title'] == productEntity.title);
+                final existingIndex = items.indexWhere(
+                  (item) => item['title'] == productEntity.title,
+                );
                 if (existingIndex == -1) {
                   items.add(cartItem);
                 } else {
@@ -110,6 +113,33 @@ class ProductGrid extends StatelessWidget {
             );
           },
         ),
+      ],
+    );
+  }
+}
+
+class PaginatedProductList extends StatelessWidget {
+  final List<Map<String, dynamic>> products;
+  final ScrollController scrollController;
+  final bool isLoadingMore;
+
+  const PaginatedProductList({
+    Key? key,
+    required this.products,
+    required this.scrollController,
+    required this.isLoadingMore,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ProductGrid(products: products, enableSorting: false),
+        if (isLoadingMore)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(child: CircularProgressIndicator()),
+          ),
       ],
     );
   }

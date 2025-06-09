@@ -3,7 +3,7 @@ import 'package:final_tasks_front_end/core/utils/user_access_control.dart';
 import '../../../../core/widgets/bottom_navigation_manager.dart';
 import '../../../../core/widgets/bottom_navigation_sales_representative.dart';
 import '../../../../core/widgets/bottom_navigation_warehouse_manager.dart';
-import '../../../products/presentation/screens/products_screen.dart';
+import '../../../homepage/presentation/screens/home_page.dart';
 
 class HomeScreenByRole extends StatelessWidget {
   final String role;

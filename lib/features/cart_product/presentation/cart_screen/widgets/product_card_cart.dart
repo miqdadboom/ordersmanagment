@@ -1,6 +1,6 @@
 import 'package:final_tasks_front_end/core/constants/app_colors.dart';
 import 'package:final_tasks_front_end/core/constants/app_size_box.dart';
-import 'package:final_tasks_front_end/features/products/domain/entities/products_entity.dart';
+import 'package:final_tasks_front_end/features/homepage/domain/entities/products_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/app_text_styles.dart';
