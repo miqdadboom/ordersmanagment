@@ -4,6 +4,7 @@ import '../../../orders/data/models/order_model.dart';
 import '../../../orders/domain/entities/order_product.dart';
 import '../../data/datasources/confirm_order_remote_data_source.dart';
 import '../../../../core/widgets/place.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ConfirmOrderCubit {
   final TextEditingController nameController = TextEditingController();
@@ -29,7 +30,8 @@ class ConfirmOrderCubit {
   void showValidationDialog(BuildContext context, String message) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder:
+          (_) => AlertDialog(
         title: const Text('Validation Error'),
         content: Text(message),
         actions: [
@@ -50,7 +52,9 @@ class ConfirmOrderCubit {
     return FirebaseAuth.instance.currentUser?.uid ?? '';
   }
 
-  List<OrderProduct> convertToOrderProducts(List<Map<String, dynamic>> rawProducts) {
+  List<OrderProduct> convertToOrderProducts(
+      List<Map<String, dynamic>> rawProducts,
+      ) {
     return rawProducts.map((p) {
       return OrderProduct(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -72,6 +76,7 @@ class ConfirmOrderCubit {
     return OrderEntity(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       customerName: name,
+      customerPhone: "",
       customerAddress: selectedLocation!.address,
       notes: notesController.text.trim(),
       latitude: selectedLocation!.latitude,
@@ -79,6 +84,11 @@ class ConfirmOrderCubit {
       status: 'Pending',
       estimatedTime: '2 hours',
       products: products,
+      totalAmount: cartProducts.fold(
+        0.0,
+            (sum, item) => sum + (item['price'] ?? 0) * (item['quantity'] ?? 1),
+      ),
+      createdAt: DateTime.now(),
       productImage: products.isNotEmpty ? cartProducts[0]['imageUrl'] : null,
       createdBy: getCurrentUserId(),
     );
@@ -93,19 +103,22 @@ class ConfirmOrderCubit {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      builder: (_) => const Center(child: CircularProgressIndicator()),
     );
 
     isLoading = true;
 
-    final products = cartProducts.map((item) => {
-      'title': item['title'] ?? 'Untitled',
-      'price': item['price'] ?? 0,
-      'quantity': item['quantity'] ?? 1,
-      'imageUrl': item['imageUrl'],
-    }).toList();
+    final products =
+    cartProducts
+        .map(
+          (item) => {
+        'title': item['title'] ?? 'Untitled',
+        'price': item['price'] ?? 0,
+        'quantity': item['quantity'] ?? 1,
+        'imageUrl': item['imageUrl'],
+      },
+    )
+        .toList();
 
     await ConfirmOrderRemoteDataSource.sendOrderToFirebase(
       customerName: nameController.text.trim(),
@@ -118,8 +131,8 @@ class ConfirmOrderCubit {
     if (Navigator.canPop(context)) Navigator.of(context).pop();
     isLoading = false;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Order sent successfully!')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Order sent successfully!')));
   }
 }
